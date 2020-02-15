@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,5 +24,5 @@ public class Ingredient extends EntityBase {
             joinColumns = @JoinColumn(name = "ingredients_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_category_id")
     )
-    private List<IngredientCategory> ingredientCategories;
+    private List<IngredientCategory> ingredientCategories =new LinkedList<>();
 }

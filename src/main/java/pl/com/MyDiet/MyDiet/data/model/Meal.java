@@ -19,7 +19,7 @@ public class Meal extends EntityBase {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private User ownerId;
+    private User owner;
 
     @Column(name = "reciple")
     private String recipe;

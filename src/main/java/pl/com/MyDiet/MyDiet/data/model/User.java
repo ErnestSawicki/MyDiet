@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "users")
@@ -43,7 +45,9 @@ public class User extends EntityBase {
     @Column(name = "email")
     private String email;
 
-    @OneToMany
-    private Set<Meal> ownedMeals;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private Set<Meal> ownedMeals = new HashSet<>();
 
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private Set<ShopList> shopLists;
 }

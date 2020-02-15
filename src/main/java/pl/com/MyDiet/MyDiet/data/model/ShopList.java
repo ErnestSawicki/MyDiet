@@ -17,7 +17,8 @@ public class ShopList extends EntityBase{
 //    @Column(name = "product_to_buy")
 //    private
 
-    @Column(name = "ovner", nullable = false)
-    private Long owner;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User owner;
 
 }
