@@ -2,12 +2,15 @@ package pl.com.MyDiet.MyDiet.data.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
+@Slf4j
 @Getter @Setter
 public class User {
 
@@ -33,8 +36,8 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "age")
-    private Integer age;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
