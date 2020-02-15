@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -45,6 +46,9 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany
+    private Set<Meal> ownedMeals;
 
     @Override
     public boolean equals(Object o) {

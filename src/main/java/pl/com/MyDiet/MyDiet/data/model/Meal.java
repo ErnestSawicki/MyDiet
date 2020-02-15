@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Meal")
@@ -19,8 +20,9 @@ public class Meal {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "ower_id")
-    private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User ownerId;
 
     @Column(name = "reciple")
     private String recipe;
@@ -28,5 +30,16 @@ public class Meal {
     @Column(name = "preparation_time")
     private Long preparationTime;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meal meal = (Meal) o;
+        return Objects.equals(id, meal.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

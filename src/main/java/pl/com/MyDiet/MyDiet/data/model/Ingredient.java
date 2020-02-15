@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ingredients")
@@ -20,6 +21,10 @@ public class Ingredient {
     @Column(name = "calories_per_100g")
     private Long caloriesPer100gram;
 
-//    @Column(name = "product_categories")
-//    private List<Ingredient> ingredientCategories;
+    @ManyToMany
+    @JoinTable(name = "ingredient_ingredient_category",
+            joinColumns = @JoinColumn(name = "ingredients_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_category_id")
+    )
+    private List<IngredientCategory> ingredientCategories;
 }
