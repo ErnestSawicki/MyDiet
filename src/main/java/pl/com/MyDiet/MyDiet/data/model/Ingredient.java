@@ -20,6 +20,6 @@ public class Ingredient {
     @Column(name = "calories_per_100g")
     private Long caloriesPer100gram;
 
-    @Column(name = "product_categories")
-    private List<IngredientCategory> ingredientCategories;
+//    @Column(name = "product_categories")
+//    private List<Ingredient> ingredientCategories;
 }

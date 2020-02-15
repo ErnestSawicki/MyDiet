@@ -10,9 +10,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>Header-MenuBar</title>
+    <link rel="stylesheet" type="text/css" href="/WEB-INF/css/styleHeader.css">
 </head>
 <body>
+<div id=menu>
+    <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="">Login</a></li>
+        <li><a href="">Register</a></li>
+    </ul>
+
+</div>
 
 </body>
 </html>

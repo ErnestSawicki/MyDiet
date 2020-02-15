@@ -1,0 +1,26 @@
+#menu
+{
+
+}
+ul
+{
+    list-style-type: none;
+    magin:0px;
+    padding:0px;
+
+
+}
+li
+{
+    margin: 1px;
+    background-color: red;
+    float: left;
+}
+
+a
+{
+    color: black;
+    text-decoration:none;
+    display: block;
+    padding: 10px 30px;
+}

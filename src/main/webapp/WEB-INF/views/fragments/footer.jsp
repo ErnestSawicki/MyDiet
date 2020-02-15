@@ -10,7 +10,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>Footer</title>
+    <p> autors: Ernest Sawicki & Arkadiusz Przytuła </p>
 </head>
 <body>
 
