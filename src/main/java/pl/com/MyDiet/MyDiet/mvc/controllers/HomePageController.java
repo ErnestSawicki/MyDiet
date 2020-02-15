@@ -11,6 +11,6 @@ public class HomePageController {
 
     @GetMapping
     public String getHomePage(){
-        return "/WEB-INF/views/home-page.jsp";
+        return "home-page";
     }
 }

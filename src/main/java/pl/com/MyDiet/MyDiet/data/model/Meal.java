@@ -9,10 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "Meal")
 @Getter @Setter
-public class Meal {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Meal extends EntityBase {
 
     @Column(name = "calories")
     private Long calories;
@@ -30,16 +27,5 @@ public class Meal {
     @Column(name = "preparation_time")
     private Long preparationTime;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Meal meal = (Meal) o;
-        return Objects.equals(id, meal.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

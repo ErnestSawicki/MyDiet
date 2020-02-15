@@ -9,11 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "shop_lists")
 @Getter @Setter
-public class ShopList {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ShopList extends EntityBase{
 
     @Column(name = "shop_day", nullable = false)
     private LocalDate shopDay;

@@ -10,10 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "ingredients")
 @Getter @Setter
-public class Ingredient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Ingredient extends EntityBase {
 
     @Column(name = "name")
     private String name;
