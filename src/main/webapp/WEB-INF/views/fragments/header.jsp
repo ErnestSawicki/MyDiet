@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>Header-MenuBar</title>
-    <link rel="stylesheet" type="text/css" href="/WEB-INF/css/styleHeader.css">
+    <link rel="stylesheet" type="text/css" href="/css/styleHeader.css">
 </head>
 <body>
 <div id=menu>
