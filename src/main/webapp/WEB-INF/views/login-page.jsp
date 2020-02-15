@@ -1,5 +1,4 @@
-
-?<%--
+<%--
   Created by IntelliJ IDEA.
   User: dell
   Date: 2020-02-15
@@ -15,6 +14,7 @@
     <title>LoginPage</title>
 </head>
 <body>
+
 <form method="post" action="/login">
     <div class="row">
         <div class="col-25">
@@ -28,7 +28,7 @@
         </div>
         <input type="text" name="password" id="password"/>
     </div>
-    <button class="button" type="submit">Login</button>>
+    <button class="button" type="submit">Login</button>
     <sec:csrfInput/>
 </form>
 
