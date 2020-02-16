@@ -26,7 +26,7 @@
         <div class="col-25">
             <label for="password">Password</label>
         </div>
-        <input type="text" name="password" id="password"/>
+        <input type="password" name="password" id="password"/>
     </div>
     <button class="button" type="submit">Login</button>
     <sec:csrfInput/>

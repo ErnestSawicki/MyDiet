@@ -3,6 +3,7 @@ package pl.com.MyDiet.MyDiet.mvc.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +23,13 @@ import java.time.LocalDate;
 public class UserRegistrationController  {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserRegistrationController(UserRepository userRepository) {
+    public UserRegistrationController(UserRepository userRepository,
+                                      PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -41,6 +45,7 @@ public class UserRegistrationController  {
         BeanUtils.copyProperties(userDTO, registeredUser);
         registeredUser.setBirthDate(LocalDate.parse(userDTO.getBirthDate()));
         registeredUser.setSex(Sex.valueOf(userDTO.getSex()));
+        registeredUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(registeredUser);
         return "redirect:/";
     }

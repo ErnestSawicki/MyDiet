@@ -50,4 +50,6 @@ public class User extends EntityBase {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<ShopList> shopLists;
+
+
 }
