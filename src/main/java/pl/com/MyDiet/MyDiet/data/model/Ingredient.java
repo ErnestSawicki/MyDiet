@@ -26,4 +26,5 @@ public class Ingredient extends EntityBase {
     )
 
     private List<IngredientCategory> ingredientCategories =new LinkedList<>();
+
 }

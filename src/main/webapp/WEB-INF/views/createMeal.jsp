@@ -18,28 +18,30 @@
 CreateMeal
 <div class="container">
     <form method="post" action="/createMeal">
+        <div><label for="mealName">Name:</label></div>
+        <input id="mealName" name="mealName" type="text">
         <div class="col-25">
-            <label for="recipe">Recipe</label>
+            <label for="mealDescription">Recipe</label>
         </div>
         <div class="col-75">
-            <textarea id="recipe" rows="4" cols="50"></textarea>
+            <textarea id="mealDescription" name="mealDescription" rows="4" cols="50"></textarea>
         </div>
 
         <div class="col-25">
-            <label for="ingredient">Add ingredient</label>
+            <label for="ingredientId">Add ingredient</label>
         </div>
         <div>
-            <select id="ingredient" name="ingredient">
+            <select id="ingredientId" name="ingredientId">
                 <c:forEach items="${ingredients}" var="ingredient">
-                    <option value="${ingredient.name}">${ingredient.name}</option>
+                    <option value="${ingredient.id}">${ingredient.name}</option>
                 </c:forEach>
             </select>
         </div>
         <div class="col-25">
-            <label for="amount">Amount</label>
+            <label for="ingredientAmount">Amount</label>
         </div>
         <div class="col-75">
-            <input id="amount" name="amount" type="number"/>
+            <input id="ingredientAmount" name="ingredientAmount" type="number"/>
         </div>
         <input type="submit" name="add" value=" + "/>
         <div>
@@ -47,12 +49,14 @@ CreateMeal
         </div>
         <div>
             <ul>
-                <c:forEach items="${mealDTO.addedIngredients}" var="mealIngredient">
-                    <li>${mealIngredient.name} ${mealIngredient.amount}</li>
+                <c:forEach items="${mealDTO.mealIngredients}" var="mealIngredient">
+                    <li>${mealIngredient.ingredient.name} ${mealIngredient.amount}</li>
+                    <input type="hidden" name="mealIngredients" value="${mealIngredient.id}"/>
                 </c:forEach>
             </ul>
         </div>
         <input type="submit" value="send" name="send"/>
+        <sec:csrfInput/>
     </form>
 </div>
 </body>

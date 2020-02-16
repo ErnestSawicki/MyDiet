@@ -17,11 +17,11 @@ public abstract class EntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "creation_date_time")
+/*    @Column(name = "creation_date_time")
     private LocalDateTime creationDataTime;
 
     @Column(name = "last_modification_data_time")
-    private LocalDateTime lastModificationDateTime;
+    private LocalDateTime lastModificationDateTime;*/
 
     @Override
     public boolean equals(Object o) {
