@@ -28,8 +28,5 @@ public class Meal extends EntityBase {
     @Column(name = "preparation_time")
     private Long preparationTime;
 
-    @OneToMany(mappedBy = "meal")
-    private List<MealIngredient> mealIngredients;
-
 
 }
