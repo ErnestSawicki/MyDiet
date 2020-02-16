@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +27,9 @@ public class Meal extends EntityBase {
 
     @Column(name = "preparation_time")
     private Long preparationTime;
+
+    @OneToMany(mappedBy = "meal")
+    private List<MealIngredient> mealIngredients;
 
 
 }
