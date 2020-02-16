@@ -31,7 +31,7 @@ CreateMeal
         <div>
             <select id="ingredient" name="ingredient">
                 <c:forEach items="${ingredients}" var="ingredient">
-                    <option value="${ingredient}">${ingredient.name}</option>
+                    <option value="${ingredient.name}">${ingredient.name}</option>
                 </c:forEach>
             </select>
         </div>
