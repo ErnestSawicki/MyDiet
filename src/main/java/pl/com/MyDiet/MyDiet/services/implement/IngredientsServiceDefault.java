@@ -1,4 +1,4 @@
-package pl.com.MyDiet.MyDiet.services;
+package pl.com.MyDiet.MyDiet.services.implement;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,8 @@ import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
 import pl.com.MyDiet.MyDiet.data.model.Ingredient;
 import pl.com.MyDiet.MyDiet.data.model.IngredientCategory;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
+import pl.com.MyDiet.MyDiet.services.IngredientCategoryService;
+import pl.com.MyDiet.MyDiet.services.IngredientService;
 
 import java.util.List;
 import java.util.Objects;

@@ -20,14 +20,14 @@
     <form method="post" action="/ingredient">
 
         <div class="">
-            <labe for="ingredientName">ingredient</labe>
+            <label for="ingredientName">ingredient</label>
         </div>
         <div class="">
             <input type="text" name="ingredientName" id="ingredientName" value="${ingredientDTO.ingredientName}">
         </div>
 
         <div class="">
-            <labe for="caloriesPer100g">amount calories per 100</labe>
+            <label for="caloriesPer100g">amount calories per 100g</label>
         </div>
         <div class="">
             <input type="number" name="caloriesPer100g" id="caloriesPer100g" value="${ingredientDTO.caloriesPer100g}">
@@ -35,7 +35,7 @@
         <c:choose>
             <c:when test="${not empty availableCategory}">
                 <div class="">
-                    <labe for="ingredientCategory">Select ingredient categories</labe>
+                    <label for="ingredientCategory">Select ingredient categories</label>
                     <select name="categoryToAdd" id="ingredientCategory">
 
                         <c:forEach items="${availableCategory}" var="ingrCategory">
@@ -43,24 +43,41 @@
 
                         </c:forEach>
 
-                        <sec:csrfInput/>
+
 
                     </select>
                     <button type="submit" name="add">+</button>
                 </div>
-
             </c:when>
             <c:otherwise>
-                Brak kategorii
+                No more categories
             </c:otherwise>
         </c:choose>
+        <div><p>new category</p>
+            <button type="submit" name="addNewCategory">add</button>
+        </div>
 
+
+        <c:if test="${categoryToAdd!=null}">
+
+            <div class="">
+                <label for="categoryName">New category:</label>
+            </div>
+            <div class="">
+                <input type="text" name="categoryName" id="categoryName" value="${categoryName}">
+            </div>
+            <button type="submit" name="addCategory">save</button>
+
+        </c:if>
 
         Selected categories:
         <ol>
             <c:forEach items="${ingredientDTO.ingredientCategoriesIdAndName}" var="addedCategories">
-                <div><li><span>${addedCategories.name}</span><span><button type="submit" name="categoryToRemove" value="${addedCategories.id}">-</button>
-               </span></li></div>
+                <div>
+                    <li><span>${addedCategories.name}</span><span><button type="submit" name="categoryToRemove"
+                                                                          value="${addedCategories.id}">-</button>
+               </span></li>
+                </div>
                 </li>
                 <input type="hidden" value="${addedCategories.id};${addedCategories.name}"
                        name="ingredientCategoriesIdAndName"/>
@@ -80,4 +97,5 @@
 </div>
 
 </body>
+
 </html>

@@ -11,4 +11,6 @@ public interface IngredientCategoryRepository extends JpaRepository<IngredientCa
     List<IngredientCategory> findAll();
 
     Set<IngredientCategory> getById(Long id);
+
+    boolean existsByName(String name);
 }
