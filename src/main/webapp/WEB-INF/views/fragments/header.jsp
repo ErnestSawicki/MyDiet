@@ -16,9 +16,10 @@
 <body>
 <div id=menu>
     <ul>
-        <li><a href="">Home</a></li>
-        <li><a href="">Login</a></li>
-        <li><a href="">Register</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/userRegistration">Register</a></li>
+        <li><a href="/logout">logout</a></li>
     </ul>
 
 </div>

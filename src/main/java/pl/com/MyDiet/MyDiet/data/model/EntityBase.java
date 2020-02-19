@@ -10,18 +10,19 @@ import java.util.Objects;
 
 
 @MappedSuperclass
-@Getter @Setter
+@Getter
+@Setter
 public abstract class EntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-/*    @Column(name = "creation_date_time")
+    @Column(name = "creation_date_time")
     private LocalDateTime creationDataTime;
 
     @Column(name = "last_modification_data_time")
-    private LocalDateTime lastModificationDateTime;*/
+    private LocalDateTime lastModificationDateTime;
 
     @Override
     public boolean equals(Object o) {
@@ -35,4 +36,17 @@ public abstract class EntityBase {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
+    @PrePersist
+    public void prePersist() {
+        this.creationDataTime= LocalDateTime.now();
+        this.lastModificationDateTime = null;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.lastModificationDateTime= LocalDateTime.now();
+    }
+
 }

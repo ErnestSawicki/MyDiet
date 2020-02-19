@@ -15,6 +15,13 @@
 <jsp:include page="fragments/header.jsp"/>
 <div id="container">
 
+    Dostępne fumkcjonalności:
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/ingredient">Utwórz składnik</a></li>
+        <li><a href="/createMeal">Utwórz danie</a></li>
+    </ul>
+
 
 
 

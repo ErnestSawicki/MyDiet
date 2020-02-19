@@ -23,7 +23,7 @@
             <labe for="ingredientName">ingredient</labe>
         </div>
         <div class="">
-            <input type="text" name="ingredientName" id= "ingredientName">
+            <input type="text" name="ingredientName" id="ingredientName">
         </div>
 
         <div class="">
@@ -32,22 +32,39 @@
         <div class="">
             <input type="number" name="caloriesPer100g" id="caloriesPer100g">
         </div>
+        <c:choose>
+            <c:when test="${not empty availableCategory}">
+                <div class="">
+                    <labe for="ingredientCategory">Select ingredient categories</labe>
+                    <select name="categoryToAdd" id="ingredientCategory">
 
-        <div class="">
-            <labe for="ingredientCategory">Select ingredient categories</labe>
-            <select  name="categoryToAdd" id="ingredientCategory">
-                <c:forEach items="${ingredientCategories}" var="ingrCategory">
-                    <option value="${ingrCategory.id}" >${ingrCategory.name}</option>
-                </c:forEach>
-            </select>
-        </div>
-            <input type="submit" name="add" value=" + "/>
+                        <c:forEach items="${availableCategory}" var="ingrCategory">
+                            <option value="${ingrCategory.id};${ingrCategory.name}">${ingrCategory.name}</option>
+
+                        </c:forEach>
+
+                        <sec:csrfInput/>
+
+                    </select>
+                    <button type="submit" name="add">+</button>
+                </div>
+
+            </c:when>
+            <c:otherwise>
+                Brak kategorii
+            </c:otherwise>
+        </c:choose>
+
 
         Selected categories:
         <ol>
-            <c:forEach items="${ingredientDTO.addedIngredientCategories}" var="addedCategories">
-                <li>${addedCategories.name}</li>
-                <input type="hidden" name="addedIngredientCategories" value="${addedCategories.id}"/>
+            <c:forEach items="${ingredientDTO.ingredientCategoriesIdAndName}" var="addedCategories">
+                <div><li><span>${addedCategories.name}</span><span><button type="submit" name="categoryToRemove" value="${addedCategories.id}">-</button>
+               </span></li></div>
+                </li>
+                <input type="hidden" value="${addedCategories.id};${addedCategories.name}"
+                       name="ingredientCategoriesIdAndName"/>
+
             </c:forEach>
 
             <sec:csrfInput/>

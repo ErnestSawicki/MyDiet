@@ -19,7 +19,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
 
     @Autowired
-    public SecurityConfiguration(DataSource dataSource){
+    public SecurityConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -45,16 +45,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/userRegistration").permitAll()
                 .antMatchers("/").permitAll()
+                .antMatchers("/userRegistration").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/logout").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/")
+                .loginPage("/login")
                 .and()
-                    .logout()
-                    .logoutSuccessUrl("/");
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and();
     }
 }
