@@ -1,5 +1,6 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import pl.com.MyDiet.MyDiet.services.IngredientService;
 
 
 @Controller
+@Slf4j
 @RequestMapping("/ingredient")
 public class IngredientController {
 
@@ -48,13 +50,15 @@ public class IngredientController {
     }
 
     @PostMapping(params = {"send"})
-    public String process(IngredientDTO ingredientDTO, Model model) {
+    public String process(@ModelAttribute("ingredientDTO") IngredientDTO ingredientDTO, Model model) {
         boolean save = ingredientService.saveIngredient(ingredientDTO);
+        System.out.println(save);
         if (save){
             return "index";
         }
         else {
-            return "redirect:/ingredient";}
+            model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
+            return "addIngredient";}
     }
 
 

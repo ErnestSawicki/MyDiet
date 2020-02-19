@@ -23,14 +23,14 @@
             <labe for="ingredientName">ingredient</labe>
         </div>
         <div class="">
-            <input type="text" name="ingredientName" id="ingredientName">
+            <input type="text" name="ingredientName" id="ingredientName" value="${ingredientDTO.ingredientName}">
         </div>
 
         <div class="">
             <labe for="caloriesPer100g">amount calories per 100</labe>
         </div>
         <div class="">
-            <input type="number" name="caloriesPer100g" id="caloriesPer100g">
+            <input type="number" name="caloriesPer100g" id="caloriesPer100g" value="${ingredientDTO.caloriesPer100g}">
         </div>
         <c:choose>
             <c:when test="${not empty availableCategory}">

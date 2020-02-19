@@ -3,7 +3,7 @@ package pl.com.MyDiet.MyDiet.services;
 import pl.com.MyDiet.MyDiet.DTO.IngredientCategoryDTO;
 import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
 
-import java.util.List;
+
 import java.util.Set;
 
 public interface IngredientService {

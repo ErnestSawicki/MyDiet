@@ -1,10 +1,12 @@
 package pl.com.MyDiet.MyDiet.services;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.IngredientCategoryDTO;
 import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
 import pl.com.MyDiet.MyDiet.data.model.Ingredient;
@@ -52,8 +54,10 @@ public class IngredientsServiceDefault implements IngredientService {
         return allCategories;
     }
 
+    @Transactional
     @Override
     public boolean saveIngredient(IngredientDTO ingredientDTO) {
+        System.out.println(ingredientDTO);
         if (ingredientDTO == null
                 || ingredientDTO.getIngredientName() == null
                 || ingredientDTO.getCaloriesPer100g() == null
@@ -65,11 +69,11 @@ public class IngredientsServiceDefault implements IngredientService {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(ingredientDTO.getIngredientName());
         ingredient.setCaloriesPer100gram(ingredientDTO.getCaloriesPer100g());
-        Set<IngredientCategory> ingredientCategories = ingredientDTO.getIngredientCategoriesIdAndName().stream()
+        List<IngredientCategory> ingredientCategories = ingredientDTO.getIngredientCategoriesIdAndName().stream()
                 .map(p -> ingredientCategoryService.findById(p.getId())
                         .orElse(null))
-                .collect(Collectors.toSet());
-        ingredient.setIngredientCategories((List<IngredientCategory>) ingredientCategories);
+                .collect(Collectors.toList());
+        ingredient.setIngredientCategories(ingredientCategories);
         log.info("Try to save ingredient= {}", ingredient.getName());
         ingredientRepository.save(ingredient);
         log.info("Saved {}", ingredient.getName());
@@ -77,9 +81,8 @@ public class IngredientsServiceDefault implements IngredientService {
     }
 
 //    @Override
-//    public boolean deleteIngredient(IngredientDTO ingredientDTO) {
-//        return false;
-    }
+    // public boolean deleteIngredient(IngredientDTO ingredientDTO) {
+//        return false; }
 
 //    @Override
 //    public boolean modifyIngredient(IngredientDTO id) {
