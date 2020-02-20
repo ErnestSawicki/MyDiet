@@ -15,16 +15,11 @@
 <jsp:include page="fragments/header.jsp"/>
 <div id="container">
 
-    Dostępne fumkcjonalności:
+    <h1>Dostępne fumkcjonalności:</h1>
     <ul>
-        <li><a href="/">Home</a></li>
         <li><a href="/ingredient">Utwórz składnik</a></li>
         <li><a href="/createMeal">Utwórz danie</a></li>
     </ul>
-
-
-
-
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

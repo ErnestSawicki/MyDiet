@@ -23,14 +23,14 @@
             <label for="ingredientName">ingredient</label>
         </div>
         <div class="">
-            <input type="text" name="ingredientName" id="ingredientName" value="${ingredientDTO.ingredientName}">
+            <input type="text" name="ingredientName" id="ingredientName" value="${ingredientDTO.ingredientName}" required>
         </div>
 
         <div class="">
             <label for="caloriesPer100g">amount calories per 100g</label>
         </div>
         <div class="">
-            <input type="number" name="caloriesPer100g" id="caloriesPer100g" value="${ingredientDTO.caloriesPer100g}">
+            <input type="number" name="caloriesPer100g" id="caloriesPer100g" value="${ingredientDTO.caloriesPer100g}" required>
         </div>
         <c:choose>
             <c:when test="${not empty availableCategory}">
@@ -42,8 +42,6 @@
                             <option value="${ingrCategory.id};${ingrCategory.name}">${ingrCategory.name}</option>
 
                         </c:forEach>
-
-
 
                     </select>
                     <button type="submit" name="add">+</button>
@@ -78,7 +76,6 @@
                                                                           value="${addedCategories.id}">-</button>
                </span></li>
                 </div>
-                </li>
                 <input type="hidden" value="${addedCategories.id};${addedCategories.name}"
                        name="ingredientCategoriesIdAndName"/>
 
