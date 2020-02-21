@@ -9,14 +9,14 @@ public class IngredientCategoryInitializer {
 
     public void createSampleIngredientCategory(IngredientCategoryRepository ingredientCategoryRepository){
         log.info("IngredientCategoryInitializer: IngredientCategory sample data started ...");
-        createIngredientCategory("nabiał", ingredientCategoryRepository);
-        createIngredientCategory("mięso", ingredientCategoryRepository);
-        createIngredientCategory("warzywa", ingredientCategoryRepository);
-        createIngredientCategory("napoje", ingredientCategoryRepository);
-        createIngredientCategory("owoce", ingredientCategoryRepository);
-        createIngredientCategory("strączkowe", ingredientCategoryRepository);
-        createIngredientCategory("przyprawy", ingredientCategoryRepository);
-        createIngredientCategory("sosy", ingredientCategoryRepository);
+        createIngredientCategory("dairy", ingredientCategoryRepository);
+        createIngredientCategory("meat", ingredientCategoryRepository);
+        createIngredientCategory("vegetables", ingredientCategoryRepository);
+        createIngredientCategory("beverages", ingredientCategoryRepository);
+        createIngredientCategory("fruits", ingredientCategoryRepository);
+        createIngredientCategory("spices", ingredientCategoryRepository);
+        createIngredientCategory("sauces", ingredientCategoryRepository);
+        createIngredientCategory("sweets", ingredientCategoryRepository);
         log.info("IngredientCategoryInitializer: ... IngredientCategory data finished");
 
     }

@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.data.model.IngredientCategory;
 import pl.com.MyDiet.MyDiet.data.repositories.*;
 
 @Component
 @Slf4j
+@Transactional
 public class DataInitializer implements CommandLineRunner {
 
     private final IngredientCategoryRepository ingredientCategoryRepository;
@@ -37,8 +39,17 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("DataInitializer: Sample data insert started....");
-            UserInitializer userInitializer = new UserInitializer();
-            userInitializer.createSampleUsers(userRepository, passwordEncoder);
+        UserInitializer userInitializer = new UserInitializer();
+        userInitializer.createSampleUsers(userRepository, passwordEncoder);
+
+        IngredientCategoryInitializer ingredientCategoryInitializer = new IngredientCategoryInitializer();
+        ingredientCategoryInitializer.createSampleIngredientCategory(ingredientCategoryRepository);
+
+        IngredientInitializer ingredientInitializer = new IngredientInitializer();
+        ingredientInitializer.createSampleIngredients(ingredientRepository, ingredientCategoryRepository);
+
         log.info("DataInitializer: ... sample data finished");
+
+
     }
 }
