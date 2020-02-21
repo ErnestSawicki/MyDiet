@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
 import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
@@ -13,9 +12,6 @@ import pl.com.MyDiet.MyDiet.services.IngredientService;
 import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.security.Principal;
-import java.sql.SQLOutput;
-import java.util.Collections;
-import java.util.List;
 
 
 @Controller
@@ -64,7 +60,7 @@ public class MealController {
                           Principal principal) {
         if (mealService.saveIngredient(mealCreateDTO, principal.getName())) {
             System.out.println("i ma here save");
-            return "index";
+            return "home-page";
         } else {
             model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
             return "createMeal";

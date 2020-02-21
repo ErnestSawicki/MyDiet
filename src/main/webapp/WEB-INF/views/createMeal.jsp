@@ -15,7 +15,10 @@
     <title>CreateMeal</title>
 </head>
 <body>
-CreateMeal
+<div>
+    <jsp:include page="fragments/header.jsp"/>
+</div>
+<h1>PREPARE MEAL</h1>
 <div class="container">
     <form method="post" action="/createMeal">
         <div><label for="mealName">Name:</label></div>
@@ -64,6 +67,9 @@ CreateMeal
         <input type="submit" value="send" name="send"/>
         <sec:csrfInput/>
     </form>
+</div>
+<div>
+    <jsp:include page="fragments/footer.jsp"/>
 </div>
 </body>
 </html>

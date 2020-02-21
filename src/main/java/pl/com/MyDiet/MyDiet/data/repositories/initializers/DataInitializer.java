@@ -1,3 +1,4 @@
+/*
 package pl.com.MyDiet.MyDiet.data.repositories.initializers;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,3 +54,4 @@ public class DataInitializer implements CommandLineRunner {
 
     }
 }
+*/

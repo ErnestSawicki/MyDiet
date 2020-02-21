@@ -54,7 +54,7 @@ public class IngredientController {
         boolean save = ingredientService.saveIngredient(ingredientDTO);
         System.out.println(save);
         if (save){
-            return "index";
+            return "home-page";
         }
         else {
             model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
@@ -71,7 +71,6 @@ public class IngredientController {
 
     @PostMapping(params = {"addCategory"})
     public String saveCategory(@ModelAttribute("ingredientDTO") IngredientDTO ingredientDTO,String categoryName, Model model){
-        System.out.println("jestem tu!!!");
         boolean save = ingredientCategoryService.save(ingredientDTO, categoryName);
         model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
         if (!save) {

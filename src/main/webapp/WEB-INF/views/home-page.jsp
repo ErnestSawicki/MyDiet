@@ -12,7 +12,9 @@
     <title>Home Page</title>
 </head>
 <body>
+<div class="header">
 <jsp:include page="fragments/header.jsp"/>
+</div>
 <div id="container">
 
     <h1>Dostępne fumkcjonalności:</h1>
@@ -21,7 +23,9 @@
         <li><a href="/createMeal">Utwórz danie</a></li>
     </ul>
 </div>
-<jsp:include page="fragments/footer.jsp"/>
+<div class="footer">
+    <jsp:include page="fragments/footer.jsp"/>
+</div>
 </body>
 </html>
 
