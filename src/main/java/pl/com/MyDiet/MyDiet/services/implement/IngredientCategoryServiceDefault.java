@@ -38,7 +38,15 @@ public class IngredientCategoryServiceDefault implements IngredientCategoryServi
     public Optional<IngredientCategory> findById(Long id) {
         return ingredientCategoryRepository.findById(id);
     }
-
+    @Override
+    public Set<IngredientCategoryDTO> getIngredientCategories(IngredientDTO ingredientDTO) {
+        Set<IngredientCategoryDTO> allCategories =getAllIngredientCategoryDTO();
+        Set<Long> usedCategories = ingredientDTO.getIngredientCategoriesIdAndName().stream()
+                .map(IngredientDTO.IngredientCategoriesIdAndName::getId)
+                .collect(Collectors.toSet());
+        allCategories.removeIf(p -> usedCategories.contains(p.getId()));
+        return allCategories;
+    }
     @Override
     public boolean save(IngredientDTO ingredientDTO, String categoryName) {
 

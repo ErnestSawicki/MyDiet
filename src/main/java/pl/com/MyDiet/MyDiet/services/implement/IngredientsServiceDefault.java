@@ -1,6 +1,5 @@
 package pl.com.MyDiet.MyDiet.services.implement;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.IngredientCategoryDTO;
 import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
+import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
 import pl.com.MyDiet.MyDiet.data.model.Ingredient;
 import pl.com.MyDiet.MyDiet.data.model.IngredientCategory;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
@@ -16,7 +16,6 @@ import pl.com.MyDiet.MyDiet.services.IngredientCategoryService;
 import pl.com.MyDiet.MyDiet.services.IngredientService;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,13 +25,12 @@ public class IngredientsServiceDefault implements IngredientService {
 
     private final IngredientCategoryService ingredientCategoryService;
     private final IngredientRepository ingredientRepository;
-    private final ModelMapper mapper;
 
     @Autowired
-    public IngredientsServiceDefault(IngredientCategoryService ingredientCategoryService, IngredientRepository ingredientRepository, ModelMapper mapper) {
+    public IngredientsServiceDefault(IngredientCategoryService ingredientCategoryService, IngredientRepository ingredientRepository) {
         this.ingredientCategoryService = ingredientCategoryService;
         this.ingredientRepository = ingredientRepository;
-        this.mapper = mapper;
+
     }
 
     public IngredientDTO rebuildFormWhenAddCategory(IngredientDTO ingredientDTO) {
@@ -48,18 +46,36 @@ public class IngredientsServiceDefault implements IngredientService {
 
     @Override
     public Set<IngredientCategoryDTO> getIngredientCategories(IngredientDTO ingredientDTO) {
-        Set<IngredientCategoryDTO> allCategories = ingredientCategoryService.getAllIngredientCategoryDTO();
-        Set<Long> usedCategories = ingredientDTO.getIngredientCategoriesIdAndName().stream()
-                .map(IngredientDTO.IngredientCategoriesIdAndName::getId)
-                .collect(Collectors.toSet());
-        allCategories.removeIf(p -> usedCategories.contains(p.getId()));
-        return allCategories;
+        return ingredientCategoryService.getIngredientCategories(ingredientDTO);
+    }
+
+
+    @Override
+    public List<IngredientDTO> getAllIngredientsDTO() {
+        return ingredientRepository.findAll().stream()
+                .map(p -> {
+                    IngredientDTO ingredientDTO = new IngredientDTO();
+                    ingredientDTO.setIngredientId(p.getId());
+                    ingredientDTO.setIngredientName(p.getName());
+                    ingredientDTO.setCaloriesPer100g(p.getCaloriesPer100gram());
+                    ingredientDTO.setIngredientCategoriesIdAndName(p.getIngredientCategories().stream()
+                            .map(s -> IngredientDTO.IngredientCategoriesIdAndName.valueOf(s.getId() + ";" + s.getName())
+                            ).collect(Collectors.toList()));
+                    return ingredientDTO;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IngredientDTO> getIngredientsDTO(MealCreateDTO mealCreateDTO) {
+        List<IngredientDTO> ingredientDTOS = getAllIngredientsDTO();
+        List<Long> usedIngredients = mealCreateDTO.getPartsOfMealIngredientIdNameAmount().stream().map(MealCreateDTO.PartOfMeal::getIngredientId).collect(Collectors.toList());
+        ingredientDTOS.removeIf(p -> usedIngredients.contains(p.getIngredientId()));
+        return ingredientDTOS;
     }
 
     @Transactional
     @Override
     public boolean saveIngredient(IngredientDTO ingredientDTO) {
-        System.out.println(ingredientDTO);
         if (ingredientDTO == null
                 || ingredientDTO.getIngredientName() == null
                 || ingredientDTO.getCaloriesPer100g() == null

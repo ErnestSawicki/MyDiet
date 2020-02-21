@@ -23,7 +23,6 @@ public class Ingredient extends EntityBase {
             joinColumns = @JoinColumn(name = "ingredients_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_category_id")
     )
-
     private List<IngredientCategory> ingredientCategories =new LinkedList<>();
 
 }

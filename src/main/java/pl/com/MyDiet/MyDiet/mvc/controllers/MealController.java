@@ -1,22 +1,20 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.com.MyDiet.MyDiet.data.model.Ingredient;
-import pl.com.MyDiet.MyDiet.data.model.Meal;
-import pl.com.MyDiet.MyDiet.data.model.MealIngredient;
-import pl.com.MyDiet.MyDiet.data.model.User;
+import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
+import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealIngredientRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
+import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
+import pl.com.MyDiet.MyDiet.services.IngredientService;
+import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.security.Principal;
-import java.util.ArrayList;
+import java.sql.SQLOutput;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -25,58 +23,51 @@ import java.util.List;
 @RequestMapping("/createMeal")
 public class MealController {
 
-    @Data
-    public class MealDTO{
-        private Long ingredientId;
-        private Integer ingredientAmount;
-        private String mealDescription;
-        private List<MealIngredient> mealIngredients = new ArrayList<>();
-        private String mealName;
-    }
+    private final MealService mealService;
+   private final IngredientRepository ingredientRepository;
 
-    private final IngredientRepository ingredientRepository;
-    private final MealIngredientRepository mealIngredientRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public MealController(IngredientRepository ingredientRepository,
-                          MealIngredientRepository mealIngredientRepository,
-                          UserRepository userRepository) {
+    public MealController(MealService mealService, IngredientService ingredientService, MealRepository mealRepository, IngredientRepository ingredientRepository) {
+        this.mealService = mealService;
+
         this.ingredientRepository = ingredientRepository;
-        this.mealIngredientRepository = mealIngredientRepository;
-        this.userRepository = userRepository;
     }
 
+
     @GetMapping
-    public String getCreateMealPage(Model model){
-        List<Ingredient> ingredients = ingredientRepository.findAll();
-        model.addAttribute("ingredients", ingredients);
-        model.addAttribute("mealDTO", new MealDTO());
+    public String getCreateMealPage(Model model) {
+        model.addAttribute("availableIngredients", ingredientRepository.findAll());//mealService.getAllIngredients());
+        model.addAttribute("MealCreateDTO", new MealCreateDTO());
         return "createMeal";
     }
 
     @PostMapping(params = {"add"})
-    public String addIngredient(MealDTO mealDTO, Model model){
-
-        MealIngredient mealIngredient = new MealIngredient();
-        mealIngredient.setAmount(mealDTO.getIngredientAmount());
-        mealIngredient.setIngredient(ingredientRepository.getOne(mealDTO.ingredientId));
-        mealIngredientRepository.save(mealIngredient);
-
-        mealDTO.mealIngredients.add(mealIngredient);
-
-        model.addAttribute("ingredients", ingredientRepository.findAll());
-        model.addAttribute("mealDTO", mealDTO);
+    public String addIngredient(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
+                                Model model) {
+        mealCreateDTO = mealService.rebuildFormWhenAddIngredient(mealCreateDTO);
+        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
         return "createMeal";
     }
 
-    @PostMapping(params = {"send"})
-    public String createMeal(MealDTO mealDTO, Principal principal){
-        Meal meal = new Meal();
-        BeanUtils.copyProperties(mealDTO, meal);
-        User loggedUser = userRepository.findUserByUsername(principal.getName());
-        meal.setOwner(loggedUser);
+    @PostMapping(params = {"categoryToRemove"})
+    public String rebuildFormWhenDelete(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
+                                        Model model) {
+        mealCreateDTO = mealService.rebuildFormWhenDeletedIngredient(mealCreateDTO);
+        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        return "addIngredient";
+    }
 
-        return "redirect:/";
+    @PostMapping(params = {"send"})
+    public String process(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
+                          Model model,
+                          Principal principal) {
+        if (mealService.saveIngredient(mealCreateDTO, principal.getName())) {
+            System.out.println("i ma here save");
+            return "index";
+        } else {
+            model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+            return "createMeal";
+        }
     }
 }

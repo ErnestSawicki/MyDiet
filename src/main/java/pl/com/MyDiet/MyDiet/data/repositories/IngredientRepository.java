@@ -5,4 +5,5 @@ import pl.com.MyDiet.MyDiet.data.model.Ingredient;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     boolean existsByName(String name);
+    Ingredient getByName(String name);
 }

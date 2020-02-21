@@ -1,14 +1,17 @@
 package pl.com.MyDiet.MyDiet.services;
 
-import pl.com.MyDiet.MyDiet.DTO.IngredientCategoryDTO;
-import pl.com.MyDiet.MyDiet.DTO.IngredientDTO;
-import pl.com.MyDiet.MyDiet.mvc.controllers.MealController;
+import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
+import pl.com.MyDiet.MyDiet.DTO.SimpleIngredientDTO;
 
-import java.util.Set;
+import java.util.List;
 
 public interface MealService {
-     rebuildFormWhenAddIngredient(IngredientDTO ingredientDTO);
-    IngredientDTO rebuildFormWhenDeletedIngredient(IngredientDTO ingredientDTO);
-    Set<IngredientCategoryDTO> getIngredientCategories(IngredientDTO ingredientDTO);
-    boolean saveIngredient(IngredientDTO ingredientDTO);
+    MealCreateDTO rebuildFormWhenAddIngredient(MealCreateDTO mealCreateDTO);
+
+    MealCreateDTO rebuildFormWhenDeletedIngredient(MealCreateDTO mealCreateDTO);
+
+    List<SimpleIngredientDTO> getIngredients(MealCreateDTO mealCreateDTO);
+    List<SimpleIngredientDTO> getAllIngredients();
+
+    boolean saveIngredient(MealCreateDTO mealCreateDTO, String principal);
 }

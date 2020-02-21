@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "Meal")
@@ -28,5 +29,7 @@ public class Meal extends EntityBase {
     @Column(name = "preparation_time")
     private Long preparationTime;
 
+    @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    private List<PartOfMeal> partsOfMeal;
 
 }

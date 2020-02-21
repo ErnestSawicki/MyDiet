@@ -19,21 +19,25 @@ CreateMeal
 <div class="container">
     <form method="post" action="/createMeal">
         <div><label for="mealName">Name:</label></div>
-        <input id="mealName" name="mealName" type="text">
+        <input id="mealName" name="name" type="text" required value="${MealCreateDTO.name}">
         <div class="col-25">
             <label for="mealDescription">Recipe</label>
         </div>
         <div class="col-75">
-            <textarea id="mealDescription" name="mealDescription" rows="4" cols="50"></textarea>
+            <textarea id="mealDescription" name="mealDescription" rows="4" cols="50"  required>${MealCreateDTO.mealDescription}</textarea>
         </div>
+
+        <div><label for="preparationTimeInMinutes">PREPARATION TIME:</label></div>
+        <input id="preparationTimeInMinutes" name="preparationTimeInMinutes" type="number" value="${MealCreateDTO.preparationTimeInMinutes}" required>
+
 
         <div class="col-25">
             <label for="ingredientId">Add ingredient</label>
         </div>
         <div>
-            <select id="ingredientId" name="ingredientId">
-                <c:forEach items="${ingredients}" var="ingredient">
-                    <option value="${ingredient.id}">${ingredient.name}</option>
+            <select id="ingredientId" name="ingredientToAdd">
+                <c:forEach items="${availableIngredients}" var="ingredient">
+                    <option value="${ingredient.id};${ingredient.name};0">${ingredient.name}</option>
                 </c:forEach>
             </select>
         </div>
@@ -41,19 +45,21 @@ CreateMeal
             <label for="ingredientAmount">Amount</label>
         </div>
         <div class="col-75">
-            <input id="ingredientAmount" name="ingredientAmount" type="number"/>
+            <input id="ingredientAmount" name="ingredientToAddAmount" type="number"/>
         </div>
+
         <input type="submit" name="add" value=" + "/>
         <div>
             <label>Meal ingredients: </label>
         </div>
         <div>
             <ul>
-                <c:forEach items="${mealDTO.mealIngredients}" var="mealIngredient">
-                    <li>${mealIngredient.ingredient.name} ${mealIngredient.amount}</li>
-                    <input type="hidden" name="mealIngredients" value="${mealIngredient.id}"/>
+                <c:forEach items="${MealCreateDTO.partsOfMealIngredientIdNameAmount}" var="mealIngredient" varStatus="lp">
+                    <li>${lp.count} name: ${mealIngredient.name} amount: ${mealIngredient.ingredientAmount}</li>
+                    <input type="hidden" name="partsOfMealIngredientIdNameAmount" value="${mealIngredient.ingredientId};${mealIngredient.name};${mealIngredient.ingredientAmount}"/>
                 </c:forEach>
             </ul>
+            <p>currency calories = ${MealCreateDTO.calories} </p>
         </div>
         <input type="submit" value="send" name="send"/>
         <sec:csrfInput/>
