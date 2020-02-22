@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class DailyMealSetDTO {
 
-    Long amongOfMeals;
+    Long mealAmount;
     Long calories;
     User creatorUser;
     List<SimpleMealsDTO> simpleMealsDTO = new ArrayList<>();

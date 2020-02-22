@@ -9,7 +9,6 @@ import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
-import pl.com.MyDiet.MyDiet.data.model.PartOfMeal;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
@@ -77,8 +76,8 @@ public class DailySetServiceServiceDefault implements DailySetService {
     public boolean save(DailyMealSetDTO dailyMealSetDTO, String user) {
         if (dailyMealSetDTO == null
                 || dailyMealSetDTO.getSimpleMealsDTO().isEmpty()
-                || dailyMealSetDTO.getAmongOfMeals() == null
-                || dailyMealSetDTO.getAmongOfMeals() < 3
+                || dailyMealSetDTO.getMealAmount() == null
+                || dailyMealSetDTO.getMealAmount() < 3
                 || dailyMealSetDTO.getCalories() == null)
             //todo
             return false;

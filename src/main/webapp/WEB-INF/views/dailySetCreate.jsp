@@ -15,183 +15,185 @@
 
 <h1>Crate new daily diet set </h1>
 <div id="container">
-<form method="post" action="/createDailySet">
-<h3> Amount meals per day </h3>
-<div>
-<c:choose>
-    <c:when test="${mealAmount !=5 }">
+    <form method="post" action="/createDailySet">
+        <h3> Amount meals per day </h3>
+        <div>
+            <c:choose>
+                <c:when test="${dailySetDTO.mealAmount !=5 }">
         <span><input type="radio" id="mealAmountChoice1c" name="mealAmount" value="3" checked>
         <label for="mealAmountChoice1c">3 (breakfast, diner, supper)</label></span>
 
-        <span> <input type="radio" id="mealAmountChoice2" name="mealAmount" value="5">
+                    <span> <input type="radio" id="mealAmountChoice2" name="mealAmount" value="5">
         <label for="mealAmountChoice2"> 5 (breakfast, second breakfast, dinner, tea, supper)</label></span>
-    </c:when>
-    <c:otherwise>
-        <span><input type="radio" id="mealAmountChoice1" name="mealAmount" value="3" >
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="mealAmountChoice1" name="mealAmount" value="3">
         <label for="mealAmountChoice1">3 (breakfast, diner, supper)</label></span>
 
-        <span> <input type="radio" id="mealAmountChoice2c" name="mealAmount" value="5" checked>
+                    <span> <input type="radio" id="mealAmountChoice2c" name="mealAmount" value="5" checked>
         <label for="mealAmountChoice2c"> 5 (breakfast, second breakfast, dinner, tea, supper)</label></span>
-    </c:otherwise>
-</c:choose>
-</div>
-<br/>
-<br/>
-<div>
-<h3> How many calories contain your set:</h3>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        <br/>
+        <br/>
+        <div>
+            <h3> How many calories contain your set:</h3>
 
-    <c:choose>
-        <c:when test="${caloriesAmount ==1000 }">
-<span><input type="radio" id="caloriesAmount1c" name="caloriesAmount" value="1000" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==1000 }">
+<span><input type="radio" id="caloriesAmount1c" name="calories" value="1000" checked>
         <label for="caloriesAmount1c">1000[cal]</label></span>
-        </c:when>
-    <c:otherwise>
-        <span><input type="radio" id="caloriesAmount1" name="caloriesAmount" value="1000" >
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount1" name="calories" value="1000">
         <label for="caloriesAmount1">1000[cal]</label></span>
-    </c:otherwise>
-    </c:choose>
+                </c:otherwise>
+            </c:choose>
 
-    <c:choose>
-    <c:when test="${caloriesAmount ==1500 }">
-<span><input type="radio" id="caloriesAmount2c" name="caloriesAmount" value = "1500" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==1500 }">
+<span><input type="radio" id="caloriesAmount2c" name="calories" value="1500" checked>
     <label for="caloriesAmount2c"> 1500[cal]</label></span>
-    </c:when>
-    <c:otherwise>
-        <span><input type="radio" id="caloriesAmount2" name="caloriesAmount" value = "1500">
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount2" name="calories" value="1500">
     <label for="caloriesAmount2"> 1500[cal]</label></span>
-    </c:otherwise>
-</c:choose>
+                </c:otherwise>
+            </c:choose>
 
-    <c:choose>
-        <c:when test="${caloriesAmount ==2000 }">
-<span><input type="radio" id="caloriesAmount3c" name="caloriesAmount" value = "2000" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==2000 }">
+<span><input type="radio" id="caloriesAmount3c" name="calories" value="2000" checked>
     <label for="caloriesAmount3c"> 2000[cal]</label></span>
-        </c:when>
-        <c:otherwise>
-        <span><input type="radio" id="caloriesAmount3" name="caloriesAmount" value = "2000">
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount3" name="calories" value="2000">
     <label for="caloriesAmount3"> 2000[cal]</label></span>
-        </c:otherwise>
-    </c:choose>
+                </c:otherwise>
+            </c:choose>
 
-    <c:choose>
-        <c:when test="${caloriesAmount ==2500 }">
-<span><input type="radio" id="caloriesAmount4c" name="caloriesAmount" value = "2500" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==2500 }">
+<span><input type="radio" id="caloriesAmount4c" name="calories" value="2500" checked>
     <label for="caloriesAmount4c"> 2500[cal]</label></span>
-        </c:when>
-        <c:otherwise>
-        <span><input type="radio" id="caloriesAmount4" name="caloriesAmount" value = "2500">
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount4" name="calories" value="2500">
     <label for="caloriesAmount4"> 2500[cal]</label></span>
-        </c:otherwise>
-    </c:choose>
+                </c:otherwise>
+            </c:choose>
 
-    <c:choose>
-        <c:when test="${caloriesAmount ==3000 }">
-<span><input type="radio" id="caloriesAmount5c" name="caloriesAmount" value = "3000" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==3000 }">
+<span><input type="radio" id="caloriesAmount5c" name="calories" value="3000" checked>
     <label for="caloriesAmount5c"> 3000[cal]</label></span>
-        </c:when>
-        <c:otherwise>
-        <span><input type="radio" id="caloriesAmount5" name="caloriesAmount" value = "3000">
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount5" name="calories" value="3000">
     <label for="caloriesAmount5"> 3000[cal]</label></span>
-        </c:otherwise>
-    </c:choose>
+                </c:otherwise>
+            </c:choose>
 
-    <c:choose>
-        <c:when test="${caloriesAmount ==3500 }">
-<span><input type="radio" id="caloriesAmount6c" name="caloriesAmount" value = "3500" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==3500 }">
+<span><input type="radio" id="caloriesAmount6c" name="calories" value="3500" checked>
     <label for="caloriesAmount6c"> 3500[cal]</label></span>
-        </c:when>
-        <c:otherwise>
-        <span><input type="radio" id="caloriesAmount6" name="caloriesAmount" value = "3500">
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount6" name="calories" value="3500">
     <label for="caloriesAmount6"> 3500[cal]</label></span>
-        </c:otherwise>
-    </c:choose>
+                </c:otherwise>
+            </c:choose>
 
-    <c:choose>
-        <c:when test="${caloriesAmount ==4000 }">
-<span><input type="radio" id="caloriesAmount7c" name="caloriesAmount" value = "4000" checked>
+            <c:choose>
+                <c:when test="${dailySetDTO.calories ==4000 }">
+<span><input type="radio" id="caloriesAmount7c" name="calories" value="4000" checked>
     <label for="caloriesAmount7c"> 4000[cal]</label></span>
-        </c:when>
-        <c:otherwise>
-        <span><input type="radio" id="caloriesAmount7" name="caloriesAmount" value = "4000">
+                </c:when>
+                <c:otherwise>
+        <span><input type="radio" id="caloriesAmount7" name="calories" value="4000">
     <label for="caloriesAmount7"> 4000[cal]</label></span>
-        </c:otherwise>
-    </c:choose>
-    <br/>
-    <div><button type="submit" name ="filter" value="true">filter</button></div>
-</div>
-<div>
+                </c:otherwise>
+            </c:choose>
+            <br/>
+            <div>
+                <button type="submit" name="filter" value="true">filter</button>
+            </div>
+        </div>
+        <div>
 
-<div>
-         <label for="breakfast"> Pick breakfast </label>
-         <select name="breakfast" id="breakfast">
-<c:forEach items="${availableCategory}" var="meal">
-         <option value="${}">${}</option>
-</c:forEach>
-           </select>
-             </div>
-<c:choose>
-    <c:when test="${mealAmount ==5 }">
-<div>
-         <label for="secondBreakfast"> Pick second breakfast </label>
-         <select name="secondBreakfast" id="secondBreakfast">
-             <c:forEach items="${availableCategory}" var="meal">
-         <option value="${}">${}</option>
-             </c:forEach>
-          </select>
-             </div>
-    </c:when>
-    <c:otherwise> <br/>
-    </c:otherwise>
-</c:choose>
+            <div>
+                <label for="breakfast"> Pick breakfast </label>
+                <select name="breakfast" id="breakfast">
+                    <c:forEach items="${availableMeats.breakfast}" var="meal">
+                        <option value="${meal.id}">${meal.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <c:choose>
+            <c:when test="${dailySetDTO.mealAmount ==5 }">
+            <div>
+                <label for="secondBreakfast"> Pick second breakfast </label>
+                <select name="secondBreakfast" id="secondBreakfast">
+                    <c:forEach items="${availableMeats.secondBreakfast}" var="meal">
+                        <option value="${meal.id}">${meal.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            </c:when>
+            <c:otherwise> <br/>
+            </c:otherwise>
+            </c:choose>
 
-<div>
-         <label for="dinner"> Pick dinner </label>
-         <select name="dinner" id="dinner">
-<c:forEach items="${availableCategory}" var="meal">
-         <option value="${}">${}</option>
-</c:forEach>
-          </select>
-             </div>
+            <div>
+                <label for="dinner"> Pick dinner </label>
+                <select name="dinner" id="dinner">
+                    <c:forEach items="${availableMeats.dinner}" var="meal">
+                        <option value="${meal.id}">${meal.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
 
-<c:choose>
-    <c:when test="${mealAmount ==5 }">
-<div>
-         <label for="tea"> Pick tea </label>
-    <c:forEach items="${availableCategory}" var="meal">
-         <select name="tea" id="tea">
-             <c:forEach items="${availableCategory}" var="meal">
-         <option value="${}">${}</option>
-             </c:forEach>
-          </select>
-    </c:forEach>
-             </div>
-    </c:when>
-    <c:otherwise> <br/>
-    </c:otherwise>
-</c:choose>
-<div>
-         <label for="supper"> Pick supper </label>
-         <select name="supper" id="supper">
-<c:forEach items="${availableCategory}" var="meal">
-         <option value="${}">${}</option>
-</c:forEach>
-          </select>
-             </div>
+            <c:choose>
+            <c:when test="${dailySetDTO.mealAmount ==5 }">
+            <div>
+                <label for="tea"> Pick tea </label>
+                <select name="tea" id="tea">
+                    <c:forEach items="${availableMeats.tea}" var="meal">
+                        <option value="${meal.id}">${meal.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            </c:when>
+            <c:otherwise> <br/>
+            </c:otherwise>
+            </c:choose>
+            <div>
+                <label for="supper"> Pick supper </label>
+                <select name="supper" id="supper">
+                    <c:forEach items="${availableMeats.supper}" var="meal">
+                        <option value="${meal.id}">${meal.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
 
-<div><button type="submit" name ="filter" value="true">check</button></div>
+            <div>
+                <button type="submit" name="filter" value="true">check</button>
+            </div>
 
-<h3> Your meals' daily set is: </h3>
-    <p> breakfast is ${}  calories: ${} [kcal]</p>
-     <c:when test="${mealAmount ==5 }">
-    <p> second breakfast is ${}  calories: ${} </p>>
-    </c:when>
-    <p> dinner is ${}  calories: ${} [kcal]</p>
-    <c:when test="${mealAmount ==5 }">
-    <p> breakfast is ${}  calories: ${} [kcal]</p>
-    </c:when>
-    <p> supper is ${}  calories: ${} [kcal]</p>
+            <h3> Your meals' daily set is: </h3>
+            <p> breakfast is ${dailySetDTO.simpleMealsDTO.get(0)} calories: ${dailySetDTO.simpleMealsDTO.get(0).calories} [kcal]</p>
+            <c:when test="${dailySetDTO.mealAmount ==5 }">
+            <p> second breakfast is ${dailySetDTO.simpleMealsDTO.get(3)} calories: ${dailySetDTO.simpleMealsDTO.get(3).calories} </p>>
+            </c:when>
+            <p> dinner is ${dailySetDTO.simpleMealsDTO.get(1)} calories: ${dailySetDTO.simpleMealsDTO.get(1).calories} [kcal]</p>
+            <c:when test="${dailySetDTO.mealAmount ==5 }">
+            <p> tea is ${dailySetDTO.simpleMealsDTO.get(4)} calories: ${dailySetDTO.simpleMealsDTO.get(4).calories} [kcal]</p>
+            </c:when>
+            <p> supper is ${dailySetDTO.simpleMealsDTO.get(2)} calories: ${dailySetDTO.simpleMealsDTO.get(2).calories} [kcal]</p>
 
-    <h3> summary calories is  ${} [kcal]</h3>
+            <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
 
-    </body>
-    </html>
+</body>
+</html>
