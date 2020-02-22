@@ -118,7 +118,7 @@
             </c:choose>
             <br/>
             <div>
-                <button type="submit" name="filter" value="true">filter</button>
+                <button type="submit" name="filter">filter</button>
             </div>
         </div>
         <div>
@@ -132,18 +132,18 @@
                 </select>
             </div>
             <c:choose>
-            <c:when test="${dailySetDTO.mealAmount ==5 }">
-            <div>
-                <label for="secondBreakfast"> Pick second breakfast </label>
-                <select name="secondBreakfast" id="secondBreakfast">
-                    <c:forEach items="${availableMeats.secondBreakfast}" var="meal">
-                        <option value="${meal.id}">${meal.name}</option>
-                    </c:forEach>
-                </select>
-            </div>
-            </c:when>
-            <c:otherwise> <br/>
-            </c:otherwise>
+                <c:when test="${dailySetDTO.mealAmount ==5 }">
+                    <div>
+                        <label for="secondBreakfast"> Pick second breakfast </label>
+                        <select name="secondBreakfast" id="secondBreakfast">
+                            <c:forEach items="${availableMeats.secondBreakfast}" var="meal">
+                                <option value="${meal.id}">${meal.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </c:when>
+                <c:otherwise> <br/>
+                </c:otherwise>
             </c:choose>
 
             <div>
@@ -156,18 +156,18 @@
             </div>
 
             <c:choose>
-            <c:when test="${dailySetDTO.mealAmount ==5 }">
-            <div>
-                <label for="tea"> Pick tea </label>
-                <select name="tea" id="tea">
-                    <c:forEach items="${availableMeats.tea}" var="meal">
-                        <option value="${meal.id}">${meal.name}</option>
-                    </c:forEach>
-                </select>
-            </div>
-            </c:when>
-            <c:otherwise> <br/>
-            </c:otherwise>
+                <c:when test="${dailySetDTO.mealAmount ==5 }">
+                    <div>
+                        <label for="tea"> Pick tea </label>
+                        <select name="tea" id="tea">
+                            <c:forEach items="${availableMeats.tea}" var="meal">
+                                <option value="${meal.id}">${meal.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </c:when>
+                <c:otherwise> <br/>
+                </c:otherwise>
             </c:choose>
             <div>
                 <label for="supper"> Pick supper </label>
@@ -179,21 +179,36 @@
             </div>
 
             <div>
-                <button type="submit" name="filter" value="true">check</button>
+                <button type="submit" name="filter">check</button>
             </div>
+        </div>
+    </form>
 
-            <h3> Your meals' daily set is: </h3>
-            <p> breakfast is ${dailySetDTO.simpleMealsDTO.get(0)} calories: ${dailySetDTO.simpleMealsDTO.get(0).calories} [kcal]</p>
-            <c:when test="${dailySetDTO.mealAmount ==5 }">
-            <p> second breakfast is ${dailySetDTO.simpleMealsDTO.get(3)} calories: ${dailySetDTO.simpleMealsDTO.get(3).calories} </p>>
-            </c:when>
-            <p> dinner is ${dailySetDTO.simpleMealsDTO.get(1)} calories: ${dailySetDTO.simpleMealsDTO.get(1).calories} [kcal]</p>
-            <c:when test="${dailySetDTO.mealAmount ==5 }">
-            <p> tea is ${dailySetDTO.simpleMealsDTO.get(4)} calories: ${dailySetDTO.simpleMealsDTO.get(4).calories} [kcal]</p>
-            </c:when>
-            <p> supper is ${dailySetDTO.simpleMealsDTO.get(2)} calories: ${dailySetDTO.simpleMealsDTO.get(2).calories} [kcal]</p>
+    <h3> Your meals' daily set is: </h3>
+    <h1>ToDo</h1>
+    <%--            <p> breakfast is ${dailySetDTO.simpleMealsDTO.get(0).name}
+                    calories: ${dailySetDTO.simpleMealsDTO.get(0).calories} [kcal]</p>
+                <c:choose>
+                <c:when test="${dailySetDTO.mealAmount ==5 }">
+                <p> second breakfast is ${dailySetDTO.simpleMealsDTO.get(3)}
+                    calories: ${dailySetDTO.simpleMealsDTO.get(3).calories} </p>>
+                </c:when>
+                    <c:otherwise></c:otherwise>
+                </c:choose>
+                <p> dinner is ${dailySetDTO.simpleMealsDTO.get(1)} calories: ${dailySetDTO.simpleMealsDTO.get(1).calories}
+                    [kcal]</p>
+                <c:choose>
+                <c:when test="${dailySetDTO.mealAmount ==5 }">
+                <p> tea is ${dailySetDTO.simpleMealsDTO.get(4)} calories: ${dailySetDTO.simpleMealsDTO.get(4).calories}
+                    [kcal]</p>
+                </c:when>
+                    <c:otherwise>></c:otherwise>
+                </c:choose>
 
-            <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
+                <p> supper is ${dailySetDTO.simpleMealsDTO.get(2)} calories: ${dailySetDTO.simpleMealsDTO.get(2).calories}
+                    [kcal]</p>
+
+                <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>--%>
 
 </body>
 </html>

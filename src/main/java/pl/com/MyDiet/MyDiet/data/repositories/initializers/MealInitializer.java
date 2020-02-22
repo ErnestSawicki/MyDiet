@@ -17,7 +17,7 @@ public class MealInitializer {
                                  IngredientRepository ingredientRepository) {
         Faker faker = new Faker();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 50; i++) {
             Meal meal = new Meal();
             meal.setRecipe(faker.harryPotter().quote());
             meal.setName(faker.food().dish());
@@ -26,7 +26,7 @@ public class MealInitializer {
             meal.setCreatorUser(userRepository.findAll().get(new Random().nextInt(9)));
 
             for (int j = 0; j < new Random().nextInt(3); j++) {
-                MealType mealType = mealTypeRepository.findAll().get(new Random().nextInt(3));
+                MealType mealType = mealTypeRepository.findAll().get(new Random().nextInt(5));
                 meal.getMealTypes().add(mealType);
                 mealType.getMeals().add(meal);
             }

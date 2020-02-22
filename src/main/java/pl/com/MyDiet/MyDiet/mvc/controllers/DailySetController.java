@@ -1,6 +1,7 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/createDailySet")
+@Slf4j
 public class DailySetController {
 
     private final DailySetService dailySetService;
@@ -36,6 +38,7 @@ public class DailySetController {
     public String createDailySetPages(@ModelAttribute ("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model){
         dailySetDTO= dailySetService.reloadPageWithSetVariable(dailySetDTO);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
+        log.info("DailySetController redirect to page");
         return "dailySetCreate";
     }
 
