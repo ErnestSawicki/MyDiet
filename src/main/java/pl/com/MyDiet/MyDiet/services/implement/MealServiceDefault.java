@@ -2,7 +2,6 @@ package pl.com.MyDiet.MyDiet.services.implement;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +11,16 @@ import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleIngredientDTO;
 import pl.com.MyDiet.MyDiet.data.model.Ingredient;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
+import pl.com.MyDiet.MyDiet.data.model.MealType;
 import pl.com.MyDiet.MyDiet.data.model.PartOfMeal;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
+import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 import pl.com.MyDiet.MyDiet.services.IngredientService;
 import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,14 +31,16 @@ public class MealServiceDefault implements MealService {
     private final IngredientService ingredientService;
     private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
+    private final MealTypeRepository mealTypeRepository;
 
 
     @Autowired
-    public MealServiceDefault(MealRepository mealRepository, IngredientService ingredientService, UserRepository userRepository, IngredientRepository ingredientRepository) {
+    public MealServiceDefault(MealRepository mealRepository, IngredientService ingredientService, UserRepository userRepository, IngredientRepository ingredientRepository, MealTypeRepository mealTypeRepository) {
         this.mealRepository = mealRepository;
         this.ingredientService = ingredientService;
         this.userRepository = userRepository;
         this.ingredientRepository = ingredientRepository;
+        this.mealTypeRepository = mealTypeRepository;
     }
 
     @Override
@@ -69,8 +70,41 @@ public class MealServiceDefault implements MealService {
     }
 
     @Override
-    public List<SimpleIngredientDTO> getIngredients(MealCreateDTO mealCreateDTO) {
-        List<SimpleIngredientDTO> availableIngredients = getAllIngredients();
+    public List<MealType> getAllMealType() {
+        return mealTypeRepository.findAll();
+    }
+
+    @Override
+    public List<MealType> getMealType(MealCreateDTO mealCreateDTO) {
+        List<MealType> allMealType = getAllMealType();
+        List<Long> collect = mealCreateDTO.getMealTypeNameMealId().stream().map(MealCreateDTO.MealTypeInner::getId).collect(Collectors.toList());
+        allMealType.removeIf(p -> collect.contains(p.getId()));
+        return allMealType;
+    }
+
+    @Override
+    public List<SimpleIngredientDTO> getAllIngredientsDTO() {
+        return ingredientRepository.findAll().stream()
+                .map(p -> {
+                    SimpleIngredientDTO simpleIngredientDTO = new SimpleIngredientDTO();
+                    simpleIngredientDTO.setId(p.getId());
+                    simpleIngredientDTO.setName(p.getName());
+                    simpleIngredientDTO.setCaloriesPer100gram(p.getCaloriesPer100gram());
+                    simpleIngredientDTO.setIngredientCategories(p.getIngredientCategories().stream()
+                            .map(s -> {
+                                IngredientCategoryDTO ingredientCategoryDTO = new IngredientCategoryDTO();
+                                ingredientCategoryDTO.setId(s.getId());
+                                ingredientCategoryDTO.setName(s.getName());
+                                return ingredientCategoryDTO;
+                            }).collect(Collectors.toList()));
+                    return simpleIngredientDTO;
+                }).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<SimpleIngredientDTO> getIngredientsDTO(MealCreateDTO mealCreateDTO) {
+        List<SimpleIngredientDTO> availableIngredients = getAllIngredientsDTO();
         List<Long> collect = mealCreateDTO.getPartsOfMealIngredientIdNameAmount().stream().map(MealCreateDTO.PartOfMeal::getIngredientId).collect(Collectors.toList());
         availableIngredients.removeIf(p -> collect.contains(p.getId()));
         return availableIngredients;
@@ -105,33 +139,13 @@ public class MealServiceDefault implements MealService {
             partOfMeal.setIngredient(ingredientRepository.getOne(p.getIngredientId()));
             return partOfMeal;
         }).collect(Collectors.toList()));
-
+        mealCreateDTO.getMealTypeNameMealId().forEach(p -> meal.getMealTypes().add(mealTypeRepository.getOne(p.getId())));
 
         log.info("Try to save meal= {}", meal.getName());
         System.out.println(meal.getPartsOfMeal().isEmpty());
         mealRepository.save(meal);
         log.info("Saved {}", meal.getName());
         return true;
-    }
-
-    @Override
-    public List<SimpleIngredientDTO> getAllIngredients() {
-        return ingredientRepository.findAll().stream()
-                .map(p -> {
-                    SimpleIngredientDTO simpleIngredientDTO = new SimpleIngredientDTO();
-                    simpleIngredientDTO.setId(p.getId());
-                    simpleIngredientDTO.setName(p.getName());
-                    simpleIngredientDTO.setCaloriesPer100gram(p.getCaloriesPer100gram());
-                    simpleIngredientDTO.setIngredientCategories(p.getIngredientCategories().stream()
-                            .map(s -> {
-                                IngredientCategoryDTO ingredientCategoryDTO = new IngredientCategoryDTO();
-                                ingredientCategoryDTO.setId(s.getId());
-                                ingredientCategoryDTO.setName(s.getName());
-                                return ingredientCategoryDTO;
-                            }).collect(Collectors.toList()));
-                    return simpleIngredientDTO;
-                }).collect(Collectors.toList());
-
     }
 
     private Long countCalories(MealCreateDTO mealCreateDTO) {

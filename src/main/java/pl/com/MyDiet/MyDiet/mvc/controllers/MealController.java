@@ -7,12 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
-import pl.com.MyDiet.MyDiet.services.IngredientService;
+import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
 import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.security.Principal;
- 
+
 
 @Controller
 @Slf4j
@@ -20,8 +19,8 @@ import java.security.Principal;
 public class MealController {
 
     private final MealService mealService;
-   private final IngredientRepository ingredientRepository;
-   private final MealTypeRepository mealTypeRepository;
+    private final IngredientRepository ingredientRepository;
+    private final MealTypeRepository mealTypeRepository;
 
 
     @Autowired
@@ -36,8 +35,7 @@ public class MealController {
     public String getCreateMealPage(Model model) {
         model.addAttribute("availableIngredients", ingredientRepository.findAll());//mealService.getAllIngredients());
         model.addAttribute("mealCreateDTO", new MealCreateDTO());
-        List<MealType> mealTypes = mealTypeRepository.findAll();
-        model.addAttribute("mealTypes", mealTypes);
+        model.addAttribute("mealTypes", mealTypeRepository.findAll());
         return "createMeal";
     }
 
@@ -45,7 +43,8 @@ public class MealController {
     public String addIngredient(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                                 Model model) {
         mealCreateDTO = mealService.rebuildFormWhenAddIngredient(mealCreateDTO);
-        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
+        model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         return "createMeal";
     }
 
@@ -53,23 +52,26 @@ public class MealController {
     public String removeIngredient(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                                    Model model) {
         mealCreateDTO = mealService.rebuildFormWhenDeletedIngredient(mealCreateDTO);
-        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
+        model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         return "createMeal";
     }
 
     @PostMapping(params = {"addMealType"})
     public String addMealType(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
-                                Model model) {
+                              Model model) {
         mealCreateDTO = mealService.rebuildFormWhenAddMealType(mealCreateDTO);
-        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
+        model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         return "createMeal";
     }
 
     @PostMapping(params = {"mealTypeToRemove"})
     public String removeMealType(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
-                                   Model model) {
+                                 Model model) {
         mealCreateDTO = mealService.rebuildFormWhenDeletedMealType(mealCreateDTO);
-        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
+        model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         return "createMeal";
     }
 
@@ -80,7 +82,8 @@ public class MealController {
         if (mealService.saveIngredient(mealCreateDTO, principal.getName())) {
             return "home-page";
         } else {
-            model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+            model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
+            model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
             return "createMeal";
         }
     }

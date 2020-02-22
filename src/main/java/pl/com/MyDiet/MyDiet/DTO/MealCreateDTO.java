@@ -23,7 +23,7 @@ public class MealCreateDTO {
     private List<PartOfMeal> partsOfMealIngredientIdNameAmount = new ArrayList<>();
     private Long mealTypeToRemove;
     private MealTypeInner mealTypeToAdd;
-    private List <MealTypeInner> mealTypeNameMealId;
+    private List <MealTypeInner> mealTypeNameMealId =new ArrayList<>();
 
 
 
@@ -47,7 +47,7 @@ public class MealCreateDTO {
 
     public void removerMealTypeInner() {
         if (this.mealTypeToRemove != null)
-            mealTypeNameMealId.removeIf(p -> (p.mealTypeId).equals(mealTypeToRemove));
+            mealTypeNameMealId.removeIf(p -> (p.id).equals(mealTypeToRemove));
     }
 
 
@@ -72,7 +72,7 @@ public class MealCreateDTO {
     @AllArgsConstructor()
     @NoArgsConstructor
     public static class MealTypeInner {
-        private Long mealTypeId;
+        private Long id;
         private MealTypeEnumeration mealTypeName;
 
 
