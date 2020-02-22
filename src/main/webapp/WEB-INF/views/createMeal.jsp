@@ -52,7 +52,7 @@
             <input id="ingredientAmount" name="ingredientToAddAmount" type="number"/>
         </div>
 
-        <input type="submit" name="add" value=" + "/>
+        <input type="submit" name="addIngredient" value=" + "/>
         <div>
             <label>Meal ingredients: </label>
         </div>
@@ -65,6 +65,19 @@
                 </c:forEach>
             </ul>
             <p>currency calories = ${mealCreateDTO.calories} </p>
+
+
+            <div>
+                <select id="ingredientId" name="ingredientToAdd">
+                    <c:forEach items="${availableIngredients}" var="ingredient">
+                        <option value="${ingredient.id};${ingredient.name};0">${ingredient.name}</option>
+                    </c:forEach>
+                </select>
+
+            </div>
+
+
+
         </div>
         <input type="submit" value="send" name="send"/>
         <sec:csrfInput/>

@@ -21,6 +21,7 @@ public class MealController {
 
     private final MealService mealService;
    private final IngredientRepository ingredientRepository;
+   private  final MealType
 
 
     @Autowired
@@ -38,7 +39,7 @@ public class MealController {
         return "createMeal";
     }
 
-    @PostMapping(params = {"add"})
+    @PostMapping(params = {"addIngredient"})
     public String addIngredient(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                                 Model model) {
         mealCreateDTO = mealService.rebuildFormWhenAddIngredient(mealCreateDTO);
@@ -47,9 +48,25 @@ public class MealController {
     }
 
     @PostMapping(params = {"ingredientToRemove"})
-    public String rebuildFormWhenDelete(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
-                                        Model model) {
+    public String removeIngredient(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
+                                   Model model) {
         mealCreateDTO = mealService.rebuildFormWhenDeletedIngredient(mealCreateDTO);
+        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        return "createMeal";
+    }
+
+    @PostMapping(params = {"addMealType"})
+    public String addMealType(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
+                                Model model) {
+        mealCreateDTO = mealService.rebuildFormWhenAddMealType(mealCreateDTO);
+        model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
+        return "createMeal";
+    }
+
+    @PostMapping(params = {"mealTypeToRemove"})
+    public String removeMealType(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
+                                   Model model) {
+        mealCreateDTO = mealService.rebuildFormWhenDeletedMealType(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
         return "createMeal";
     }

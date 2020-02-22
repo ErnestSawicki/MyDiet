@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.com.MyDiet.MyDiet.data.model.User;
+import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,11 @@ public class MealCreateDTO {
     private Long preparationTimeInMinutes;
     private PartOfMeal ingredientToAdd;
     private Long ingredientToRemove;
-    List<PartOfMeal> partsOfMealIngredientIdNameAmount = new ArrayList<>();
+    private List<PartOfMeal> partsOfMealIngredientIdNameAmount = new ArrayList<>();
+    private Long mealTypeToRemove;
+    private MealTypeInner mealTypeToAdd;
+    private List <MealTypeInner> mealTypeNameMealId;
+
 
 
     public void savePartOfMeal() {
@@ -32,6 +37,17 @@ public class MealCreateDTO {
     public void removerPartOfMeal() {
         if (this.ingredientToRemove != null)
             partsOfMealIngredientIdNameAmount.removeIf(p -> (p.ingredientId).equals(ingredientToRemove));
+    }
+
+    public void saveMealTypeInner() {
+        if (this.mealTypeToAdd != null
+                && !mealTypeNameMealId.contains(mealTypeToAdd))
+            mealTypeNameMealId.add(mealTypeToAdd);
+    }
+
+    public void removerMealTypeInner() {
+        if (this.mealTypeToRemove != null)
+            mealTypeNameMealId.removeIf(p -> (p.mealTypeId).equals(mealTypeToRemove));
     }
 
 
@@ -49,5 +65,22 @@ public class MealCreateDTO {
             return new PartOfMeal(Long.valueOf(values[0]),values[1], Long.valueOf(values[2]));
 
         }
+
     }
+
+    @Data
+    @AllArgsConstructor()
+    @NoArgsConstructor
+    public static class MealTypeInner {
+        private Long mealTypeId;
+        private MealTypeEnumeration mealTypeName;
+
+
+        public static MealTypeInner valueOf(String value) {
+            String[] values = value.split(";");
+            return new MealTypeInner(Long.valueOf(values[1]), Enum.valueOf(MealTypeEnumeration.class, values[0]));
+
+        }
+    }
+
 }

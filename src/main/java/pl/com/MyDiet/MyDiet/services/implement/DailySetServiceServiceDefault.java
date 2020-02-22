@@ -46,6 +46,7 @@ public class DailySetServiceServiceDefault implements DailySetService {
     private List<SimpleMealsDTO> convertToDTO(List<Meal> meals) {
 
         if (meals == null || !meals.get(0).getClass().equals(Meal.class))
+
             return new ArrayList<>();
 
         return meals.stream().filter(Objects::nonNull)
@@ -74,28 +75,29 @@ public class DailySetServiceServiceDefault implements DailySetService {
     @Override
     @Transactional
     public boolean save(DailyMealSetDTO dailyMealSetDTO, String user) {
-        if (dailyMealSetDTO == null
-                || dailyMealSetDTO.getSimpleMealsDTO().isEmpty()
-                || dailyMealSetDTO.getMealAmount() == null
-                || dailyMealSetDTO.getMealAmount() < 3
-                || dailyMealSetDTO.getCalories() == null)
-            //todo
-            return false;
-
-        log.info("condition pass");
-
-        DailySet dailySet= new DailySet();
-
-
-
-
-
-//        log.info("Try to save meal= {}", meal.getName());
-//        System.out.println(meal.getPartsOfMeal().isEmpty());
-//        mealRepository.save(meal);
-//        log.info("Saved {}", meal.getName());
-        return true;
-
+//        if (dailyMealSetDTO == null
+//                || dailyMealSetDTO.getSimpleMealsDTO().isEmpty()
+//                || dailyMealSetDTO.getMealAmount() == null
+//                || dailyMealSetDTO.getMealAmount() < 3
+//
+//                || dailyMealSetDTO.getCalories() == null)
+//            //todo
+//            return false;
+//
+//        log.info("condition pass");
+//
+//        DailySet dailySet= new DailySet();
+//
+//
+//
+//
+//
+////        log.info("Try to save meal= {}", meal.getName());
+////        System.out.println(meal.getPartsOfMeal().isEmpty());
+////        mealRepository.save(meal);
+////        log.info("Saved {}", meal.getName());
+//        return true;
+//
 
         return false;
 

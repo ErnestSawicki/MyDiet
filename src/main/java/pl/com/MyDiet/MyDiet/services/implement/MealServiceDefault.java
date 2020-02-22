@@ -50,9 +50,21 @@ public class MealServiceDefault implements MealService {
     }
 
     @Override
+    public MealCreateDTO rebuildFormWhenAddMealType(MealCreateDTO mealCreateDTO) {
+        mealCreateDTO.saveMealTypeInner();
+        return mealCreateDTO;
+    }
+
+    @Override
     public MealCreateDTO rebuildFormWhenDeletedIngredient(MealCreateDTO mealCreateDTO) {
         mealCreateDTO.removerPartOfMeal();
         mealCreateDTO.setCalories(countCalories(mealCreateDTO));
+        return mealCreateDTO;
+    }
+
+    @Override
+    public MealCreateDTO rebuildFormWhenDeletedMealType(MealCreateDTO mealCreateDTO) {
+        mealCreateDTO.removerMealTypeInner();
         return mealCreateDTO;
     }
 
