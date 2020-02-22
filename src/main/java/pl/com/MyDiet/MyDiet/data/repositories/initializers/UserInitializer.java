@@ -20,6 +20,22 @@ public class UserInitializer {
         log.info("UserInitializer: User sample data started ...");
         Faker faker = new Faker();
 
+        User mainUser = new User();
+
+
+        mainUser.setFirstName("Adam");
+        mainUser.setLastName("Kowalski");
+        mainUser.setUsername("user");
+        mainUser.setSex(Sex.MALE);
+        mainUser.setEmail("AdamKowalski@gmail.com");
+        mainUser.setBirthDate(LocalDate.of(1970,3,15));
+        mainUser.setRole("USER");
+        mainUser.setActive(true);
+        mainUser.setPassword(passwordEncoder.encode("pass"));
+
+        userRepository.save(mainUser);
+
+
         for(int i =0; i < 20; i++){
 
             User user = new User();

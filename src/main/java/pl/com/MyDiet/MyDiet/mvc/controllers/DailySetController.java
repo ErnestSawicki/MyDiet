@@ -5,14 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
+import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
+import pl.com.MyDiet.MyDiet.data.model.Meal;
+import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
+import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -21,10 +24,14 @@ import java.security.Principal;
 public class DailySetController {
 
     private final DailySetService dailySetService;
+    private final MealRepository mealRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public DailySetController( DailySetService dailySetService) {
+    public DailySetController(DailySetService dailySetService, MealRepository mealRepository, UserRepository userRepository) {
         this.dailySetService = dailySetService;
+        this.mealRepository = mealRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -34,16 +41,53 @@ public class DailySetController {
         return "dailySetCreate";
     }
 
-    @PostMapping(params={"filter"})
-    public String createDailySetPages(@ModelAttribute ("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model){
-        dailySetDTO= dailySetService.reloadPageWithSetVariable(dailySetDTO);
+    @PostMapping(params = {"filter"})
+    public String createDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
+        dailySetDTO = dailySetService.reloadPageWithSetVariable(dailySetDTO);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         log.info("DailySetController redirect to page");
         return "dailySetCreate";
     }
 
     @PostMapping(params = {"send"})
-    public String process(@ModelAttribute("mealCreateDTO") DailyMealSetDTO dailySetDTO, Principal principal, Model model){
+    public String process(@ModelAttribute("mealCreateDTO") DailyMealSetDTO dailySetDTO,
+                          Principal principal,
+                          Model model,
+                          @RequestParam Long breakfast,
+                          @RequestParam(required = false) Long secondBreakfast,
+                          @RequestParam Long dinner,
+                          @RequestParam(required = false) Long tea,
+                          @RequestParam Long supper) {
+        log.debug("DailySetController-@PostMapping(params=send): dailySetDTO ={}", dailySetDTO.toString());
+        log.debug("DailySetController-@PostMapping(params=send): breakfastId={}, secondBreakfastId={}, dinnerId={}, teaId={}, supperId={}",
+                breakfast, secondBreakfast, dinner, tea, supper);
+
+        List<Meal> meals = new ArrayList<>();
+        if (breakfast != null) {
+            meals.add(mealRepository.getOne(breakfast));
+        }
+        if (secondBreakfast != null) {
+            meals.add(mealRepository.getOne(secondBreakfast));
+        }
+        if (dinner != null) {
+            meals.add(mealRepository.getOne(dinner));
+        }
+        if (tea != null) {
+            meals.add(mealRepository.getOne(tea));
+        }
+        if (supper != null) {
+            meals.add(mealRepository.getOne(supper));
+        }
+        meals.forEach(p ->{
+            SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
+            simpleMealsDTO.setId(p.getId());
+            simpleMealsDTO.setCalories(p.getCalories());
+            simpleMealsDTO.setName(p.getName());
+            simpleMealsDTO.setPreparationTime(p.getPreparationTime());
+            dailySetDTO.getSimpleMealsDTO().add(simpleMealsDTO);
+            p.setCreatorUser(userRepository.findUserByUsername(principal.getName()));
+        });
+        log.debug("DailySetController-@PostMapping(params=send): after simpleMealsDTO setUp dailySetDTO ={}", dailySetDTO.toString());
         if (dailySetService.save(dailySetDTO, principal.getName())) {
             return "home-page";
         } else {
@@ -51,5 +95,4 @@ public class DailySetController {
             return "dailySetCreate";
         }
     }
-
 }

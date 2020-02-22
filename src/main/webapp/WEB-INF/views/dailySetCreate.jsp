@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: akprz
@@ -16,6 +17,7 @@
 <h1>Crate new daily diet set </h1>
 <div id="container">
     <form method="post" action="/createDailySet">
+
         <h3> Amount meals per day </h3>
         <div>
             <c:choose>
@@ -35,8 +37,7 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <br/>
-        <br/>
+
         <div>
             <h3> How many calories contain your set:</h3>
 
@@ -116,10 +117,8 @@
     <label for="caloriesAmount7"> 4000[cal]</label></span>
                 </c:otherwise>
             </c:choose>
-            <br/>
-            <div>
-                <button type="submit" name="filter">filter</button>
-            </div>
+            <input type="submit" name="filter" value="Filter"/>
+
         </div>
         <div>
 
@@ -179,9 +178,10 @@
             </div>
 
             <div>
-                <button type="submit" name="filter">check</button>
+                <button type="submit" name="send">SEND</button>
             </div>
         </div>
+        <sec:csrfInput/>
     </form>
 
     <h3> Your meals' daily set is: </h3>
