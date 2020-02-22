@@ -21,14 +21,14 @@ public class MealController {
 
     private final MealService mealService;
    private final IngredientRepository ingredientRepository;
-   private  final MealType
+   private final MealTypeRepository mealTypeRepository;
 
 
     @Autowired
-    public MealController(MealService mealService, IngredientService ingredientService, MealRepository mealRepository, IngredientRepository ingredientRepository) {
+    public MealController(MealService mealService, IngredientRepository ingredientRepository, MealTypeRepository mealTypeRepository) {
         this.mealService = mealService;
-
         this.ingredientRepository = ingredientRepository;
+        this.mealTypeRepository = mealTypeRepository;
     }
 
 
@@ -36,6 +36,8 @@ public class MealController {
     public String getCreateMealPage(Model model) {
         model.addAttribute("availableIngredients", ingredientRepository.findAll());//mealService.getAllIngredients());
         model.addAttribute("mealCreateDTO", new MealCreateDTO());
+        List<MealType> mealTypes = mealTypeRepository.findAll();
+        model.addAttribute("mealTypes", mealTypes);
         return "createMeal";
     }
 

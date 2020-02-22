@@ -127,7 +127,7 @@
                 <label for="breakfast"> Pick breakfast </label>
                 <select name="breakfast" id="breakfast">
                     <c:forEach items="${availableMeats.breakfast}" var="meal">
-                        <option value="${meal.id}">${meal.name}</option>
+                        <option value="${meal.id}">${meal.name} - ${meal.calories}kcal</option>
                     </c:forEach>
                 </select>
             </div>

@@ -12,5 +12,6 @@ public interface MealRepository extends JpaRepository<Meal, Long>{
 
     boolean existsByName(String name);
 
-    List<Meal> findAllByMealTypes(MealTypeEnumeration mealType);
+    List<Meal> findAllByMealTypes(MealType mealType);
+
 }

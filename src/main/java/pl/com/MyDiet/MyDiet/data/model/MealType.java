@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,6 @@ public class MealType extends EntityBase {
     @JoinTable(name = "meal_meal_type",
             joinColumns = @JoinColumn(name = "meal_type_id"),
             inverseJoinColumns = @JoinColumn(name = "meal_id"))
-    private List<Meal> meals;
+    private List<Meal> meals = new ArrayList<>();
 
 }
