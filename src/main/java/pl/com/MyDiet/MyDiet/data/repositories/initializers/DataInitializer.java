@@ -55,6 +55,9 @@ public class DataInitializer implements CommandLineRunner {
         MealTypeInitializer mealTypeInitializer = new MealTypeInitializer();
         mealTypeInitializer.createSampleUsers(mealTypeRepository);
 
+        MealInitializer mealInitializer = new MealInitializer();
+        mealInitializer.createSampleMeal(mealRepository, userRepository, mealTypeRepository, partOfMealRepository, ingredientRepository);
+
         log.info("DataInitializer: ... sample data finished");
 
 

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -30,10 +31,10 @@ public class Meal extends EntityBase {
     // Relation part//
 
     @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PartOfMeal> partsOfMeal;
+    private List<PartOfMeal> partsOfMeal = new ArrayList<>();
 
     @ManyToMany(mappedBy = "meals", fetch = FetchType.LAZY)
-    List<MealType> mealTypes;
+    List<MealType> mealTypes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
