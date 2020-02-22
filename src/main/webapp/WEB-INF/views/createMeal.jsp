@@ -51,7 +51,6 @@
         <div class="col-75">
             <input id="ingredientAmount" name="ingredientToAddAmount" type="number"/>
         </div>
-
         <input type="submit" name="add" value=" + "/>
         <div>
             <label>Meal ingredients: </label>
@@ -66,8 +65,16 @@
             </ul>
             <p>currency calories = ${mealCreateDTO.calories} </p>
         </div>
+        <div class="mealType">
+            <select>
+                <c:forEach items="${mealTypes}" var="mealType">
+                    <option ${mealType.mealTypeName}>${mealType.mealTypeName}</option>
+                </c:forEach>
+            </select>
+        </div>
         <input type="submit" value="send" name="send"/>
         <sec:csrfInput/>
+
     </form>
 </div>
 <div>

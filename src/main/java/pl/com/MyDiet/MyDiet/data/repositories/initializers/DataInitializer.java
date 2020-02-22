@@ -21,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     private final PartOfMealRepository partOfMealRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MealTypeRepository mealTypeRepository;
 
     @Autowired
     public DataInitializer(IngredientCategoryRepository ingredientCategoryRepository,
@@ -28,13 +29,15 @@ public class DataInitializer implements CommandLineRunner {
                            MealRepository mealRepository,
                            PartOfMealRepository partOfMealRepository,
                            UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           MealTypeRepository mealTypeRepository) {
         this.ingredientCategoryRepository = ingredientCategoryRepository;
         this.ingredientRepository = ingredientRepository;
         this.mealRepository = mealRepository;
         this.partOfMealRepository = partOfMealRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mealTypeRepository = mealTypeRepository;
     }
 
     @Override
@@ -48,6 +51,9 @@ public class DataInitializer implements CommandLineRunner {
 
         IngredientInitializer ingredientInitializer = new IngredientInitializer();
         ingredientInitializer.createSampleIngredients(ingredientRepository, ingredientCategoryRepository);
+
+        MealTypeInitializer mealTypeInitializer = new MealTypeInitializer();
+        mealTypeInitializer.createSampleUsers(mealTypeRepository);
 
         log.info("DataInitializer: ... sample data finished");
 

@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
-import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
+import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 
 import java.util.ArrayList;
@@ -22,23 +22,26 @@ import java.util.stream.Collectors;
 @Service
 public class DailySetServiceServiceDefault implements DailySetService {
     private final MealRepository mealRepository;
+    private final MealTypeRepository mealTypeRepository;
 
 
     @Autowired
-    public DailySetServiceServiceDefault(MealRepository mealRepository) {
+    public DailySetServiceServiceDefault(MealRepository mealRepository, MealTypeRepository mealTypeRepository) {
         this.mealRepository = mealRepository;
+        this.mealTypeRepository = mealTypeRepository;
     }
 
 
     @Override
     public MealsAvailableToSetDTO getAvailableMeats(Long mealsAmount) {
+
         MealsAvailableToSetDTO mealsAvailableToSetDTO = new MealsAvailableToSetDTO();
-        mealsAvailableToSetDTO.setBreakfast(convertToDTO(mealRepository.findAllByMealTypes(MealTypeEnumeration.BREAKFAST)));
-        mealsAvailableToSetDTO.setDinner(convertToDTO(mealRepository.findAllByMealTypes(MealTypeEnumeration.BREAKFAST)));
-        mealsAvailableToSetDTO.setSupper(convertToDTO(mealRepository.findAllByMealTypes(MealTypeEnumeration.BREAKFAST)));
+        mealsAvailableToSetDTO.setBreakfast(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.BREAKFAST))));
+        mealsAvailableToSetDTO.setDinner(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.DINNER))));
+        mealsAvailableToSetDTO.setSupper(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SUPPER))));
         if (mealsAmount == 5) {
-            mealsAvailableToSetDTO.setSecondBreakfast(convertToDTO(mealRepository.findAllByMealTypes(MealTypeEnumeration.SECOND_BREAKFAST)));
-            mealsAvailableToSetDTO.setTea(convertToDTO(mealRepository.findAllByMealTypes(MealTypeEnumeration.TEA)));
+            mealsAvailableToSetDTO.setSecondBreakfast(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.BREAKFAST))));
+            mealsAvailableToSetDTO.setTea(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.TEA))));
         }
         return mealsAvailableToSetDTO;
     }
