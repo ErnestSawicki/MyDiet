@@ -18,6 +18,8 @@ public class Ingredient extends EntityBase {
     @Column(name = "calories_per_100g")
     private Long caloriesPer100gram;
 
+    // Relation part//
+
     @ManyToMany
     @JoinTable(name = "ingredient_ingredient_category",
             joinColumns = @JoinColumn(name = "ingredients_id"),

@@ -8,9 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import pl.com.MyDiet.MyDiet.DTO.UserRegistrationDTO;
-import pl.com.MyDiet.MyDiet.data.model.Sex;
+import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 

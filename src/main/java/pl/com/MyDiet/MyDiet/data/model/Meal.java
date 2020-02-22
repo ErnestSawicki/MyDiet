@@ -10,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Meal")
-@Getter @Setter
+@Getter
+@Setter
 public class Meal extends EntityBase {
 
     @Column(name = "calories")
@@ -19,9 +20,6 @@ public class Meal extends EntityBase {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User creatorUser;
 
     @Column(name = "reciple")
     private String recipe;
@@ -29,8 +27,16 @@ public class Meal extends EntityBase {
     @Column(name = "preparation_time")
     private Long preparationTime;
 
-    @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade =CascadeType.ALL)
+    // Relation part//
+
+    @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PartOfMeal> partsOfMeal;
 
+    @ManyToMany(mappedBy = "meals", fetch = FetchType.LAZY)
+    List<MealType> mealTypes;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User creatorUser;
 
 }

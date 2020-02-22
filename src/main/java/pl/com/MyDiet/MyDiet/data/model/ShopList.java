@@ -16,9 +16,10 @@ public class ShopList extends EntityBase {
     @Column(name = "shop_day", nullable = false)
     private LocalDate shopDay;
 
+    // Relation part//
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User owner;
-
 
     @OneToMany(mappedBy = "shopList")
     List<IngredientToBuy> ingredientsToBuy;

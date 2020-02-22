@@ -16,6 +16,8 @@ public class IngredientCategory extends EntityBase {
     @Column(name = "name")
     private String name;
 
+    // Relation part//
+
     @ManyToMany(mappedBy = "ingredientCategories")
     private List<Ingredient> ingredients;
 

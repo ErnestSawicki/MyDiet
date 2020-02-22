@@ -1,18 +1,15 @@
 package pl.com.MyDiet.MyDiet.data.repositories.initializers;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.com.MyDiet.MyDiet.data.model.Sex;
+import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 import java.util.Random;
 
 @Slf4j

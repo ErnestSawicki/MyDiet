@@ -82,7 +82,7 @@ public class MealServiceDefault implements MealService {
         Meal meal = new Meal();
 
         meal.setName(mealCreateDTO.getName().trim().toLowerCase());
-        meal.setOwner(userRepository.findUserByUsername(principal));
+        meal.setCreatorUser(userRepository.findUserByUsername(principal));
         meal.setCalories(mealCreateDTO.getCalories());
         meal.setPreparationTime(mealCreateDTO.getPreparationTimeInMinutes());
         meal.setRecipe(mealCreateDTO.getMealDescription());

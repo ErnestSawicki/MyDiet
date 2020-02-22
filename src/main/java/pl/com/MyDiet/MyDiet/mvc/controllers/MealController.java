@@ -34,12 +34,12 @@ public class MealController {
     @GetMapping
     public String getCreateMealPage(Model model) {
         model.addAttribute("availableIngredients", ingredientRepository.findAll());//mealService.getAllIngredients());
-        model.addAttribute("MealCreateDTO", new MealCreateDTO());
+        model.addAttribute("mealCreateDTO", new MealCreateDTO());
         return "createMeal";
     }
 
     @PostMapping(params = {"add"})
-    public String addIngredient(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
+    public String addIngredient(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                                 Model model) {
         mealCreateDTO = mealService.rebuildFormWhenAddIngredient(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
@@ -47,7 +47,7 @@ public class MealController {
     }
 
     @PostMapping(params = {"ingredientToRemove"})
-    public String rebuildFormWhenDelete(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
+    public String rebuildFormWhenDelete(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                                         Model model) {
         mealCreateDTO = mealService.rebuildFormWhenDeletedIngredient(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
@@ -55,11 +55,10 @@ public class MealController {
     }
 
     @PostMapping(params = {"send"})
-    public String process(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
+    public String process(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                           Model model,
                           Principal principal) {
         if (mealService.saveIngredient(mealCreateDTO, principal.getName())) {
-            System.out.println("i ma here save");
             return "home-page";
         } else {
             model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));

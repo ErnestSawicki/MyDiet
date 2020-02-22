@@ -12,12 +12,14 @@ import javax.persistence.*;
 @Setter
 public class PartOfMeal extends EntityBase {
 
+    @Column(name = "amount")
+    private Long amount;
+
+    // Relation part//
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
-
-    @Column(name = "amount")
-    private Long amount;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "meal_id")

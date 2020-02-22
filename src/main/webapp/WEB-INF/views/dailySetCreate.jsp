@@ -15,7 +15,7 @@
 
 <h1>Crate new daily diet set </h1>
 <div id="container">
-<form method="post" action="/mealSet">
+<form method="post" action="/createDailySet">
 <h3> Amount meals per day </h3>
 <div>
 <c:choose>
