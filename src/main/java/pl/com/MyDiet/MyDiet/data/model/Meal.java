@@ -40,4 +40,12 @@ public class Meal extends EntityBase {
     @JoinColumn(name = "owner_id", nullable = false)
     private User creatorUser;
 
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "name='" + name + '\'' +
+                ", recipe='" + recipe + '\'' +
+                ", preparationTime=" + preparationTime +
+                '}';
+    }
 }

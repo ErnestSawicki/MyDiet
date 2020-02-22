@@ -1,9 +1,9 @@
-/*
 package pl.com.MyDiet.MyDiet.data.repositories.initializers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +13,7 @@ import pl.com.MyDiet.MyDiet.data.repositories.*;
 @Component
 @Slf4j
 @Transactional
+@Profile("heroku")
 public class DataInitializer implements CommandLineRunner {
 
     private final IngredientCategoryRepository ingredientCategoryRepository;
@@ -63,4 +64,3 @@ public class DataInitializer implements CommandLineRunner {
 
     }
 }
-*/
