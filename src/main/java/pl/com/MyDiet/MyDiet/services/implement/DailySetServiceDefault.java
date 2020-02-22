@@ -7,28 +7,34 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
+import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
+import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
+import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class DailySetServiceServiceDefault implements DailySetService {
+public class DailySetServiceDefault implements DailySetService {
     private final MealRepository mealRepository;
     private final MealTypeRepository mealTypeRepository;
+    private final UserRepository userRepository;
+    private final DailySetRepository dailySetRepository;
 
 
     @Autowired
-    public DailySetServiceServiceDefault(MealRepository mealRepository, MealTypeRepository mealTypeRepository) {
+    public DailySetServiceDefault(MealRepository mealRepository, MealTypeRepository mealTypeRepository, UserRepository userRepository, DailySetRepository dailySetRepository) {
         this.mealRepository = mealRepository;
         this.mealTypeRepository = mealTypeRepository;
+        this.userRepository = userRepository;
+        this.dailySetRepository = dailySetRepository;
     }
 
 
@@ -63,7 +69,7 @@ public class DailySetServiceServiceDefault implements DailySetService {
 
         /*if (meals == null || !meals.get(0).getClass().equals(Meal.class))
             return new ArrayList<>();*/
-        log.info("DailySetServiceDefault-convertToDto: Incoming meals {}", meals.toString());
+        log.debug("DailySetServiceDefault-convertToDto: Incoming meals {}", meals.toString());
         return meals.stream().filter(Objects::nonNull)
                 .map(p -> {
                     SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
@@ -71,7 +77,7 @@ public class DailySetServiceServiceDefault implements DailySetService {
                     simpleMealsDTO.setName(p.getName());
                     simpleMealsDTO.setPreparationTime(p.getPreparationTime());
                     simpleMealsDTO.setCalories(p.getCalories());
-                    log.info("DailySetServiceDefault-convertToDto: ... converted to DTO");
+                    log.debug("DailySetServiceDefault-convertToDto: ... converted to DTO");
                     return simpleMealsDTO;
                 }).collect(Collectors.toList());
     }
@@ -90,21 +96,35 @@ public class DailySetServiceServiceDefault implements DailySetService {
 
     @Override
     @Transactional
-    public boolean save(DailyMealSetDTO dailyMealSetDTO, String user) {
+    public boolean save(DailyMealSetDTO dailyMealSetDTO, String username) {
         /*if (dailyMealSetDTO == null
                 || dailyMealSetDTO.getSimpleMealsDTO().isEmpty()
                 || dailyMealSetDTO.getMealAmount() == null
                 || dailyMealSetDTO.getMealAmount() < 3
-                || dailyMealSetDTO.getCalories() == null)
-            //todo
+                || dailyMealSetDTO.getCalories() == null){
             return false;
-        log.info("condition pass");
+        }*/
+
+        log.debug("DailySetServiceDefault-save: started ...");
         DailySet dailySet= new DailySet();
 
-        log.info("Try to save meal= {}", meal.getName());
-        System.out.println(meal.getPartsOfMeal().isEmpty());
-        mealRepository.save(meal);
-        log.info("Saved {}", meal.getName());*/
+        dailySet.setCalories(dailyMealSetDTO.getCalories());
+        dailySet.setCreatorUser(userRepository.findUserByUsername(username));
+        dailySet.setMealAmount(dailyMealSetDTO.getMealAmount());
+
+        log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getSimpleMealsDTO().size());
+
+        dailyMealSetDTO.getSimpleMealsDTO().forEach(p -> {
+            Meal meal = mealRepository.getOne(p.getId());
+            log.debug("DailySetServiceDefault-save: mealInDailySet {}", meal.toString());
+            dailySet.getSetMeals().add(meal);
+            dailySetRepository.save(dailySet);
+            log.debug("DailySetServiceDefault-save: dailySet {}", dailySet);
+            meal.getDailySets().add(dailySet);
+            mealRepository.save(meal);
+        });
+
+        log.debug("DailySetServiceDefault-save: ... finished");
         return true;
 
     }

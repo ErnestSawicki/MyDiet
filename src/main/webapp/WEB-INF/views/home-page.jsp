@@ -19,8 +19,9 @@
 
     <h1>Dostępne fumkcjonalności:</h1>
     <ul>
-        <li><a href="/ingredient">Utwórz składnik</a></li>
-        <li><a href="/createMeal">Utwórz danie</a></li>
+        <li><a href="/ingredient">Ingredients</a></li>
+        <li><a href="/createMeal">Meal</a></li>
+        <li><a href="/createDailySet">DailySet</a></li>
     </ul>
 </div>
 <div class="footer">

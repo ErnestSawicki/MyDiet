@@ -9,4 +9,14 @@ public class SimpleMealsDTO {
     private Long preparationTime;
     private String name;
     private Long calories;
+
+    @Override
+    public String toString() {
+        return "SimpleMealsDTO{" +
+                "id=" + id +
+                ", preparationTime=" + preparationTime +
+                ", name='" + name + '\'' +
+                ", calories=" + calories +
+                '}';
+    }
 }

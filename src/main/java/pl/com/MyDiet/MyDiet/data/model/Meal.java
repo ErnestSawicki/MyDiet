@@ -40,6 +40,9 @@ public class Meal extends EntityBase {
     @JoinColumn(name = "owner_id", nullable = false)
     private User creatorUser;
 
+    @ManyToMany(mappedBy = "setMeals", fetch = FetchType.LAZY)
+    List<DailySet> dailySets = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Meal{" +

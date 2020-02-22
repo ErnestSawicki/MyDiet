@@ -16,4 +16,14 @@ public class DailyMealSetDTO {
     Long calories;
     User creatorUser;
     List<SimpleMealsDTO> simpleMealsDTO = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "DailyMealSetDTO{" +
+                "mealAmount=" + mealAmount +
+                ", calories=" + calories +
+                ", creatorUser=" + creatorUser +
+                ", simpleMealsDTO=" + simpleMealsDTO +
+                '}';
+    }
 }
