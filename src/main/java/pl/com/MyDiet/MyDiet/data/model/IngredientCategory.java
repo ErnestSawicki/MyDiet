@@ -19,4 +19,5 @@ public class IngredientCategory extends EntityBase {
     @ManyToMany(mappedBy = "ingredientCategories")
     private List<Ingredient> ingredients;
 
+
 }

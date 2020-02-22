@@ -68,7 +68,6 @@ public class MealServiceDefault implements MealService {
     @Override
     @Transactional
     public boolean saveIngredient(MealCreateDTO mealCreateDTO, String principal) {
-        System.out.println(mealCreateDTO);
         if (mealCreateDTO == null
                 || mealCreateDTO.getName() == null
                 || mealCreateDTO.getMealDescription() == null
@@ -89,6 +88,7 @@ public class MealServiceDefault implements MealService {
         meal.setRecipe(mealCreateDTO.getMealDescription());
         meal.setPartsOfMeal(mealCreateDTO.getPartsOfMealIngredientIdNameAmount().stream().map(p -> {
             PartOfMeal partOfMeal = new PartOfMeal();
+            partOfMeal.setMeal(meal);
             partOfMeal.setAmount(p.getIngredientAmount());
             partOfMeal.setIngredient(ingredientRepository.getOne(p.getIngredientId()));
             return partOfMeal;

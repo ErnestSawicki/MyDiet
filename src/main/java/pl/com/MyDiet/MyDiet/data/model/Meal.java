@@ -21,7 +21,7 @@ public class Meal extends EntityBase {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    private User creatorUser;
 
     @Column(name = "reciple")
     private String recipe;
@@ -29,7 +29,8 @@ public class Meal extends EntityBase {
     @Column(name = "preparation_time")
     private Long preparationTime;
 
-    @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade =CascadeType.ALL)
     private List<PartOfMeal> partsOfMeal;
+
 
 }

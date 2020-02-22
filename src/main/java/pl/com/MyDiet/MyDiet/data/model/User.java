@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -45,11 +42,22 @@ public class User extends EntityBase {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    private Set<Meal> ownedMeals = new HashSet<>();
+    // Relation part//
+
+    @OneToMany(mappedBy = "creatorUser", fetch = FetchType.LAZY)
+    private Set<Meal> createdMeals = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<ShopList> shopLists;
 
+
+    @OneToMany(mappedBy = "creatorUser", fetch = FetchType.LAZY)
+    List<DailySet> createdDailySet;
+
+    @OneToMany(mappedBy = "creatorUser", fetch = FetchType.LAZY)
+    List<Diet> createdDaily;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    Diet ownedDiet;
 
 }

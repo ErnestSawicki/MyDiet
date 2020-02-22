@@ -12,9 +12,6 @@ import javax.persistence.*;
 @Setter
 public class PartOfMeal extends EntityBase {
 
-    @Column(name = "calories")
-    private Long calories;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
@@ -25,4 +22,5 @@ public class PartOfMeal extends EntityBase {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "meal_id")
     private Meal meal;
+
 }

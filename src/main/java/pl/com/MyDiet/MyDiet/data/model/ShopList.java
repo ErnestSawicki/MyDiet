@@ -5,20 +5,21 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "shop_lists")
-@Getter @Setter
-public class ShopList extends EntityBase{
+@Getter
+@Setter
+public class ShopList extends EntityBase {
 
     @Column(name = "shop_day", nullable = false)
     private LocalDate shopDay;
 
-//    @Column(name = "product_to_buy")
-//    private
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User owner;
 
+
+    @OneToMany(mappedBy = "shopList")
+    List<IngredientToBuy> ingredientsToBuy;
 }

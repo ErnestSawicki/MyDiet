@@ -5,6 +5,5 @@ import pl.com.MyDiet.MyDiet.data.model.Meal;
 
 public interface MealRepository extends JpaRepository<Meal, Long>{
 
-
     boolean existsByName(String name);
 }

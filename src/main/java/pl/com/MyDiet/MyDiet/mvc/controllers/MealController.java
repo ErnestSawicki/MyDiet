@@ -12,7 +12,7 @@ import pl.com.MyDiet.MyDiet.services.IngredientService;
 import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.security.Principal;
-
+ 
 
 @Controller
 @Slf4j
@@ -46,12 +46,12 @@ public class MealController {
         return "createMeal";
     }
 
-    @PostMapping(params = {"categoryToRemove"})
+    @PostMapping(params = {"ingredientToRemove"})
     public String rebuildFormWhenDelete(@ModelAttribute("MealCreateDTO") MealCreateDTO mealCreateDTO,
                                         Model model) {
         mealCreateDTO = mealService.rebuildFormWhenDeletedIngredient(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredients(mealCreateDTO));
-        return "addIngredient";
+        return "createMeal";
     }
 
     @PostMapping(params = {"send"})

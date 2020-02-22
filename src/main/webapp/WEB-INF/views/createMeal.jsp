@@ -43,6 +43,7 @@
                     <option value="${ingredient.id};${ingredient.name};0">${ingredient.name}</option>
                 </c:forEach>
             </select>
+
         </div>
         <div class="col-25">
             <label for="ingredientAmount">Amount</label>
@@ -58,7 +59,8 @@
         <div>
             <ul>
                 <c:forEach items="${MealCreateDTO.partsOfMealIngredientIdNameAmount}" var="mealIngredient" varStatus="lp">
-                    <li>${lp.count} name: ${mealIngredient.name} amount: ${mealIngredient.ingredientAmount}</li>
+                <li>${lp.count} name: ${mealIngredient.name} amount: ${mealIngredient.ingredientAmount}
+                    <button type="submit" name="ingredientToRemove" value=${mealIngredient.ingredientId} > Delete </button></li>
                     <input type="hidden" name="partsOfMealIngredientIdNameAmount" value="${mealIngredient.ingredientId};${mealIngredient.name};${mealIngredient.ingredientAmount}"/>
                 </c:forEach>
             </ul>

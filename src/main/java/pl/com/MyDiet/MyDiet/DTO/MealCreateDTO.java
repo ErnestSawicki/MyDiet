@@ -36,12 +36,13 @@ public class MealCreateDTO {
 
 
     @Data
-    @AllArgsConstructor
+    @AllArgsConstructor()
     @NoArgsConstructor
     public static class PartOfMeal {
         private Long ingredientId;
         private String name;
         private Long ingredientAmount;
+
 
         public static PartOfMeal valueOf(String value) {
             String[] values = value.split(";");
