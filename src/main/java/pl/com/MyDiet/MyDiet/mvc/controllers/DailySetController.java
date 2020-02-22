@@ -1,7 +1,6 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +35,7 @@ public class DailySetController {
     @PostMapping(params={"filter"})
     public String createDailySetPages(@ModelAttribute ("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model){
         dailySetDTO= dailySetService.reloadPageWithSetVariable(dailySetDTO);
-        model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getAmongOfMeals()));
+        model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         return "dailySetCreate";
     }
 
@@ -45,7 +44,7 @@ public class DailySetController {
         if (dailySetService.save(dailySetDTO, principal.getName())) {
             return "home-page";
         } else {
-            model.addAttribute("availableIngredients", dailySetService.getAvailableMeats(dailySetDTO.getAmongOfMeals()));
+            model.addAttribute("availableIngredients", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
             return "dailySetCreate";
         }
     }
