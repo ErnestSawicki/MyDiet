@@ -19,7 +19,8 @@ public class DailySet extends EntityBase {
     private LocalDate chosenDayForThisSet;
 
     @Column(name = "amount_of_meals")
-    private Long amongOfMeals;
+    private Long mealAmount;
+
     @Column(name = "calories")
     private Long calories;
 

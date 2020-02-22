@@ -75,30 +75,21 @@ public class DailySetServiceServiceDefault implements DailySetService {
     @Override
     @Transactional
     public boolean save(DailyMealSetDTO dailyMealSetDTO, String user) {
-        if (dailyMealSetDTO == null
+        /*if (dailyMealSetDTO == null
                 || dailyMealSetDTO.getSimpleMealsDTO().isEmpty()
                 || dailyMealSetDTO.getAmongOfMeals() == null
                 || dailyMealSetDTO.getAmongOfMeals() < 3
                 || dailyMealSetDTO.getCalories() == null)
             //todo
             return false;
-
         log.info("condition pass");
-
         DailySet dailySet= new DailySet();
 
-
-
-
-
-//        log.info("Try to save meal= {}", meal.getName());
-//        System.out.println(meal.getPartsOfMeal().isEmpty());
-//        mealRepository.save(meal);
-//        log.info("Saved {}", meal.getName());
+        log.info("Try to save meal= {}", meal.getName());
+        System.out.println(meal.getPartsOfMeal().isEmpty());
+        mealRepository.save(meal);
+        log.info("Saved {}", meal.getName());*/
         return true;
-
-
-        return false;
 
     }
 }
