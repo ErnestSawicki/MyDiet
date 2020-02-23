@@ -62,7 +62,6 @@ public class DietController {
 
     @PostMapping(params = {"createDailySet"})
     public String getCreateDailySet(){
-
-        return "redirect:/createDailySet";
+        return "redirect:/createDailySet/forDiet";
     }
 }

@@ -98,4 +98,18 @@ public class DailySetController {
             return "dailySetCreate";
         }
     }
+
+    @GetMapping("/forDiet")
+    public String getDailySetForDiet(Model model){
+        model.addAttribute("availableMeats", dailySetService.getAvailableMeats(3L));
+        model.addAttribute("dailySetDTO", new DailyMealSetDTO());
+
+        model.addAttribute("redirected", true);
+        return "dailySetCreate";
+    }
+
+    @PostMapping(params = {"createdForDiet"})
+    public String createDailySetForDiet(){
+        return "redirect:/createDiet";
+    }
 }
