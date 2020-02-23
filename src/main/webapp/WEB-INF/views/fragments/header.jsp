@@ -123,7 +123,7 @@
             </a>
             <a>
                 <li><sec:authorize access="isAuthenticated()">
-                    <form method="get" action="/logout">
+                    <form method="post" action="/logout">
                         <button class="myButton" type="submit">Logout</button>
                         <sec:csrfInput/>
                     </form>
