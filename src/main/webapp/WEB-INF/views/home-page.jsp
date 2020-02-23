@@ -22,6 +22,7 @@
         <li><a href="/ingredient">Ingredients</a></li>
         <li><a href="/createMeal">Meal</a></li>
         <li><a href="/createDailySet">DailySet</a></li>
+        <li><a href="/createDiet">Diet</a></li>
     </ul>
 </div>
 <div class="footer">
