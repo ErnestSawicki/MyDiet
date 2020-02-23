@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
+import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
@@ -26,12 +27,14 @@ public class DailySetController {
     private final DailySetService dailySetService;
     private final MealRepository mealRepository;
     private final UserRepository userRepository;
+    private final DietConfigurator dietConfigurator;
 
     @Autowired
-    public DailySetController(DailySetService dailySetService, MealRepository mealRepository, UserRepository userRepository) {
+    public DailySetController(DailySetService dailySetService, MealRepository mealRepository, UserRepository userRepository, DietConfigurator dietConfigurator) {
         this.dailySetService = dailySetService;
         this.mealRepository = mealRepository;
         this.userRepository = userRepository;
+        this.dietConfigurator = dietConfigurator;
     }
 
     @GetMapping

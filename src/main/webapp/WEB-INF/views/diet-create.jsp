@@ -18,15 +18,15 @@
 <form method="post" action="/createDiet">
 <div>
     <label for="dietName">Diet name</label>
-    <input type="text" id="dietName" name="dietName"/>
+    <input type="text" id="dietName" name="dietName" value="${dietConfigurator.dietName}"/>
 </div>
     <div>
     <label for="description">Description</label>
-    <textarea cols="30" rows="5" id="description" name="description"></textarea>
+    <textarea cols="30" rows="5" id="description" name="description" >${dietConfigurator.dietDescription}</textarea>
     </div>
     <div>
     <label for="duration">Duration</label>
-    <input type="number" id="duration" name="duration"/>
+    <input type="number" id="duration" name="duration" value="${dietConfigurator.duration}"/>
     </div>
     <div>
     <input type="submit" name="filter" value="filter"/>
