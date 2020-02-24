@@ -20,6 +20,7 @@ import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Optional;
 
 
 @Controller
@@ -114,9 +115,7 @@ public class MealController {
         mealFileEntity.setContentType(file.getContentType());
         mealFileEntity.setFileName(file.getOriginalFilename());
         mealFileEntity.setData(file.getBytes());
-
         fileEntityRepository.save(mealFileEntity);
-
         log.debug("MealController-uploadFile: mealFileEntity-status: {}", mealFileEntity.toString());
         mealCreateDTO.setMealFile(mealFileEntity);
         log.debug("MealController-uploadFile: mealCreateDTO-status: {}", mealCreateDTO.toString());
@@ -131,13 +130,14 @@ public class MealController {
     }
 
 
-    @GetMapping("/createMeal")
-    public ResponseEntity<Resource> getMealPicture(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO){
-        log.debug("MealController-mealFile: Input mealCreateDTO: {}", mealCreateDTO.toString());
+    @GetMapping("/meal-file")
+    public ResponseEntity<Resource> getMealPicture(@RequestParam Long mealFileId){
+        log.debug("MealController-mealFile: Input mealFileId: {}", mealFileId);
+        FileEntity mealFile = fileEntityRepository.findAllById(mealFileId).get(0);
         log.debug("MealController-mealFile: Download of meal picture started: ...");
-        if (hasMealPicture(mealCreateDTO)){
+        if (mealFile != null){
             log.debug("MealController-mealFile: ... file returned");
-            return buildMealFileResponse(mealCreateDTO);
+            return buildMealFileResponse(mealFile);
         } else {
             log.debug("MealController-mealFile: ... fine NOT returned - no file exist for meal");
             return buildNoMealFileResponse();
@@ -146,8 +146,7 @@ public class MealController {
 
     private ResponseEntity<Resource> buildNoMealFileResponse() { return ResponseEntity.noContent().build();}
 
-    private ResponseEntity<Resource> buildMealFileResponse(MealCreateDTO mealCreateDTO){
-        FileEntity mealFile = mealCreateDTO.getMealFile();
+    private ResponseEntity<Resource> buildMealFileResponse(FileEntity mealFile){
         ByteArrayResource data = getMealFileData(mealFile);
         return ResponseEntity
                 .ok()

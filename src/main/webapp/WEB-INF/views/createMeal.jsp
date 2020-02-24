@@ -121,8 +121,7 @@
         </div>
         <div class="content">
             <c:if test="${hasMealPicture}">
-                <input type="hidden">
-                <img src="/createMeal"/>
+                <img src="/createMeal/meal-file?mealFileId=${mealCreateDTO.mealFile.id}"/>
             </c:if>
         </div>
 
@@ -131,6 +130,7 @@
         <sec:csrfInput/>
 
     </form>
+
 </div>
 <div>
     <jsp:include page="fragments/footer.jsp"/>
