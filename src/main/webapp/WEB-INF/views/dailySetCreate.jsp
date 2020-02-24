@@ -176,10 +176,20 @@
                     </c:forEach>
                 </select>
             </div>
-
-            <div>
-                <button type="submit" name="send">SEND</button>
-            </div>
+            <c:choose>
+                <c:when test="${redirected == true}">
+                    <div>
+                        <button type="submit" name="createdForDiet">Create</button>
+                        <sec:csrfInput/>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div>
+                        <button type="submit" name="send">SEND</button>
+                        <sec:csrfInput/>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
         <sec:csrfInput/>
     </form>

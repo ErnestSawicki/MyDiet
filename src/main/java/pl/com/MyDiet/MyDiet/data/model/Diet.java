@@ -2,6 +2,7 @@ package pl.com.MyDiet.MyDiet.data.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,22 +15,16 @@ public class Diet extends EntityBase {
 
     @Column(name = "diet_name")
     private String dietName;
-
-    @Column(name = "calories")
-    private Long calories;
-
-    @Column(name = "start_day")
-    private LocalDate startDay;
-
-    @Column(name = "period_in_days")
-    private Long periodDays;
-
     @Column(name = "description")
     private String description;
 
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "duration")
+    private Long duration;
 
     // Relation part//
-
     @ManyToOne(fetch = FetchType.LAZY)
     private User creatorUser;
 
