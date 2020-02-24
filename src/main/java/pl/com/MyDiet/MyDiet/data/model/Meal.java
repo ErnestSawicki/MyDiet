@@ -2,6 +2,7 @@ package pl.com.MyDiet.MyDiet.data.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.com.MyDiet.MyDiet.data.model.file.FileEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -43,12 +44,25 @@ public class Meal extends EntityBase {
     @JoinColumn(name = "owner_id", nullable = false)
     private User creatorUser;
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "meal_file_id")
+    private FileEntity mealFile;
+
+    @Column(name = "meal_file_id", insertable = false, updatable = false)
+    private Long mealFileId;
+
     @Override
     public String toString() {
         return "Meal{" +
-                "name='" + name + '\'' +
+                "calories=" + calories +
+                ", name='" + name + '\'' +
                 ", recipe='" + recipe + '\'' +
                 ", preparationTime=" + preparationTime +
+                ", partsOfMeal=" + partsOfMeal +
+                ", mealTypes=" + mealTypes +
+                ", creatorUser=" + creatorUser +
+                ", mealFile=" + mealFile +
+                ", mealFileId=" + mealFileId +
                 '}';
     }
 }

@@ -141,6 +141,9 @@ public class MealServiceDefault implements MealService {
         }).collect(Collectors.toList()));
 
         mealCreateDTO.getMealTypeNameMealId().forEach(p -> meal.getMealTypes().add(mealTypeRepository.getOne(p.getId())));
+        meal.setMealFile(mealCreateDTO.getMealFile());
+
+        log.debug("MealServiceDefault: meal={}", meal.toString());
 
         log.debug("DailySetServiceDefault-save: try save meal {}", meal.getName());
         mealRepository.save(meal);

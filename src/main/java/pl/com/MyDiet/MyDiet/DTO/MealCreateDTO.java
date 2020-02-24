@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
+import pl.com.MyDiet.MyDiet.data.model.file.FileEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class MealCreateDTO {
     private Long mealTypeToRemove;
     private MealTypeInner mealTypeToAdd;
     private List <MealTypeInner> mealTypeNameMealId =new ArrayList<>();
-
+    private FileEntity mealFile;
 
 
     public void savePartOfMeal() {
@@ -60,13 +61,11 @@ public class MealCreateDTO {
         private String name;
         private Long ingredientAmount;
 
-
         public static PartOfMeal valueOf(String value) {
             String[] values = value.split(";");
             return new PartOfMeal(Long.valueOf(values[0]),values[1], Long.valueOf(values[2]));
 
         }
-
     }
 
     @Data
@@ -76,12 +75,29 @@ public class MealCreateDTO {
         private Long id;
         private MealTypeEnumeration mealTypeName;
 
-
         public static MealTypeInner valueOf(String value) {
             String[] values = value.split(";");
             return new MealTypeInner(Long.valueOf(values[1]), Enum.valueOf(MealTypeEnumeration.class, values[0]));
-
         }
     }
 
+    @Override
+    public String toString() {
+        return "MealCreateDTO{" +
+                "MealId=" + MealId +
+                ", calories=" + calories +
+                ", name='" + name + '\'' +
+                ", owner=" + owner +
+                ", ingredientToAddAmount=" + ingredientToAddAmount +
+                ", mealDescription='" + mealDescription + '\'' +
+                ", preparationTimeInMinutes=" + preparationTimeInMinutes +
+                ", ingredientToAdd=" + ingredientToAdd +
+                ", ingredientToRemove=" + ingredientToRemove +
+                ", partsOfMealIngredientIdNameAmount=" + partsOfMealIngredientIdNameAmount +
+                ", mealTypeToRemove=" + mealTypeToRemove +
+                ", mealTypeToAdd=" + mealTypeToAdd +
+                ", mealTypeNameMealId=" + mealTypeNameMealId +
+                ", mealFile=" + mealFile +
+                '}';
+    }
 }
