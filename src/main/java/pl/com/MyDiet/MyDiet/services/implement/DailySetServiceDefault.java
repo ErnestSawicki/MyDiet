@@ -16,7 +16,7 @@ import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,20 +43,20 @@ public class DailySetServiceDefault implements DailySetService {
     public MealsAvailableToSetDTO getAvailableMeats(Long mealsAmount) {
 
         MealsAvailableToSetDTO mealsAvailableToSetDTO = new MealsAvailableToSetDTO();
-        log.info("DailySetServiceDefault-BREAKFAST meals: {}",mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.BREAKFAST)).toString());
+        log.info("DailySetServiceDefault-BREAKFAST meals: {}", mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.BREAKFAST)).toString());
         mealsAvailableToSetDTO.setBreakfast(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.BREAKFAST))));
 
-        log.info("DailySetServiceDefault-DINNER meals: {}",mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.DINNER)).toString());
+        log.info("DailySetServiceDefault-DINNER meals: {}", mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.DINNER)).toString());
         mealsAvailableToSetDTO.setDinner(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.DINNER))));
 
-        log.info("DailySetServiceDefault-SUPPER meals: {}",mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SUPPER)).toString());
+        log.info("DailySetServiceDefault-SUPPER meals: {}", mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SUPPER)).toString());
         mealsAvailableToSetDTO.setSupper(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SUPPER))));
         if (mealsAmount == 5) {
 
-            log.info("DailySetServiceDefault-SECOND_BREAKFAST meals: {}",mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SECOND_BREAKFAST)).toString());
+            log.info("DailySetServiceDefault-SECOND_BREAKFAST meals: {}", mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SECOND_BREAKFAST)).toString());
             mealsAvailableToSetDTO.setSecondBreakfast(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.SECOND_BREAKFAST))));
 
-            log.info("DailySetServiceDefault-TEA meals: {}",mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.TEA)).toString());
+            log.info("DailySetServiceDefault-TEA meals: {}", mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.TEA)).toString());
             mealsAvailableToSetDTO.setTea(convertToDTO(mealRepository.findAllByMealTypes(mealTypeRepository.findByMealTypeName(MealTypeEnumeration.TEA))));
         }
         log.info("DailySetServiceDefault mealsAvailableToSetDTO: breakfast size: {}, dinner size {}, supper size {}",
@@ -68,15 +68,12 @@ public class DailySetServiceDefault implements DailySetService {
 
     private List<SimpleMealsDTO> convertToDTO(List<Meal> meals) {
 
-        /*if (meals == null || !meals.get(0).getClass().equals(Meal.class))
-            return new ArrayList<>();*/
         log.debug("DailySetServiceDefault-convertToDto: Incoming meals {}", meals.toString());
         return meals.stream().filter(Objects::nonNull)
                 .map(p -> {
                     SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
                     simpleMealsDTO.setId(p.getId());
                     simpleMealsDTO.setName(p.getName());
-                    simpleMealsDTO.setPreparationTime(p.getPreparationTime());
                     simpleMealsDTO.setCalories(p.getCalories());
                     log.debug("DailySetServiceDefault-convertToDto: ... converted to DTO");
                     return simpleMealsDTO;
@@ -85,13 +82,21 @@ public class DailySetServiceDefault implements DailySetService {
 
     @Override
     public DailyMealSetDTO reloadPageWithSetVariable(DailyMealSetDTO dailyMealSetDTO) {
-        Long calories = 0L;
-        List<Long> collect = dailyMealSetDTO.getSimpleMealsDTO().stream().map(SimpleMealsDTO::getCalories).collect(Collectors.toList());
-        for (Long l : collect) {
-            calories += l;
-        }
-        dailyMealSetDTO.setCalories(calories);
+        dailyMealSetDTO.setCalories(countMealsCaloriesForSet(dailyMealSetDTO));
         return dailyMealSetDTO;
+    }
+
+    private Long countMealsCaloriesForSet(DailyMealSetDTO dailyMealSetDTO) {
+        Long calories = 0L;
+        calories += dailyMealSetDTO.getBreakfast().getCalories();
+        calories += dailyMealSetDTO.getDinner().getCalories();
+        calories += dailyMealSetDTO.getSupper().getCalories();
+
+        if (dailyMealSetDTO.getMealAmount() == 5) {
+            calories += dailyMealSetDTO.getSecondBreakfast().getCalories();
+            calories += dailyMealSetDTO.getTea().getCalories();
+        }
+        return calories;
     }
 
 
@@ -107,24 +112,22 @@ public class DailySetServiceDefault implements DailySetService {
         }*/
 
         log.debug("DailySetServiceDefault-save: started ...");
-        DailySet dailySet= new DailySet();
+        DailySet dailySet = new DailySet();
 
         dailySet.setCalories(dailyMealSetDTO.getCalories());
         dailySet.setCreatorUser(userRepository.findUserByUsername(username));
         dailySet.setMealAmount(dailyMealSetDTO.getMealAmount());
 
-        log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getSimpleMealsDTO().size());
+        log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getMeals().size());
 
-        dailyMealSetDTO.getSimpleMealsDTO().forEach(p -> {
-            Meal meal = mealRepository.getOne(p.getId());
-            log.debug("DailySetServiceDefault-save: mealInDailySet {}", meal.toString());
-            dailySet.getSetMeals().add(meal);
-            dailySetRepository.save(dailySet);
-            log.debug("DailySetServiceDefault-save: dailySet {}", dailySet);
-            meal.getDailySets().add(dailySet);
-            mealRepository.save(meal);
-        });
+        log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getMeals().size());
+        System.out.println(dailyMealSetDTO.getMeals());
+        dailyMealSetDTO.getMeals().stream().map(p->mealRepository.getOne(p.getId()).set).collect(Collectors.toList());
 
+        dailySetRepository.save(dailySet);
+
+
+        log.debug("DailySetServiceDefault-save: dailySet {}", dailySet);
         log.debug("DailySetServiceDefault-save: ... finished");
         return true;
 

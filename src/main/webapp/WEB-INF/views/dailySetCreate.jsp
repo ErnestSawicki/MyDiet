@@ -124,9 +124,9 @@
 
             <div>
                 <label for="breakfast"> Pick breakfast </label>
-                <select name="breakfast" id="breakfast">
+                <select name="meals" id="breakfast">
                     <c:forEach items="${availableMeats.breakfast}" var="meal">
-                        <option value="${meal.id}">${meal.name} - ${meal.calories}kcal</option>
+                        <option value="${meal.id};${meal.name};${meal.calories},BREAKFAST">${meal.name} - ${meal.calories}kcal</option>
                     </c:forEach>
                 </select>
             </div>
@@ -134,9 +134,9 @@
                 <c:when test="${dailySetDTO.mealAmount ==5 }">
                     <div>
                         <label for="secondBreakfast"> Pick second breakfast </label>
-                        <select name="secondBreakfast" id="secondBreakfast">
+                        <select name="meals" id="secondBreakfast">
                             <c:forEach items="${availableMeats.secondBreakfast}" var="meal">
-                                <option value="${meal.id}">${meal.name}</option>
+                                <option value="${meal.id};${meal.name};${meal.calories};SECOND_BREAKFAST">${meal.name}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -147,9 +147,9 @@
 
             <div>
                 <label for="dinner"> Pick dinner </label>
-                <select name="dinner" id="dinner">
+                <select name="meals" id="dinner">
                     <c:forEach items="${availableMeats.dinner}" var="meal">
-                        <option value="${meal.id}">${meal.name}</option>
+                        <option value="${meal.id};${meal.name};${meal.calories};DINNER">${meal.name}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -158,9 +158,9 @@
                 <c:when test="${dailySetDTO.mealAmount ==5 }">
                     <div>
                         <label for="tea"> Pick tea </label>
-                        <select name="tea" id="tea">
+                        <select name="meals" id="tea">
                             <c:forEach items="${availableMeats.tea}" var="meal">
-                                <option value="${meal.id}">${meal.name}</option>
+                                <option value="${meal.id};${meal.name};${meal.calories};TEA">${meal.name}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -170,9 +170,9 @@
             </c:choose>
             <div>
                 <label for="supper"> Pick supper </label>
-                <select name="supper" id="supper">
+                <select name="meals" id="supper">
                     <c:forEach items="${availableMeats.supper}" var="meal">
-                        <option value="${meal.id}">${meal.name}</option>
+                        <option value="${meal.id};${meal.name};${meal.calories}SUPPER">${meal.name}</option>
                     </c:forEach>
                 </select>
             </div>

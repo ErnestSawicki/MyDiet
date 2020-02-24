@@ -30,6 +30,9 @@ public class Meal extends EntityBase {
 
     // Relation part//
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="meal" )
+    private List<MealTime> mealTime;
+
     @OneToMany(mappedBy = "meal", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PartOfMeal> partsOfMeal = new ArrayList<>();
 
@@ -40,7 +43,7 @@ public class Meal extends EntityBase {
     @JoinColumn(name = "owner_id", nullable = false)
     private User creatorUser;
 
-    @ManyToMany(mappedBy = "setMeals", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     List<DailySet> dailySets = new ArrayList<>();
 
     @Override

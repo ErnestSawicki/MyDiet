@@ -71,6 +71,8 @@
                 </c:forEach>
             </ul>
             <p>currency calories = ${mealCreateDTO.calories} </p>
+            <input type="hidden" name="calories"
+                   value="${mealCreateDTO.calories}"/>
         </div>
         <br/>
         <br/>

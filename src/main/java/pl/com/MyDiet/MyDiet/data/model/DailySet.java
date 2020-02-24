@@ -35,11 +35,12 @@ public class DailySet extends EntityBase {
             inverseJoinColumns = @JoinColumn(name = "diet_id"))
     private List<Diet> diets;
 
+
     @ManyToMany
     @JoinTable(name = "meal_diet_set",
             joinColumns = @JoinColumn(name = "daily_set_id"),
             inverseJoinColumns = @JoinColumn(name = "meal_id"))
-    private List<Meal> setMeals = new ArrayList<>();
+private List<Meal> meals;
 
 
 }

@@ -79,7 +79,8 @@ public class MealController {
     public String process(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                           Model model,
                           Principal principal) {
-        if (mealService.saveIngredient(mealCreateDTO, principal.getName())) {
+        log.debug("MealController-@PostMapping(params=send): meal calories = {}",mealCreateDTO.getCalories());
+        if (mealService.saveMeal(mealCreateDTO, principal.getName())) {
             return "home-page";
         } else {
             model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));

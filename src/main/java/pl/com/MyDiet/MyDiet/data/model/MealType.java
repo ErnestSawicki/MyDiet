@@ -11,14 +11,19 @@ import java.util.List;
 
 @Entity
 @Table(name = "meal_types")
-@Getter @Setter
+@Getter
+@Setter
 public class MealType extends EntityBase {
 
     @Column(name = "meal_type_name")
     @Enumerated(EnumType.STRING)
     private MealTypeEnumeration mealTypeName;
 
+
     // Relation part//
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mealType")
+    private List<MealTime> mealTime;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "meal_meal_type",

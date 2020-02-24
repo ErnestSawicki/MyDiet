@@ -12,10 +12,11 @@ import java.util.List;
 @Data
 public class DailyMealSetDTO {
 
-    Long mealAmount;
-    Long calories;
-    User creatorUser;
-    List<SimpleMealsDTO> simpleMealsDTO = new ArrayList<>();
+    private Long mealAmount;
+    private Long calories;
+    private User creatorUser;
+
+    private List<Meal> meals = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -23,7 +24,7 @@ public class DailyMealSetDTO {
                 "mealAmount=" + mealAmount +
                 ", calories=" + calories +
                 ", creatorUser=" + creatorUser +
-                ", simpleMealsDTO=" + simpleMealsDTO +
+                ", simpleMealsDTO=" + calories +
                 '}';
     }
 }
