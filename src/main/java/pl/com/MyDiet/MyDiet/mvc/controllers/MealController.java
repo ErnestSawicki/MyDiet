@@ -2,14 +2,23 @@ package pl.com.MyDiet.MyDiet.mvc.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
+import pl.com.MyDiet.MyDiet.data.model.file.FileEntity;
+import pl.com.MyDiet.MyDiet.data.repositories.FileEntityRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
 import pl.com.MyDiet.MyDiet.services.MealService;
 
+
+import java.io.IOException;
 import java.security.Principal;
 
 
@@ -21,21 +30,25 @@ public class MealController {
     private final MealService mealService;
     private final IngredientRepository ingredientRepository;
     private final MealTypeRepository mealTypeRepository;
+    private final FileEntityRepository fileEntityRepository;
 
 
     @Autowired
-    public MealController(MealService mealService, IngredientRepository ingredientRepository, MealTypeRepository mealTypeRepository) {
+    public MealController(MealService mealService, IngredientRepository ingredientRepository, MealTypeRepository mealTypeRepository, FileEntityRepository fileEntityRepository) {
         this.mealService = mealService;
         this.ingredientRepository = ingredientRepository;
         this.mealTypeRepository = mealTypeRepository;
+        this.fileEntityRepository = fileEntityRepository;
     }
 
 
     @GetMapping
     public String getCreateMealPage(Model model) {
-        model.addAttribute("availableIngredients", ingredientRepository.findAll());//mealService.getAllIngredients());
-        model.addAttribute("mealCreateDTO", new MealCreateDTO());
+        MealCreateDTO mealCreateDTO = new MealCreateDTO();
+        model.addAttribute("availableIngredients", ingredientRepository.findAll()); //mealService.getAllIngredients());
+        model.addAttribute("mealCreateDTO", mealCreateDTO);
         model.addAttribute("mealTypes", mealTypeRepository.findAll());
+        model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
         return "createMeal";
     }
 
@@ -45,6 +58,7 @@ public class MealController {
         mealCreateDTO = mealService.rebuildFormWhenAddIngredient(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
+        model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
         return "createMeal";
     }
 
@@ -54,6 +68,7 @@ public class MealController {
         mealCreateDTO = mealService.rebuildFormWhenDeletedIngredient(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
+        model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
         return "createMeal";
     }
 
@@ -63,6 +78,7 @@ public class MealController {
         mealCreateDTO = mealService.rebuildFormWhenAddMealType(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
+        model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
         return "createMeal";
     }
 
@@ -72,6 +88,7 @@ public class MealController {
         mealCreateDTO = mealService.rebuildFormWhenDeletedMealType(mealCreateDTO);
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
+        model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
         return "createMeal";
     }
 
@@ -79,12 +96,77 @@ public class MealController {
     public String process(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO,
                           Model model,
                           Principal principal) {
-        if (mealService.saveIngredient(mealCreateDTO, principal.getName())) {
+        log.debug("MealController-saveMeal: mealCreateDTO is like: {}", mealCreateDTO.toString());
+        if (mealService.saveMeal(mealCreateDTO, principal.getName())) {
             return "home-page";
         } else {
             model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
             model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
+            model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
             return "createMeal";
         }
+    }
+
+    @PostMapping(params = {"upload"})
+    public String uploadProfileFile(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO, @RequestParam MultipartFile file, Model model) throws IOException {
+        log.debug("MealController-uploadFile: Meal picture upload started ...");
+        FileEntity mealFileEntity = new FileEntity();
+        mealFileEntity.setContentType(file.getContentType());
+        mealFileEntity.setFileName(file.getOriginalFilename());
+        mealFileEntity.setData(file.getBytes());
+
+        fileEntityRepository.save(mealFileEntity);
+
+        log.debug("MealController-uploadFile: mealFileEntity-status: {}", mealFileEntity.toString());
+        mealCreateDTO.setMealFile(mealFileEntity);
+        log.debug("MealController-uploadFile: mealCreateDTO-status: {}", mealCreateDTO.toString());
+        model.addAttribute("mealCreateDTO", mealCreateDTO);
+        model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
+        model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
+        model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
+        log.debug("MealController-uploadFile: mealCreateDTO-inModel: {}", model.getAttribute("mealCreateDTO").toString());
+        log.debug("MealController-uploadFile: ...upload finished");
+
+        return "createMeal";
+    }
+
+
+    @GetMapping("/createMeal")
+    public ResponseEntity<Resource> getMealPicture(@ModelAttribute("mealCreateDTO") MealCreateDTO mealCreateDTO){
+        log.debug("MealController-mealFile: Input mealCreateDTO: {}", mealCreateDTO.toString());
+        log.debug("MealController-mealFile: Download of meal picture started: ...");
+        if (hasMealPicture(mealCreateDTO)){
+            log.debug("MealController-mealFile: ... file returned");
+            return buildMealFileResponse(mealCreateDTO);
+        } else {
+            log.debug("MealController-mealFile: ... fine NOT returned - no file exist for meal");
+            return buildNoMealFileResponse();
+        }
+    }
+
+    private ResponseEntity<Resource> buildNoMealFileResponse() { return ResponseEntity.noContent().build();}
+
+    private ResponseEntity<Resource> buildMealFileResponse(MealCreateDTO mealCreateDTO){
+        FileEntity mealFile = mealCreateDTO.getMealFile();
+        ByteArrayResource data = getMealFileData(mealFile);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.valueOf(mealFile.getContentType()))
+                .header("Content-Disposition", String.format("filename=%s", mealFile.getFileName())).body(data);
+    }
+
+    private ByteArrayResource getMealFileData(FileEntity mealFile){
+        return new ByteArrayResource(mealFile.getData());
+    }
+
+    private boolean hasMealPicture(MealCreateDTO mealCreateDTO){
+        return mealCreateDTO.getMealFile() != null;
+    }
+
+    private boolean isValidProfileFile(FileEntity mealPicture){
+        if (mealPicture.getContentType() == null) return false;
+        if (mealPicture.getFileName() == null || mealPicture.getFileName().isEmpty()) return false;
+        if (mealPicture.getData() == null) return false;
+        return true;
     }
 }

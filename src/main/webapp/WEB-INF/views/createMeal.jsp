@@ -20,7 +20,7 @@
 </div>
 <h1>PREPARE MEAL</h1>
 <div class="container">
-    <form method="post" action="/createMeal">
+    <form method="post" action="/createMeal" enctype="multipart/form-data">
         <div><label for="mealName">Name:</label></div>
         <input id="mealName" name="name" type="text" required value="${mealCreateDTO.name}">
         <div class="col-25">
@@ -90,19 +90,45 @@
 
         <label>Meal ingredients: </label>
 
-<div>
-    <ul>
-        <c:forEach items="${mealCreateDTO.mealTypeNameMealId}" var="mealTypeToRemove" varStatus="lp">
-            <li>${lp.count} name: ${mealTypeToRemove.mealTypeName}
-                <button type="submit" name="mealTypeToRemove" value=${mealTypeToRemove.id}> Delete</button>
-            </li>
-            <input type="hidden" name="mealTypeNameMealId"
-                   value="${mealTypeToRemove.mealTypeName};${mealTypeToRemove.id}"/>
-        </c:forEach>
-    </ul>
+        <div>
+            <ul>
+                <c:forEach items="${mealCreateDTO.mealTypeNameMealId}" var="mealTypeToRemove" varStatus="lp">
+                    <li>${lp.count} name: ${mealTypeToRemove.mealTypeName}
+                        <button type="submit" name="mealTypeToRemove" value=${mealTypeToRemove.id}> Delete</button>
+                    </li>
+                    <input type="hidden" name="mealTypeNameMealId"
+                           value="${mealTypeToRemove.mealTypeName};${mealTypeToRemove.id}"/>
+                </c:forEach>
+            </ul>
+        </div>
+        <input type="hidden" name="mealFile" value="${mealCreateDTO.mealFile.id}">
+        <div>
+            <input type="file" name="file" accept="image/*"/>
+        </div>
 
-    <input type="submit" value="send" name="send"/>
-    <sec:csrfInput/>
+        <script>
+            var fileInput = document.querySelector('#file');
+            fileInput.onchange = function () {
+                if (fileInput.files.length > 0) {
+                    var fileName = document.querySelector('.file .file-name');
+                    fileName.textContent = fileInput.files[0].name;
+                }
+            }
+        </script>
+        <div>
+            <input type="submit" name="upload" value="Upload picture"/>
+            <sec:csrfInput/>
+        </div>
+        <div class="content">
+            <c:if test="${hasMealPicture}">
+                <input type="hidden">
+                <img src="/createMeal"/>
+            </c:if>
+        </div>
+
+
+        <input type="submit" value="send" name="send"/>
+        <sec:csrfInput/>
 
     </form>
 </div>

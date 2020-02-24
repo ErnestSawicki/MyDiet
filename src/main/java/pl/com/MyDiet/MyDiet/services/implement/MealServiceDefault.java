@@ -113,7 +113,7 @@ public class MealServiceDefault implements MealService {
 
     @Override
     @Transactional
-    public boolean saveIngredient(MealCreateDTO mealCreateDTO, String principal) {
+    public boolean saveMeal(MealCreateDTO mealCreateDTO, String principal) {
         if (mealCreateDTO == null
                 || mealCreateDTO.getName() == null
                 || mealCreateDTO.getMealDescription() == null
@@ -140,6 +140,9 @@ public class MealServiceDefault implements MealService {
             return partOfMeal;
         }).collect(Collectors.toList()));
         mealCreateDTO.getMealTypeNameMealId().forEach(p -> meal.getMealTypes().add(mealTypeRepository.getOne(p.getId())));
+        meal.setMealFile(mealCreateDTO.getMealFile());
+
+        log.debug("MealServiceDefault: meal={}", meal.toString());
 
         log.info("Try to save meal= {}", meal.getName());
         System.out.println(meal.getPartsOfMeal().isEmpty());

@@ -23,5 +23,5 @@ public interface MealService {
 
     List<SimpleIngredientDTO> getAllIngredientsDTO();
 
-    boolean saveIngredient(MealCreateDTO mealCreateDTO, String principal);
+    boolean saveMeal(MealCreateDTO mealCreateDTO, String principal);
 }
