@@ -22,9 +22,6 @@ public class MealType extends EntityBase {
 
     // Relation part//
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mealType")
-    private List<MealTime> mealTime;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "meal_meal_type",
             joinColumns = @JoinColumn(name = "meal_type_id"),

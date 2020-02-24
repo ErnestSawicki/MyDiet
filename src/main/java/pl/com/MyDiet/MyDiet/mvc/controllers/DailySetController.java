@@ -53,7 +53,7 @@ public class DailySetController {
     }
 
     @PostMapping(params = {"send"})
-    public String process(@ModelAttribute("mealCreateDTO") DailyMealSetDTO dailySetDTO,
+    public String process(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO,
                           Principal principal,
                           Model model) {
 //        log.debug("DailySetController-@PostMapping(params=send): dailySetDTO ={}", dailySetDTO.toString());
@@ -91,7 +91,7 @@ public class DailySetController {
         if (dailySetService.save(dailySetDTO, principal.getName())) {
             return "home-page";
         } else {
-            model.addAttribute("availableIngredients", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
+            model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
             return "dailySetCreate";
         }
     }

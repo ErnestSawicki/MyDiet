@@ -5,9 +5,7 @@ import lombok.Setter;
 import sun.rmi.runtime.Log;
 
 import javax.persistence.*;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,12 +33,9 @@ public class DailySet extends EntityBase {
             inverseJoinColumns = @JoinColumn(name = "diet_id"))
     private List<Diet> diets;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dailySet",cascade = CascadeType.ALL)
+    private List<MealTime> mealTime;
 
-    @ManyToMany
-    @JoinTable(name = "meal_diet_set",
-            joinColumns = @JoinColumn(name = "daily_set_id"),
-            inverseJoinColumns = @JoinColumn(name = "meal_id"))
-private List<Meal> meals;
 
 
 }

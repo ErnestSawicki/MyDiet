@@ -44,77 +44,77 @@
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==1000 }">
 <span><input type="radio" id="caloriesAmount1c" name="calories" value="1000" checked>
-        <label for="caloriesAmount1c">1000[cal]</label></span>
+        <label for="caloriesAmount1c">1000[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount1" name="calories" value="1000">
-        <label for="caloriesAmount1">1000[cal]</label></span>
+        <label for="caloriesAmount1">1000[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==1500 }">
 <span><input type="radio" id="caloriesAmount2c" name="calories" value="1500" checked>
-    <label for="caloriesAmount2c"> 1500[cal]</label></span>
+    <label for="caloriesAmount2c"> 1500[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount2" name="calories" value="1500">
-    <label for="caloriesAmount2"> 1500[cal]</label></span>
+    <label for="caloriesAmount2"> 1500[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==2000 }">
 <span><input type="radio" id="caloriesAmount3c" name="calories" value="2000" checked>
-    <label for="caloriesAmount3c"> 2000[cal]</label></span>
+    <label for="caloriesAmount3c"> 2000[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount3" name="calories" value="2000">
-    <label for="caloriesAmount3"> 2000[cal]</label></span>
+    <label for="caloriesAmount3"> 2000[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==2500 }">
 <span><input type="radio" id="caloriesAmount4c" name="calories" value="2500" checked>
-    <label for="caloriesAmount4c"> 2500[cal]</label></span>
+    <label for="caloriesAmount4c"> 2500[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount4" name="calories" value="2500">
-    <label for="caloriesAmount4"> 2500[cal]</label></span>
+    <label for="caloriesAmount4"> 2500[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==3000 }">
 <span><input type="radio" id="caloriesAmount5c" name="calories" value="3000" checked>
-    <label for="caloriesAmount5c"> 3000[cal]</label></span>
+    <label for="caloriesAmount5c"> 3000[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount5" name="calories" value="3000">
-    <label for="caloriesAmount5"> 3000[cal]</label></span>
+    <label for="caloriesAmount5"> 3000[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==3500 }">
 <span><input type="radio" id="caloriesAmount6c" name="calories" value="3500" checked>
-    <label for="caloriesAmount6c"> 3500[cal]</label></span>
+    <label for="caloriesAmount6c"> 3500[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount6" name="calories" value="3500">
-    <label for="caloriesAmount6"> 3500[cal]</label></span>
+    <label for="caloriesAmount6"> 3500[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
                 <c:when test="${dailySetDTO.calories ==4000 }">
 <span><input type="radio" id="caloriesAmount7c" name="calories" value="4000" checked>
-    <label for="caloriesAmount7c"> 4000[cal]</label></span>
+    <label for="caloriesAmount7c"> 4000[kcal]</label></span>
                 </c:when>
                 <c:otherwise>
         <span><input type="radio" id="caloriesAmount7" name="calories" value="4000">
-    <label for="caloriesAmount7"> 4000[cal]</label></span>
+    <label for="caloriesAmount7"> 4000[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
             <input type="submit" name="filter" value="Filter"/>
@@ -126,7 +126,9 @@
                 <label for="breakfast"> Pick breakfast </label>
                 <select name="meals" id="breakfast">
                     <c:forEach items="${availableMeats.breakfast}" var="meal">
-                        <option value="${meal.id};${meal.name};${meal.calories},BREAKFAST">${meal.name} - ${meal.calories}kcal</option>
+                        <option value="${meal.id};${meal.name};${meal.calories};BREAKFAST">${meal.name}
+                            - ${meal.calories}kcal
+                        </option>
                     </c:forEach>
                 </select>
             </div>
@@ -172,7 +174,7 @@
                 <label for="supper"> Pick supper </label>
                 <select name="meals" id="supper">
                     <c:forEach items="${availableMeats.supper}" var="meal">
-                        <option value="${meal.id};${meal.name};${meal.calories}SUPPER">${meal.name}</option>
+                        <option value="${meal.id};${meal.name};${meal.calories};SUPPER">${meal.name}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -194,31 +196,40 @@
         <sec:csrfInput/>
     </form>
 
+    <c:choose>
+    <c:when test="${dailySetDTO.meals.size()>0}">
     <h3> Your meals' daily set is: </h3>
-    <h1>ToDo</h1>
-    <%--            <p> breakfast is ${dailySetDTO.simpleMealsDTO.get(0).name}
-                    calories: ${dailySetDTO.simpleMealsDTO.get(0).calories} [kcal]</p>
-                <c:choose>
-                <c:when test="${dailySetDTO.mealAmount ==5 }">
-                <p> second breakfast is ${dailySetDTO.simpleMealsDTO.get(3)}
-                    calories: ${dailySetDTO.simpleMealsDTO.get(3).calories} </p>>
-                </c:when>
-                    <c:otherwise></c:otherwise>
-                </c:choose>
-                <p> dinner is ${dailySetDTO.simpleMealsDTO.get(1)} calories: ${dailySetDTO.simpleMealsDTO.get(1).calories}
-                    [kcal]</p>
-                <c:choose>
-                <c:when test="${dailySetDTO.mealAmount ==5 }">
-                <p> tea is ${dailySetDTO.simpleMealsDTO.get(4)} calories: ${dailySetDTO.simpleMealsDTO.get(4).calories}
-                    [kcal]</p>
-                </c:when>
-                    <c:otherwise>></c:otherwise>
-                </c:choose>
+    breakfast is ${dailySetDTO.meals.get(0).name}
+    calories: ${dailySetDTO.meals.get(0).calories} [kcal]</p>
+    <c:choose>
+    <c:when test="${dailySetDTO.mealAmount ==5 }">
+    <p> second breakfast is ${dailySetDTO.meals.get(3).name}
+        calories: ${dailySetDTO.meals.get(3).calories} </p>>
+    </c:when>
+    <c:otherwise>
 
-                <p> supper is ${dailySetDTO.simpleMealsDTO.get(2)} calories: ${dailySetDTO.simpleMealsDTO.get(2).calories}
-                    [kcal]</p>
+    </c:otherwise>
+    </c:choose>
+    <p> dinner is ${dailySetDTO.meals.get(1).name} calories: ${dailySetDTO.meals.get(1).calories}
+        [kcal]</p>
+    <c:choose>
+    <c:when test="${dailySetDTO.mealAmount ==5 }">
+    <p> tea is ${dailySetDTO.meals.get(4).name} calories: ${dailySetDTO.meals.get(4).calories}
+        [kcal]</p>
+    </c:when>
+    <c:otherwise></c:otherwise>
+    </c:choose>
 
-                <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>--%>
+    <p> supper is ${dailySetDTO.meals.get(2).name} calories: ${dailySetDTO.meals.get(2).calories}
+        [kcal]</p>
 
+    <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
+    </c:when>
+    <c:otherwise>
+
+    </c:otherwise>
+
+    </c:choose>
+</div>
 </body>
 </html>

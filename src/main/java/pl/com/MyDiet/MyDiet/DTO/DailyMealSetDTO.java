@@ -15,8 +15,7 @@ public class DailyMealSetDTO {
     private Long mealAmount;
     private Long calories;
     private User creatorUser;
-
-    private List<Meal> meals = new ArrayList<>();
+    private List<SimpleMealsDTO> meals = new ArrayList<>();
 
     @Override
     public String toString() {

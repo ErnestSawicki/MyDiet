@@ -3,8 +3,6 @@ package pl.com.MyDiet.MyDiet.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.com.MyDiet.MyDiet.data.model.MealTime;
-import pl.com.MyDiet.MyDiet.data.model.MealType;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 
 @Data

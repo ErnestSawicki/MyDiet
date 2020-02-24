@@ -9,6 +9,8 @@ import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
+import pl.com.MyDiet.MyDiet.data.model.MealTime;
+import pl.com.MyDiet.MyDiet.data.model.MealType;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
@@ -16,9 +18,10 @@ import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -88,13 +91,9 @@ public class DailySetServiceDefault implements DailySetService {
 
     private Long countMealsCaloriesForSet(DailyMealSetDTO dailyMealSetDTO) {
         Long calories = 0L;
-        calories += dailyMealSetDTO.getBreakfast().getCalories();
-        calories += dailyMealSetDTO.getDinner().getCalories();
-        calories += dailyMealSetDTO.getSupper().getCalories();
-
-        if (dailyMealSetDTO.getMealAmount() == 5) {
-            calories += dailyMealSetDTO.getSecondBreakfast().getCalories();
-            calories += dailyMealSetDTO.getTea().getCalories();
+        List<Long> collect = dailyMealSetDTO.getMeals().stream().filter(Objects::nonNull).map(SimpleMealsDTO::getCalories).collect(Collectors.toList());
+        for (Long l : collect) {
+            calories += l;
         }
         return calories;
     }
@@ -122,11 +121,16 @@ public class DailySetServiceDefault implements DailySetService {
 
         log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getMeals().size());
         System.out.println(dailyMealSetDTO.getMeals());
-        dailyMealSetDTO.getMeals().stream().map(p->mealRepository.getOne(p.getId()).set).collect(Collectors.toList());
-
+        List<MealTime> mealTimes = dailyMealSetDTO.getMeals().stream().map(p -> {
+            MealTime mealTime = new MealTime();
+            mealTime.setDailySet(dailySet);
+            mealTime.setMeal(mealRepository.getOne(p.getId()));
+            mealTime.setMealTypeName(p.getMealType());
+            return mealTime;
+        }).collect(Collectors.toList());
+dailySet.setMealTime(mealTimes);
         dailySetRepository.save(dailySet);
-
-
+//mealTimes.stream().forEach();
         log.debug("DailySetServiceDefault-save: dailySet {}", dailySet);
         log.debug("DailySetServiceDefault-save: ... finished");
         return true;
