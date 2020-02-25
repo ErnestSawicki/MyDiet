@@ -105,6 +105,11 @@ public class MealServiceDefault implements MealService {
     }
 
     @Override
+    public Meal getMealById(Long mealId) {
+        return mealRepository.getOne(mealId);
+    }
+
+    @Override
     public List<SimpleIngredientDTO> getIngredientsDTO(MealCreateDTO mealCreateDTO) {
         List<SimpleIngredientDTO> availableIngredients = getAllIngredientsDTO();
         List<Long> collect = mealCreateDTO.getPartsOfMealIngredientIdNameAmount().stream().map(MealCreateDTO.PartOfMeal::getIngredientId).collect(Collectors.toList());
