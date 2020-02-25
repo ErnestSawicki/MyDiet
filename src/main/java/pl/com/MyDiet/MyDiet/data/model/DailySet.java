@@ -6,6 +6,7 @@ import sun.rmi.runtime.Log;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,10 +32,10 @@ public class DailySet extends EntityBase {
     @JoinTable(name = "diet_diet_set",
             joinColumns = @JoinColumn(name = "daily_set_id"),
             inverseJoinColumns = @JoinColumn(name = "diet_id"))
-    private List<Diet> diets;
+    private List<Diet> diets = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "dailySet",cascade = CascadeType.ALL)
-    private List<MealTime> mealTime;
+    private List<MealTime> mealTime = new ArrayList<>();
 
 
 

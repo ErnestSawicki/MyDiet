@@ -6,6 +6,7 @@ import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class Diet extends EntityBase {
     private User creatorUser;
 
     @ManyToMany(mappedBy = "diets", fetch = FetchType.LAZY)
-    private List<DailySet> dailySet;
+    private List<DailySet> dailySet = new ArrayList<>();
 
     @OneToMany(mappedBy = "ownedDiet", fetch = FetchType.LAZY)
     private List<User> dietOwner;

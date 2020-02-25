@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.MyDiet.MyDiet.data.model.IngredientCategory;
 import pl.com.MyDiet.MyDiet.data.repositories.*;
 
 @Component
@@ -23,6 +22,8 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MealTypeRepository mealTypeRepository;
+    private final DailySetRepository dailySetRepository;
+    private final MealTimeRepository mealTimeRepository;
 
 
     @Autowired
@@ -32,7 +33,9 @@ public class DataInitializer implements CommandLineRunner {
                            PartOfMealRepository partOfMealRepository,
                            UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
-                           MealTypeRepository mealTypeRepository, DailySetRepository dailySetRepository) {
+                           MealTypeRepository mealTypeRepository,
+                           DailySetRepository dailySetRepository,
+                           MealTimeRepository mealTimeRepository) {
         this.ingredientCategoryRepository = ingredientCategoryRepository;
         this.ingredientRepository = ingredientRepository;
         this.mealRepository = mealRepository;
@@ -40,6 +43,8 @@ public class DataInitializer implements CommandLineRunner {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.mealTypeRepository = mealTypeRepository;
+        this.dailySetRepository = dailySetRepository;
+        this.mealTimeRepository = mealTimeRepository;
     }
 
     @Override
@@ -60,9 +65,9 @@ public class DataInitializer implements CommandLineRunner {
         MealInitializer mealInitializer = new MealInitializer();
         mealInitializer.createSampleMeal(mealRepository, userRepository, mealTypeRepository, partOfMealRepository, ingredientRepository);
 
-//        DailySetInitializer dailySetInitializer = new DailySetInitializer();
-//        dailySetInitializer.createDailySetSamples(dailySetRepository, mealRepository, userRepository);
-//        log.info("DataInitializer: ... sample data finished");
+        DailySetInitializer dailySetInitializer = new DailySetInitializer();
+        dailySetInitializer.createDailySetSamples(dailySetRepository, mealRepository, userRepository, mealTimeRepository);
+        log.info("DataInitializer: ... sample data finished");
 
 
     }

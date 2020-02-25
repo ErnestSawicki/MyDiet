@@ -33,26 +33,16 @@
     </div>
     <p1>Kolejne dni diety</p1>
     <c:choose>
-        <c:when test="${dailySets != null}">
-            <c:forEach items="${dailySets}" var="dailySet">
+        <c:when test="${dailyMealSetsDTO != null}">
+            <c:forEach items="${dailyMealSetsDTO}" var="dailySet" varStatus="loop">
                 <div>
-                    <select name="" id="bla">
-                        <c:forEach items="${dailySetsInDB}" var="dailySetInDB">
-                            <option value="${dailySetInDB.id}">${dailySetInDB.id}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div>
-                    <input type="submit" name="createDailySet" value="Create new dailySet">
+                    Day ${dailySet.key}:
+                    <input type="submit" name="findDailySet" value="Find dailySet">
+                    <a href="/createDailySet/forDiet?dietDay=${dailySet.key}">Create new dailySet</a>
                 </div>
             </c:forEach>
         </c:when>
     </c:choose>
-
-
-
-
-
     <button type="submit" name="create">CreateDiet</button>
     <sec:csrfInput/>
 </form>

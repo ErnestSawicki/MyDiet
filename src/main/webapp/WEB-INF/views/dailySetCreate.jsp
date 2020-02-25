@@ -181,6 +181,7 @@
             <c:choose>
                 <c:when test="${redirected == true}">
                     <div>
+                        <input type="hidden" name="dietDay" value="${dietDay}">
                         <button type="submit" name="createdForDiet">Create</button>
                         <sec:csrfInput/>
                     </div>
@@ -197,37 +198,37 @@
     </form>
 
     <c:choose>
-    <c:when test="${dailySetDTO.meals.size()>0}">
-    <h3> Your meals' daily set is: </h3>
-    breakfast is ${dailySetDTO.meals.get(0).name}
-    calories: ${dailySetDTO.meals.get(0).calories} [kcal]</p>
-    <c:choose>
-    <c:when test="${dailySetDTO.mealAmount ==5 }">
-    <p> second breakfast is ${dailySetDTO.meals.get(3).name}
-        calories: ${dailySetDTO.meals.get(3).calories} </p>>
-    </c:when>
-    <c:otherwise>
+        <c:when test="${dailySetDTO.meals.size()>0}">
+            <h3> Your meals' daily set is: </h3>
+            breakfast is ${dailySetDTO.meals.get(0).name}
+            calories: ${dailySetDTO.meals.get(0).calories} [kcal]</p>
+            <c:choose>
+                <c:when test="${dailySetDTO.mealAmount ==5 }">
+                    <p> second breakfast is ${dailySetDTO.meals.get(3).name}
+                        calories: ${dailySetDTO.meals.get(3).calories} </p>>
+                </c:when>
+                <c:otherwise>
 
-    </c:otherwise>
-    </c:choose>
-    <p> dinner is ${dailySetDTO.meals.get(1).name} calories: ${dailySetDTO.meals.get(1).calories}
-        [kcal]</p>
-    <c:choose>
-    <c:when test="${dailySetDTO.mealAmount ==5 }">
-    <p> tea is ${dailySetDTO.meals.get(4).name} calories: ${dailySetDTO.meals.get(4).calories}
-        [kcal]</p>
-    </c:when>
-    <c:otherwise></c:otherwise>
-    </c:choose>
+                </c:otherwise>
+            </c:choose>
+            <p> dinner is ${dailySetDTO.meals.get(1).name} calories: ${dailySetDTO.meals.get(1).calories}
+                [kcal]</p>
+            <c:choose>
+                <c:when test="${dailySetDTO.mealAmount ==5 }">
+                    <p> tea is ${dailySetDTO.meals.get(4).name} calories: ${dailySetDTO.meals.get(4).calories}
+                        [kcal]</p>
+                </c:when>
+                <c:otherwise></c:otherwise>
+            </c:choose>
 
-    <p> supper is ${dailySetDTO.meals.get(2).name} calories: ${dailySetDTO.meals.get(2).calories}
-        [kcal]</p>
+            <p> supper is ${dailySetDTO.meals.get(2).name} calories: ${dailySetDTO.meals.get(2).calories}
+                [kcal]</p>
 
-    <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
-    </c:when>
-    <c:otherwise>
+            <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
+        </c:when>
+        <c:otherwise>
 
-    </c:otherwise>
+        </c:otherwise>
 
     </c:choose>
 </div>

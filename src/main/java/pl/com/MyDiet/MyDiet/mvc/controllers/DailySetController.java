@@ -25,15 +25,12 @@ import java.util.List;
 public class DailySetController {
 
     private final DailySetService dailySetService;
-    private final MealRepository mealRepository;
-    private final UserRepository userRepository;
     private final DietConfigurator dietConfigurator;
 
     @Autowired
-    public DailySetController(DailySetService dailySetService, MealRepository mealRepository, UserRepository userRepository, DietConfigurator dietConfigurator) {
+    public DailySetController(DailySetService dailySetService, DietConfigurator dietConfigurator) {
         this.dailySetService = dailySetService;
-        this.mealRepository = mealRepository;
-        this.userRepository = userRepository;
+
         this.dietConfigurator = dietConfigurator;
     }
 
@@ -97,16 +94,24 @@ public class DailySetController {
     }
 
     @GetMapping("/forDiet")
-    public String getDailySetForDiet(Model model){
+    public String getDailySetForDiet(Model model, @RequestParam Integer dietDay) {
+        log.debug("DailySetController-createdForDiet: dietDay:{}", dietDay);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(3L));
         model.addAttribute("dailySetDTO", new DailyMealSetDTO());
 
         model.addAttribute("redirected", true);
+        model.addAttribute("dietDay", dietDay);
         return "dailySetCreate";
     }
 
     @PostMapping(params = {"createdForDiet"})
-    public String createDailySetForDiet(){
+    public String createDailySetForDiet(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailyMealSetDTO,
+                                        Principal principal,
+                                        Model model,
+                                        @RequestParam Integer dietDay) {
+        log.debug("DailySetController-createdForDiet: dietDay:{}", dietDay);
+        log.debug("DailySetController-createdForDiet: dietConfigurationDailySetMap:{}", dietConfigurator.getDailySetDTOMap());
+        dietConfigurator.getDailySetDTOMap().put(dietDay, dailyMealSetDTO);
         return "redirect:/createDiet";
     }
 }

@@ -18,7 +18,6 @@ public class MealTime extends EntityBase {
     @Enumerated(EnumType.STRING)
     private MealTypeEnumeration mealTypeName;
 
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private DailySet dailySet;
 

@@ -118,9 +118,8 @@ public class DailySetServiceDefault implements DailySetService {
         dailySet.setMealAmount(dailyMealSetDTO.getMealAmount());
 
         log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getMeals().size());
-
         log.debug("DailySetServiceDefault-save: simpleMealsDTO size - req. min 3 actual size = {}", dailyMealSetDTO.getMeals().size());
-        System.out.println(dailyMealSetDTO.getMeals());
+
         List<MealTime> mealTimes = dailyMealSetDTO.getMeals().stream().map(p -> {
             MealTime mealTime = new MealTime();
             mealTime.setDailySet(dailySet);
