@@ -30,9 +30,7 @@ public class DietServiceDefault implements DietService {
     public boolean save(DietConfigurator dietConfigurator, String username) {
         Diet diet = dietConfigurator.copyProperties(userRepository, username, mealRepository, dailySetRepository);
         dietRepository.save(diet);
-        return false;
+        dietConfigurator.clearDietConfiguration();
+        return true;
     }
-
-
-
 }

@@ -23,6 +23,7 @@
         <li><a href="/createMeal">Meal</a></li>
         <li><a href="/createDailySet">DailySet</a></li>
         <li><a href="/createDiet">Diet</a></li>
+        <li><a href="/userRegistration/modifyProfile">ModifyProfile</a></li>
     </ul>
 </div>
 <div class="footer">

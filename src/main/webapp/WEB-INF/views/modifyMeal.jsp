@@ -10,10 +10,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>ModifyMeal</title>
 </head>
 <body>
+<form method="post" action="/createMeal/modifyMeal">
+    <label>MealPicture</label>
+    <div class="content">
+        <c:if test="${hasMealPicture}">
+            <img src="/createMeal/meal-file?mealFileId=${mealToModify.mealFile.id}"/>
+        </c:if>
+    </div>
+    <div><label for="mealName">Name:</label></div>
+    <input id="mealName" name="name" type="text" value="${mealToModify.name}">
+    <div class="col-25">
+        <label for="mealDescription">Recipe</label>
+    </div>
+    <div class="col-75">
+            <textarea id="mealDescription" name="mealDescription" rows="4" cols="50" required>${mealToModify.recipe}</textarea>
+    </div>
 
+    <div><label for="preparationTimeInMinutes">PREPARATION TIME:</label></div>
+    <input id="preparationTimeInMinutes" name="preparationTimeInMinutes" type="number"
+           value="${mealToModify.preparationTime}" required>
+
+</form>
 
 </body>
 </html>

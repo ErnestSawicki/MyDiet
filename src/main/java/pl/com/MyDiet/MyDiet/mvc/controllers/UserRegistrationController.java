@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +13,10 @@ import pl.com.MyDiet.MyDiet.DTO.UserRegistrationDTO;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
+import pl.com.MyDiet.MyDiet.services.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.time.LocalDate;
 
 @Controller
@@ -21,14 +24,11 @@ import java.time.LocalDate;
 @RequestMapping("/userRegistration")
 public class UserRegistrationController  {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public UserRegistrationController(UserRepository userRepository,
-                                      PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserRegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -38,14 +38,19 @@ public class UserRegistrationController  {
 
     @PostMapping
     public String registerUser(@Valid UserRegistrationDTO userDTO){
-        User registeredUser = new User();
-        registeredUser.setActive(true);
-        registeredUser.setRole("USER");
-        BeanUtils.copyProperties(userDTO, registeredUser);
-        registeredUser.setBirthDate(LocalDate.parse(userDTO.getBirthDate()));
-        registeredUser.setSex(Sex.valueOf(userDTO.getSex()));
-        registeredUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(registeredUser);
+        userService.registerUser(userDTO);
         return "redirect:/";
+    }
+
+    @GetMapping("/modifyProfile")
+    public String getModifyProfilePage(Model model, Principal principal){
+        model.addAttribute("userData", userService.getUserDetails(principal.getName()));
+        return "/modifyUserProfile";
+    }
+
+    @PostMapping("/modifyProfile")
+    public String modifyProfile(UserRegistrationDTO userDTO){
+        userService.updateProfile(userDTO);
+        return "redirect:/userRegistration/modifyProfile";
     }
 }

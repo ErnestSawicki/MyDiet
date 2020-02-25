@@ -143,6 +143,21 @@ public class MealController {
         }
     }
 
+    @GetMapping("/modifyMeal")
+    public String getModifyMealPage(Model model, @RequestParam Long mealId){
+        if (mealService.getMealById(mealId).getMealFile() != null) {
+            model.addAttribute("hasMealPicture", true);
+        }
+        model.addAttribute("hasMealPicture", false);
+        model.addAttribute("mealToModify", mealService.getMealById(mealId));
+        return "/modifyMeal";
+    }
+
+    @PostMapping("/modifyMeal")
+    public String modifyMeal(){
+        return "redirect:/createMeal/modifyMeal";
+    }
+
     private ResponseEntity<Resource> buildNoMealFileResponse() { return ResponseEntity.noContent().build();}
 
     private ResponseEntity<Resource> buildMealFileResponse(FileEntity mealFile){
