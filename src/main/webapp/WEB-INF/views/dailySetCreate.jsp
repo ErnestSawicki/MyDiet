@@ -151,7 +151,8 @@
     <label for="caloriesAmount7"> 4000[kcal]</label></span>
                 </c:otherwise>
             </c:choose>
-            <input type="submit" name="filter" value="Filter"/>
+            <c:if test="${dailySetDTO.caloriesPicked==null}">
+            </c:if>
 
 
             <c:choose>

@@ -10,6 +10,7 @@ import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.MealTime;
+import pl.com.MyDiet.MyDiet.data.model.MealType;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
@@ -100,7 +101,7 @@ public class DailySetServiceDefault implements DailySetService {
         log.debug("DailySetServiceDefault-save: started ...");
         DailySet dailySet = new DailySet();
 
-        dailySet.setCalories(dailyMealSetDTO.getCalories());
+        dailySet.setCalories(dailyMealSetDTO.getCaloriesPicked());
         dailySet.setCreatorUser(userRepository.findUserByUsername(username));
         dailySet.setMealAmount(dailyMealSetDTO.getMealAmount());
 
