@@ -1,7 +1,6 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,10 +26,12 @@ public class DailySetController {
 
     private final DailySetService dailySetService;
 
+    private final DietConfigurator dietConfigurator;
 
     @Autowired
-    public DailySetController(DailySetService dailySetService) {
+    public DailySetController(DailySetService dailySetService, DietConfigurator dietConfigurator) {
         this.dailySetService = dailySetService;
+        this.dietConfigurator = dietConfigurator;
     }
 
     @GetMapping
@@ -42,7 +43,17 @@ public class DailySetController {
 
 
     @PostMapping(params = {"filter"})
-    public String createDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
+    public String createDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO,
+                                      Model model,
+                                      @RequestParam(defaultValue = "false") Boolean redirected,
+                                      @RequestParam(required = false) Integer dietDay) {
+        if (redirected.equals("false")) {
+            model.addAttribute("redirected", false);
+        }
+        model.addAttribute("redirected", redirected);
+        if (dietDay != null){
+            model.addAttribute("dietDay", dietDay);
+        }
         log.info("DailySetController redirect to page with amount {}" , dailySetDTO.getMealAmount());
         dailySetDTO = dailySetService.reloadPageWithSetVariable(dailySetDTO);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
@@ -52,7 +63,16 @@ public class DailySetController {
     }
 
     @PostMapping(params = {"modifyMealList"})
-    public String modifyMealList(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
+    public String modifyMealList(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model,
+                                 @RequestParam(defaultValue = "false") Boolean redirected,
+                                 @RequestParam(required = false) Integer dietDay) {
+        if (redirected.equals("false")) {
+            model.addAttribute("redirected", false);
+        }
+        model.addAttribute("redirected", redirected);
+        if (dietDay != null){
+            model.addAttribute("dietDay", dietDay);
+        }
         dailySetDTO.setMealPicked(false);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         return "dailySetCreate";
@@ -67,7 +87,6 @@ public class DailySetController {
     public String process(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO,
                           Principal principal,
                           Model model) {
-
         if (dailySetService.save(dailySetDTO, principal.getName())) {
             return "home-page";
         } else {
@@ -77,16 +96,22 @@ public class DailySetController {
     }
 
     @GetMapping("/forDiet")
-    public String getDailySetForDiet(Model model){
+    public String getDailySetForDiet(Model model, @RequestParam Integer dietDay) {
+        log.debug("DailySetController-createdForDiet: dietDay:{}", dietDay);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(3L));
         model.addAttribute("dailySetDTO", new DailyMealSetDTO());
 
         model.addAttribute("redirected", true);
+        model.addAttribute("dietDay", dietDay);
         return "dailySetCreate";
     }
 
     @PostMapping(params = {"createdForDiet"})
-    public String createDailySetForDiet(){
+    public String createDailySetForDiet(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailyMealSetDTO,
+                                        @RequestParam Integer dietDay) {
+        log.debug("DailySetController-createdForDiet: dietDay:{}", dietDay);
+        log.debug("DailySetController-createdForDiet: dietConfigurationDailySetMap:{}", dietConfigurator.getDailySetDTOMap());
+        dietConfigurator.getDailySetDTOMap().put(dietDay, dailyMealSetDTO);
         return "redirect:/createDiet";
     }
 }
