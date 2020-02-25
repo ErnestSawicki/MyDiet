@@ -13,16 +13,14 @@ import pl.com.MyDiet.MyDiet.DTO.DietDTO;
 import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Diet;
-import pl.com.MyDiet.MyDiet.data.model.MealTime;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.DietRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
+import pl.com.MyDiet.MyDiet.services.DietService;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -30,19 +28,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class DietController {
 
-    private final DailySetRepository dailySetRepository;
-    private final DietRepository dietRepository;
-    private final UserRepository userRepository;
+
     private final DietConfigurator dietConfigurator;
-    private final MealRepository mealRepository;
+    private final DietService dietService;
 
     @Autowired
-    public DietController(DailySetRepository dailySetRepository, DietRepository dietRepository, UserRepository userRepository, DietConfigurator dietConfigurator, MealRepository mealRepository) {
-        this.dailySetRepository = dailySetRepository;
-        this.dietRepository = dietRepository;
-        this.userRepository = userRepository;
+    public DietController(DietConfigurator dietConfigurator, DietService dietService) {
         this.dietConfigurator = dietConfigurator;
-        this.mealRepository = mealRepository;
+        this.dietService = dietService;
     }
 
     @GetMapping
@@ -54,15 +47,8 @@ public class DietController {
 
     @PostMapping(params = {"filter"})
     public String getDietPageWithFilter(Model model, DietDTO dietDTO) {
-
-        dietConfigurator.setDietName(dietDTO.getDietName());
-        dietConfigurator.setDietDescription(dietDTO.getDescription());
-        dietConfigurator.setDuration(dietDTO.getDuration());
+        dietDTO.copyPropertiesDietDTO(dietConfigurator);
         model.addAttribute("dietConfigurator", dietConfigurator);
-        for (Integer i = 0; i < dietDTO.getDuration(); i++) {
-            DailyMealSetDTO dailyMealSetDTO = new DailyMealSetDTO();
-            dietConfigurator.getDailySetDTOMap().put(i , dailyMealSetDTO);
-        }
         model.addAttribute("dailyMealSetsDTO", dietConfigurator.getDailySetDTOMap());
 
         return "/diet-create";
@@ -74,7 +60,7 @@ public class DietController {
     }
 
     @PostMapping(params = {"findDailySet"})
-    public String findDailySet(){
+    public String findDailySet() {
         return "redirect:/createDailySet";
     }
 
@@ -82,33 +68,10 @@ public class DietController {
     @PostMapping(params = {"create"})
     public String createDiet(Principal principal) {
         log.debug("DietController-create: Start to create diet ...");
-        Diet diet = new Diet();
-        User creator = userRepository.findUserByUsername(principal.getName());
-        diet.setCreatorUser(creator);
-        diet.setDietName(dietConfigurator.getDietName());
-        diet.setDescription(dietConfigurator.getDietDescription());
-        diet.setDuration(dietConfigurator.getDuration());
-        log.debug("DietController-create: ... translate dailyMealSetDTO to dailySet for diet ...");
-        dietConfigurator.getDailySetDTOMap().forEach((key, dailyMealSetDTO) -> {
-            DailySet dailySet = new DailySet();
-            dailySet.setCalories(dailyMealSetDTO.getCalories());
-            dailySet.setCreatorUser(creator);
-            dailySet.setMealAmount(dailyMealSetDTO.getMealAmount());
-            List<MealTime> mealTimes = dailyMealSetDTO.getMeals().stream().map(p -> {
-                MealTime mealTime = new MealTime();
-                mealTime.setDailySet(dailySet);
-                mealTime.setMeal(mealRepository.getOne(p.getId()));
-                mealTime.setMealTypeName(p.getMealType());
-                return mealTime;
-            }).collect(Collectors.toList());
-            dailySet.setMealTime(mealTimes);
-            log.debug("DietController-create: ... dailySetIs = {}", dailySet);
-            dailySet.getDiets().add(diet);
-            dailySetRepository.save(dailySet);
-            diet.getDailySet().add(dailySet);
-        });
-        dietRepository.save(diet);
+        dietService.save(dietConfigurator, principal.getName());
         log.debug("DietController-create: ... diet created");
         return "redirect:/";
     }
+
+
 }
