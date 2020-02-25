@@ -43,7 +43,17 @@ public class DailySetController {
 
 
     @PostMapping(params = {"filter"})
-    public String createDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
+    public String createDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO,
+                                      Model model,
+                                      @RequestParam(defaultValue = "false") Boolean redirected,
+                                      @RequestParam(required = false) Integer dietDay) {
+        if (redirected.equals("false")) {
+            model.addAttribute("redirected", false);
+        }
+        model.addAttribute("redirected", redirected);
+        if (dietDay != null){
+            model.addAttribute("dietDay", dietDay);
+        }
         log.info("DailySetController redirect to page with amount {}" , dailySetDTO.getMealAmount());
         dailySetDTO = dailySetService.reloadPageWithSetVariable(dailySetDTO);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
@@ -53,7 +63,16 @@ public class DailySetController {
     }
 
     @PostMapping(params = {"modifyMealList"})
-    public String modifyMealList(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
+    public String modifyMealList(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model,
+                                 @RequestParam(defaultValue = "false") Boolean redirected,
+                                 @RequestParam(required = false) Integer dietDay) {
+        if (redirected.equals("false")) {
+            model.addAttribute("redirected", false);
+        }
+        model.addAttribute("redirected", redirected);
+        if (dietDay != null){
+            model.addAttribute("dietDay", dietDay);
+        }
         dailySetDTO.setMealPicked(false);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         return "dailySetCreate";
@@ -68,7 +87,6 @@ public class DailySetController {
     public String process(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO,
                           Principal principal,
                           Model model) {
-
         if (dailySetService.save(dailySetDTO, principal.getName())) {
             return "home-page";
         } else {
@@ -90,8 +108,6 @@ public class DailySetController {
 
     @PostMapping(params = {"createdForDiet"})
     public String createDailySetForDiet(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailyMealSetDTO,
-                                        Principal principal,
-                                        Model model,
                                         @RequestParam Integer dietDay) {
         log.debug("DailySetController-createdForDiet: dietDay:{}", dietDay);
         log.debug("DailySetController-createdForDiet: dietConfigurationDailySetMap:{}", dietConfigurator.getDailySetDTOMap());

@@ -18,6 +18,14 @@
 <div id="container">
     <form method="post" action="/createDailySet">
 
+        <c:choose>
+            <c:when test="${redirected == true}">
+                <input type="hidden" name="redirected" value="${redirected}">
+                <input type="hidden" name="dietDay" value="${dietDay}">
+            </c:when>
+        </c:choose>
+
+
         <h3> Amount meals per day </h3>
         <div>
             <c:choose>
@@ -360,7 +368,7 @@
                                 <c:when test="${redirected == true}">
                                     <div>
                                         <input type="hidden" name="dietDay" value="${dietDay}">
-                                        <button type="submit" name="createdForDiet">Create</button>
+                                        <button type="submit" name="createdForDiet">Create for diet</button>
                                         <sec:csrfInput/>
                                     </div>
                                 </c:when>
