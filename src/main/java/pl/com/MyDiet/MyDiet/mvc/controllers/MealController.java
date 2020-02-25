@@ -164,7 +164,6 @@ public class MealController {
     private boolean isValidProfileFile(FileEntity mealPicture){
         if (mealPicture.getContentType() == null) return false;
         if (mealPicture.getFileName() == null || mealPicture.getFileName().isEmpty()) return false;
-        if (mealPicture.getData() == null) return false;
-        return true;
+        return mealPicture.getData() != null;
     }
 }
