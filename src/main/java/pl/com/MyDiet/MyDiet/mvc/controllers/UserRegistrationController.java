@@ -12,6 +12,7 @@ import pl.com.MyDiet.MyDiet.DTO.UserRegistrationDTO;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
+import pl.com.MyDiet.MyDiet.services.UserService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -21,14 +22,11 @@ import java.time.LocalDate;
 @RequestMapping("/userRegistration")
 public class UserRegistrationController  {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public UserRegistrationController(UserRepository userRepository,
-                                      PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserRegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -38,14 +36,7 @@ public class UserRegistrationController  {
 
     @PostMapping
     public String registerUser(@Valid UserRegistrationDTO userDTO){
-        User registeredUser = new User();
-        registeredUser.setActive(true);
-        registeredUser.setRole("USER");
-        BeanUtils.copyProperties(userDTO, registeredUser);
-        registeredUser.setBirthDate(LocalDate.parse(userDTO.getBirthDate()));
-        registeredUser.setSex(Sex.valueOf(userDTO.getSex()));
-        registeredUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(registeredUser);
+        userService.registerUser(userDTO);
         return "redirect:/";
     }
 }

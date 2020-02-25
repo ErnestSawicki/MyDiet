@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pl.com.MyDiet.MyDiet.DTO.IngredientCategoryDTO;
 
 import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
@@ -13,13 +14,12 @@ import pl.com.MyDiet.MyDiet.data.model.Ingredient;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.MealType;
 import pl.com.MyDiet.MyDiet.data.model.PartOfMeal;
-import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
+import pl.com.MyDiet.MyDiet.data.model.file.FileEntity;
+import pl.com.MyDiet.MyDiet.data.repositories.*;
 import pl.com.MyDiet.MyDiet.services.IngredientService;
 import pl.com.MyDiet.MyDiet.services.MealService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,15 +32,17 @@ public class MealServiceDefault implements MealService {
     private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
     private final MealTypeRepository mealTypeRepository;
+    private final FileEntityRepository fileEntityRepository;
 
 
     @Autowired
-    public MealServiceDefault(MealRepository mealRepository, IngredientService ingredientService, UserRepository userRepository, IngredientRepository ingredientRepository, MealTypeRepository mealTypeRepository) {
+    public MealServiceDefault(MealRepository mealRepository, IngredientService ingredientService, UserRepository userRepository, IngredientRepository ingredientRepository, MealTypeRepository mealTypeRepository, FileEntityRepository fileEntityRepository) {
         this.mealRepository = mealRepository;
         this.ingredientService = ingredientService;
         this.userRepository = userRepository;
         this.ingredientRepository = ingredientRepository;
         this.mealTypeRepository = mealTypeRepository;
+        this.fileEntityRepository = fileEntityRepository;
     }
 
     @Override
@@ -151,8 +153,8 @@ public class MealServiceDefault implements MealService {
         return true;
     }
 
-    private Long countCalories(MealCreateDTO mealCreateDTO) {
 
+    private Long countCalories(MealCreateDTO mealCreateDTO) {
         List<Long> calories = mealCreateDTO.getPartsOfMealIngredientIdNameAmount().stream()
                 .map(p -> {
                     Ingredient ingredient = ingredientRepository.findById(p.getIngredientId()).orElse(null);
@@ -162,7 +164,6 @@ public class MealServiceDefault implements MealService {
                         return 0L;
                     }
                 }).collect(Collectors.toList());
-
         Long result = 0L;
         for (Long l : calories) {
             result = result + l;

@@ -50,7 +50,6 @@ public class DietController {
         dietDTO.copyPropertiesDietDTO(dietConfigurator);
         model.addAttribute("dietConfigurator", dietConfigurator);
         model.addAttribute("dailyMealSetsDTO", dietConfigurator.getDailySetDTOMap());
-
         return "/diet-create";
     }
 
@@ -64,13 +63,15 @@ public class DietController {
         return "redirect:/createDailySet";
     }
 
-
     @PostMapping(params = {"create"})
     public String createDiet(Principal principal) {
         log.debug("DietController-create: Start to create diet ...");
-        dietService.save(dietConfigurator, principal.getName());
-        log.debug("DietController-create: ... diet created");
-        return "redirect:/";
+        if (dietService.save(dietConfigurator, principal.getName())) {
+            log.debug("DietController-create: ... diet created");
+            return "redirect:/";
+        }
+        log.debug("DietController-create: ... diet NOT created");
+        return "redirect:/createDiet";
     }
 
 
