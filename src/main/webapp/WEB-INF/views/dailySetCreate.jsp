@@ -352,7 +352,7 @@
 
                             <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
                         <c:if test="${dailySetDTO.caloriesPicked<dailySetDTO.calories}">
-                            <p style="color: red">Too many calories!!!! You try create meal set with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories} [kcal] </p>
+                            <p style="color: red">Too manygit branch calories!!!! You try create meal set with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories} [kcal] </p>
                         </c:if>
 
                             <c:choose>
