@@ -23,6 +23,7 @@ public class DailySet extends EntityBase {
     @Column(name = "calories")
     private Long calories;
 
+
     // Relation part//
 
     @ManyToOne(fetch = FetchType.LAZY)

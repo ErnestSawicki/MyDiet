@@ -9,7 +9,7 @@ import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
-import pl.com.MyDiet.MyDiet.data.model.MealTime;
+import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
@@ -82,7 +82,7 @@ public class DailySetServiceDefault implements DailySetService {
 
     @Override
     public DailyMealSetDTO reloadPageWithSetVariable(DailyMealSetDTO dailyMealSetDTO) {
-        dailyMealSetDTO.countCalories();
+        dailyMealSetDTO.setUpValuesCaloriesAndMealListQueue();
         return dailyMealSetDTO;
     }
 
@@ -95,5 +95,15 @@ public class DailySetServiceDefault implements DailySetService {
         log.debug("DailySetServiceDefault-save: dailySet {}", dailySet);
         log.debug("DailySetServiceDefault-save: ... finished");
         return true;
+    }
+
+    @Override
+    public List<DailySet> getAllDailySet() {
+        return dailySetRepository.findAll();
+    }
+
+    @Override
+    public List<DailySet> getAllUserDailySet(User user){
+        return dailySetRepository.findAllByCreatorUser(user);
     }
 }

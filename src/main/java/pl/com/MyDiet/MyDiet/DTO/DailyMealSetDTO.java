@@ -4,7 +4,6 @@ package pl.com.MyDiet.MyDiet.DTO;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
-import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.MealTime;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
@@ -12,6 +11,7 @@ import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,25 +21,40 @@ public class DailyMealSetDTO {
 
     private Long mealAmount;
     private Long caloriesPicked;
-    private Long calories=0L;
+    private Long calories = 0L;
     private User creatorUser;
-    private boolean mealPicked=false;
+    private boolean mealPicked = false;
     private List<SimpleMealsDTO> meals = new ArrayList<>();
 
 
-    public void countCalories(){
-        Long result =0L;
-        List<Long> collect = meals.stream().map(SimpleMealsDTO::getCalories).collect(Collectors.toList());
-        for (Long l :collect) {
-            result+=l;
+
+    public void setUpValuesCaloriesAndMealListQueue() {
+        countCalories();
+        if (meals.size() == 5) {
+            setUpMealsListQueue();
         }
-        this.calories=result;
     }
+
+    private void countCalories() {
+        Long result = 0L;
+        List<Long> collect = meals.stream().map(SimpleMealsDTO::getCalories).collect(Collectors.toList());
+        for (Long l : collect) {
+            result += l;
+        }
+        this.calories = result;
+    }
+
+    private void setUpMealsListQueue() {
+        Collections.swap(this.meals, 1, 2);
+        Collections.swap(this.meals, 3, 4);
+        Collections.swap(this.meals, 2, 3);
+    }
+
 
     public DailySet copyProperties(DailyMealSetDTO dailyMealSetDTO,
                                    UserRepository userRepository,
                                    String username,
-                                   MealRepository mealRepository){
+                                   MealRepository mealRepository) {
         log.debug("DailyMealSetDTO-copyProperties: Copy properties started... ");
         log.debug("DailyMealSetDTO-copyProperties: dailyMealSetDTO.toString()={}", dailyMealSetDTO.toString());
         DailySet dailySet = new DailySet();
@@ -59,6 +74,7 @@ public class DailyMealSetDTO {
         log.debug("DailyMealSetDTO-copyProperties: ... copy properties finished");
         return dailySet;
     }
+
 
     @Override
     public String toString() {
