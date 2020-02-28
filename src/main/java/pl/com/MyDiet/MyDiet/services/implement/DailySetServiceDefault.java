@@ -159,6 +159,7 @@ public class DailySetServiceDefault implements DailySetService {
     @Override
     public boolean modify(DailyMealSetDTO dailySetDTO, String username) {
         log.debug("DailySetServiceDefault-modify: started ...");
+        dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         DailySet dailySet = dailySetDTO.copyProperties(dailySetDTO, userRepository, username, mealRepository);
         mealTimeRepository.findAllByDailySet(dailySetRepository.getOne(dailySetDTO.getId())).forEach(mealTimeRepository::delete);
         dailySetRepository.save(dailySet);

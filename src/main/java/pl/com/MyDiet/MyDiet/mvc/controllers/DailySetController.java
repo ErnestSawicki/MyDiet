@@ -110,6 +110,7 @@ public class DailySetController {
                                                 @RequestParam(defaultValue = "false") Boolean redirected,
                                                 @RequestParam(required = false) Integer dietDay) {
 
+        dailySetService.reloadPageWithSetVariable(dailySetDTO);
         dailySetDTO.setMealPicked(false);
         log.debug("DailySetController-modifyClearList: user try modify his meal pick list with amount {}", dailySetDTO.getMealAmount());
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
@@ -161,6 +162,7 @@ public class DailySetController {
         }
         log.info("DailySetController redirect to page with amount {}", dailySetDTO.getMealAmount());
         dailySetDTO = dailySetService.reloadPageWithSetVariable(dailySetDTO);
+        dailySetDTO.getMeals().stream().forEach(p-> log.debug("createDailySetPages id {} name {}", p.getId(), p.getName()));
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         log.info("DailySetController redirect to page with amount {} , meal size {}", dailySetDTO.getMealAmount(), dailySetDTO.getMeals().size());
         return "dailySetCreate";
@@ -177,9 +179,12 @@ public class DailySetController {
         if (dietDay != null) {
             model.addAttribute("dietDay", dietDay);
         }
+        log.info("DailySetController redirect to page with amount {}", dailySetDTO.getMealAmount());
         dailySetDTO.setMealPicked(false);
+
         dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         log.debug("DailySetController-modifyClearList: user try modify his meal pick list with amount {}", dailySetDTO.getMealAmount());
+        dailySetDTO.getMeals().stream().forEach(p-> log.debug("id {} name {}", p.getId(), p.getName()));
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         return "dailySetCreate";
     }
