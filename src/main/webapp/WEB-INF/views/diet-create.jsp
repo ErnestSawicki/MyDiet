@@ -38,7 +38,7 @@
                 <div>
                     Day ${dailySet.key}:
                     <input type="submit" name="findDailySet" value="Find dailySet">
-                    <a href="/createDailySet/forDiet?dietDay=${dailySet.key}">Create new dailySet</a>
+                    <a href="/daily-set/create/forDiet?dietDay=${dailySet.key}">Create new dailySet</a>
                 </div>
             </c:forEach>
         </c:when>

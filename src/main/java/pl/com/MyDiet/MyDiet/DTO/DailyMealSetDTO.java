@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.MealTime;
 import pl.com.MyDiet.MyDiet.data.model.User;
+import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 
@@ -29,7 +30,7 @@ public class DailyMealSetDTO {
 
     public void setUpValuesCaloriesAndMealListQueue() {
         countCalories();
-        if (meals.size() == 5) {
+        if (meals.size() == 5 && meals.get(1).getMealType()==MealTypeEnumeration.SECOND_BREAKFAST) {
             setUpMealsListQueue();
         }
     }
@@ -69,6 +70,8 @@ public class DailyMealSetDTO {
             return mealTime;
         }).collect(Collectors.toList());
         dailySet.setMealTime(mealTimes);
+        if(dailyMealSetDTO.id!=null)
+            dailySet.setId(dailyMealSetDTO.getId());
 
         log.debug("DailyMealSetDTO-copyProperties: ... copy properties finished");
         return dailySet;

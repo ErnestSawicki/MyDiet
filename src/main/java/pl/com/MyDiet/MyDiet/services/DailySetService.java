@@ -11,7 +11,8 @@ import java.util.List;
 public interface DailySetService {
 
     MealsAvailableToSetDTO getAvailableMeats(Long mealsAmount);
-    DailyMealSetDTO getDailySetAsDailyMealSetDTO(DailySet dailySet);
+    DailyMealSetDTO getDailySetAsDailyMealSetDTO(Long dailySetId);
+
     DailyMealSetDTO reloadPageWithSetVariable(DailyMealSetDTO dailyMealSetDTO);
     boolean save(DailyMealSetDTO dailyMealSetDTO, String user);
     List<DailySet> getAllDailySet();

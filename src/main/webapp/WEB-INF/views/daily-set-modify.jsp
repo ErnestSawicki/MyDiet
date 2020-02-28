@@ -13,7 +13,7 @@
     <title>Modification created daily meal's set</title>
 </head>
 <body>
-<h1>Crate new daily diet set </h1>
+<h1>Modify existing diet set </h1>
 <div id="container">
     <form method="post" action="/daily-set/modify">
 <input type="hidden" value="${dailySetDTO.id}" name="id">
@@ -332,8 +332,7 @@
                             <c:choose>
                                 <c:when test="${dailySetDTO.meals.size()==5}">
                                     <p> tea is ${dailySetDTO.meals.get(4).name}
-                                        calories: ${dailySetDTO.meals.get(4).calories}[kcal
-                                        ]</p>
+                                        calories: ${dailySetDTO.meals.get(4).calories}[kcal]</p>
                                     <input type="hidden"
                                            value="${dailySetDTO.meals.get(4).id};${dailySetDTO.meals.get(4).name};${dailySetDTO.meals.get(4).calories};TEA"
                                            name="meals">
@@ -356,13 +355,10 @@
                                 <p style="color: red">Too many calories!!!! You try create meal set with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories} [kcal] </p>
                             </c:if>
 
-
-
-
                                     <div>
-                                        <button type="submit" name="send">SEND</button>
-                                        <button type="submit" name="modifyMealList">MODIFY LIST</button>
-                                        <button type="submit" name="clear">RESET ALL</button>
+                                        <button type="submit" name="approvalModification">SEND</button>
+                                        <button type="submit" name="modifyExistingMealList">MODIFY LIST</button>
+                                        <button type="submit" name="resetAll">RESET ALL</button>
                                         <sec:csrfInput/>
                                     </div>
 

@@ -2,6 +2,7 @@ package pl.com.MyDiet.MyDiet.services.implement;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
@@ -82,8 +83,8 @@ public class DailySetServiceDefault implements DailySetService {
     }
 
     @Override
-    public DailyMealSetDTO getDailySetAsDailyMealSetDTO(DailySet dailySet) {
-        return convertDailySetToDailyMealSetDTO(dailySet);
+    public DailyMealSetDTO getDailySetAsDailyMealSetDTO(Long dailySetId) {
+        return convertDailySetToDailyMealSetDTO(getOneDailyMealById(dailySetId));
     }
 
     private DailyMealSetDTO convertDailySetToDailyMealSetDTO(DailySet dailySet) {
@@ -95,7 +96,7 @@ public class DailySetServiceDefault implements DailySetService {
             SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
             simpleMealsDTO.setCalories(p.getMeal().getCalories());
             simpleMealsDTO.setName(p.getMeal().getName());
-            simpleMealsDTO.setId(p.getId());
+            simpleMealsDTO.setId(p.getMeal().getId());
             simpleMealsDTO.setMealType(p.getMealTypeName());
             return simpleMealsDTO;
         }).collect(Collectors.toList()));
@@ -113,6 +114,7 @@ public class DailySetServiceDefault implements DailySetService {
     @Transactional
     public boolean save(DailyMealSetDTO dailyMealSetDTO, String username) {
         log.debug("DailySetServiceDefault-save: started ...");
+        dailyMealSetDTO.setUpValuesCaloriesAndMealListQueue();
         DailySet dailySet = dailyMealSetDTO.copyProperties(dailyMealSetDTO, userRepository, username, mealRepository);
         dailySetRepository.save(dailySet);
         log.debug("DailySetServiceDefault-save: dailySet {}", dailySet);
@@ -156,12 +158,19 @@ public class DailySetServiceDefault implements DailySetService {
     @Transactional
     @Override
     public boolean modify(DailyMealSetDTO dailySetDTO, String username) {
-        return false;
+        log.debug("DailySetServiceDefault-modify: started ...");
+        DailySet dailySet = dailySetDTO.copyProperties(dailySetDTO, userRepository, username, mealRepository);
+        mealTimeRepository.findAllByDailySet(dailySetRepository.getOne(dailySetDTO.getId())).forEach(mealTimeRepository::delete);
+        dailySetRepository.save(dailySet);
+
+        log.debug("DailySetServiceDefault-modify: dailySet {}", dailySet);
+        log.debug("DailySetServiceDefault-modify: ... finished");
+        return true;
     }
 
     private SimpleDailySetDTO.MealForDailyDTO convertMealToMealForDailyDTO(MealTime mealTime) {
         SimpleDailySetDTO.MealForDailyDTO mealForDailyDTO = new SimpleDailySetDTO.MealForDailyDTO();
-        Meal meal = mealRepository.getOne(mealTime.getId());
+        Meal meal = mealRepository.getOne(mealTime.getMeal().getId());
         mealForDailyDTO.setId(meal.getId());
         mealForDailyDTO.setMealFileId(meal.getMealFileId());
         mealForDailyDTO.setMealFile(meal.getMealFile());
@@ -183,7 +192,7 @@ public class DailySetServiceDefault implements DailySetService {
         simpleDailySetDTO.setMealAmount(dailySet.getMealAmount());
         simpleDailySetDTO.setCreatorUserId(dailySet.getCreatorUser().getId());
         simpleDailySetDTO.setCreatorUserName(dailySet.getCreatorUser().getUsername());
-        simpleDailySetDTO.setMealForDailyDTO(dailySet.getMealTime().stream().filter(Objects::nonNull).map(p-> mealTimeRepository.getOne(p.getId())).map(this::convertMealToMealForDailyDTO
+        simpleDailySetDTO.setMealForDailyDTO(dailySet.getMealTime().stream().filter(Objects::nonNull).map(p -> mealTimeRepository.getOne(p.getId())).map(this::convertMealToMealForDailyDTO
         ).collect(Collectors.toList()));
         log.debug("convertDailySetToSimpleDailySetDTO: Get path/daily-set: daily set meal size = {}", dailySet.getMealTime().size());
         return simpleDailySetDTO;

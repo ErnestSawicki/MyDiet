@@ -94,7 +94,7 @@
             <td>
                 <div><a href="">View more</a></div>
                 <c:if test="${dailySet.creatorUserName==loggedUser}">
-                    <div><a href="/${dailySet.id}}">Modify</a></div>
+                    <div><a href="/daily-set/modify/${dailySet.id}/modify">Modify</a></div>
                 </c:if>
                 <div><a href="">View more</a></div>
             </td>
