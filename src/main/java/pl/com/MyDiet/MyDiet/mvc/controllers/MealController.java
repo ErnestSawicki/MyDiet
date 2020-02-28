@@ -7,10 +7,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.MyDiet.MyDiet.DTO.MealCreateDTO;
+import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.file.FileEntity;
 import pl.com.MyDiet.MyDiet.data.repositories.FileEntityRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.IngredientRepository;
@@ -20,7 +22,7 @@ import pl.com.MyDiet.MyDiet.services.MealService;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Optional;
+import java.util.*;
 
 
 @Controller
@@ -128,7 +130,6 @@ public class MealController {
         return "createMeal";
     }
 
-
     @GetMapping("/meal-file")
     public ResponseEntity<Resource> getMealPicture(@RequestParam Long mealFileId){
         log.debug("MealController-mealFile: Input mealFileId: {}", mealFileId);
@@ -147,8 +148,9 @@ public class MealController {
     public String getModifyMealPage(Model model, @RequestParam Long mealId){
         if (mealService.getMealById(mealId).getMealFile() != null) {
             model.addAttribute("hasMealPicture", true);
+        } else {
+            model.addAttribute("hasMealPicture", false);
         }
-        model.addAttribute("hasMealPicture", false);
         model.addAttribute("mealToModify", mealService.getMealById(mealId));
         return "/modifyMeal";
     }
@@ -156,6 +158,27 @@ public class MealController {
     @PostMapping("/modifyMeal")
     public String modifyMeal(){
         return "redirect:/createMeal/modifyMeal";
+    }
+
+    @GetMapping("/viewMeal")
+    public String getViewMealPage(Model model, @RequestParam Long mealId){
+        if (mealService.getMealById(mealId).getMealFile() != null) {
+            model.addAttribute("hasMealPicture", true);
+        } else {
+            model.addAttribute("hasMealPicture", false);
+        }
+        Meal meal = mealService.getMealById(mealId);
+        log.debug("MealController-viewMeal: meal={}", meal.toString());
+        model.addAttribute("partsOfMeal", meal.getPartsOfMeal());
+        Set<String> mealTypesNames = new HashSet<>();
+        meal.getMealTypes().forEach( p -> {
+            log.debug("MealController-viewMeal: typeNames as strings: {}", p.getMealTypeName());
+            mealTypesNames.add(p.getMealTypeName().name());
+        });
+        model.addAttribute("mealTypes", mealTypesNames);
+        log.debug("MealController-viewMeal: mealTypes are: {}", mealTypesNames);
+        model.addAttribute("mealDetails", meal);
+        return "/mealDetails";
     }
 
     private ResponseEntity<Resource> buildNoMealFileResponse() { return ResponseEntity.noContent().build();}
