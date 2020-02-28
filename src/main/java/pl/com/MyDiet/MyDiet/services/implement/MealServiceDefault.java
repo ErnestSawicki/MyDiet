@@ -132,6 +132,7 @@ public class MealServiceDefault implements MealService {
             return false;
         }
         log.info("condition pass");
+        log.debug("MealServiceDefault: mealCreateDTO");
         Meal meal = new Meal();
 
         meal.setName(mealCreateDTO.getName().trim().toLowerCase());
@@ -147,14 +148,21 @@ public class MealServiceDefault implements MealService {
             return partOfMeal;
         }).collect(Collectors.toList()));
 
-        mealCreateDTO.getMealTypeNameMealId().forEach(p -> meal.getMealTypes().add(mealTypeRepository.getOne(p.getId())));
+
+        mealCreateDTO.getMealTypeNameMealId().forEach(p -> {
+            log.debug("MealServiceDefault: mealType from repository={}", mealTypeRepository.getOne(p.getId()).getMealTypeName());
+            MealType mealType = mealTypeRepository.getOne(p.getId());
+            meal.getMealTypes().add(mealType);
+            mealType.getMeals().add(meal);
+        });
+
         meal.setMealFile(mealCreateDTO.getMealFile());
 
         log.debug("MealServiceDefault: meal={}", meal.toString());
 
         log.debug("DailySetServiceDefault-save: try save meal {}", meal.getName());
         mealRepository.save(meal);
-        log.info("DailySetServiceDefault-save: save meal {} succes", meal.getName());
+        log.info("DailySetServiceDefault-save: save meal {} succes", mealRepository.findById(meal.getId()).toString());
         return true;
     }
 
