@@ -6,15 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
+import pl.com.MyDiet.MyDiet.DTO.SimpleDailySetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
+import pl.com.MyDiet.MyDiet.data.model.MealTime;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
-import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealTypeRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
+import pl.com.MyDiet.MyDiet.data.repositories.*;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 
 import java.util.List;
@@ -28,14 +27,16 @@ public class DailySetServiceDefault implements DailySetService {
     private final MealTypeRepository mealTypeRepository;
     private final UserRepository userRepository;
     private final DailySetRepository dailySetRepository;
+    private final MealTimeRepository mealTimeRepository;
 
 
     @Autowired
-    public DailySetServiceDefault(MealRepository mealRepository, MealTypeRepository mealTypeRepository, UserRepository userRepository, DailySetRepository dailySetRepository) {
+    public DailySetServiceDefault(MealRepository mealRepository, MealTypeRepository mealTypeRepository, UserRepository userRepository, DailySetRepository dailySetRepository, MealTimeRepository mealTimeRepository) {
         this.mealRepository = mealRepository;
         this.mealTypeRepository = mealTypeRepository;
         this.userRepository = userRepository;
         this.dailySetRepository = dailySetRepository;
+        this.mealTimeRepository = mealTimeRepository;
     }
 
 
@@ -81,6 +82,28 @@ public class DailySetServiceDefault implements DailySetService {
     }
 
     @Override
+    public DailyMealSetDTO getDailySetAsDailyMealSetDTO(DailySet dailySet) {
+        return convertDailySetToDailyMealSetDTO(dailySet);
+    }
+
+    private DailyMealSetDTO convertDailySetToDailyMealSetDTO(DailySet dailySet) {
+        DailyMealSetDTO dailyMealSetDTO = new DailyMealSetDTO();
+        dailyMealSetDTO.setCaloriesPicked(dailySet.getCalories());
+        dailyMealSetDTO.setCreatorUser(dailySet.getCreatorUser());
+        dailyMealSetDTO.setMealAmount(dailySet.getMealAmount());
+        dailyMealSetDTO.setMeals(dailySet.getMealTime().stream().map(p -> {
+            SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
+            simpleMealsDTO.setCalories(p.getMeal().getCalories());
+            simpleMealsDTO.setName(p.getMeal().getName());
+            simpleMealsDTO.setId(p.getId());
+            simpleMealsDTO.setMealType(p.getMealTypeName());
+            return simpleMealsDTO;
+        }).collect(Collectors.toList()));
+        return dailyMealSetDTO;
+    }
+
+
+    @Override
     public DailyMealSetDTO reloadPageWithSetVariable(DailyMealSetDTO dailyMealSetDTO) {
         dailyMealSetDTO.setUpValuesCaloriesAndMealListQueue();
         return dailyMealSetDTO;
@@ -103,7 +126,68 @@ public class DailySetServiceDefault implements DailySetService {
     }
 
     @Override
-    public List<DailySet> getAllUserDailySet(User user){
+    public List<DailySet> getAllUserDailySet(User user) {
         return dailySetRepository.findAllByCreatorUser(user);
     }
+
+    @Override
+    public List<SimpleDailySetDTO> getAllDailySetDTOToDisplay() {
+        return dailySetRepository.findAll().stream().filter(Objects::nonNull).map(this::convertDailySetToSimpleDailySetDTO
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SimpleDailySetDTO> getUserDailySetDTOToDisplay(User user) {
+        return dailySetRepository.findAllByCreatorUser(user).stream().filter(Objects::nonNull).map(this::convertDailySetToSimpleDailySetDTO
+        ).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public boolean checkUserIsDailySetOwner(Long dailySetId, User user) {
+        return !dailySetRepository.existsById(dailySetId) && dailySetRepository.getOne(dailySetId).getCreatorUser() == user;
+    }
+
+    @Override
+    public DailySet getOneDailyMealById(Long dailySetId) {
+        return dailySetRepository.getOne(dailySetId);
+    }
+
+    @Transactional
+    @Override
+    public boolean modify(DailyMealSetDTO dailySetDTO, String username) {
+        return false;
+    }
+
+    private SimpleDailySetDTO.MealForDailyDTO convertMealToMealForDailyDTO(MealTime mealTime) {
+        SimpleDailySetDTO.MealForDailyDTO mealForDailyDTO = new SimpleDailySetDTO.MealForDailyDTO();
+        Meal meal = mealRepository.getOne(mealTime.getId());
+        mealForDailyDTO.setId(meal.getId());
+        mealForDailyDTO.setMealFileId(meal.getMealFileId());
+        mealForDailyDTO.setMealFile(meal.getMealFile());
+        mealForDailyDTO.setCalories(meal.getCalories());
+        mealForDailyDTO.setCreatorUser(meal.getCreatorUser().getUsername());
+        mealForDailyDTO.setName(meal.getName());
+        mealForDailyDTO.setPreparationTime(meal.getPreparationTime());
+        mealForDailyDTO.setRecipe(meal.getRecipe());
+        mealForDailyDTO.setMealTypeEnumeration(mealTime.getMealTypeName());
+        log.debug("convertMealToMealForDailyDTO: dailySets name {}", mealForDailyDTO.getName());
+        return mealForDailyDTO;
+    }
+
+    private SimpleDailySetDTO convertDailySetToSimpleDailySetDTO(DailySet dailySet) {
+        SimpleDailySetDTO simpleDailySetDTO = new SimpleDailySetDTO();
+        simpleDailySetDTO.setId(dailySet.getId());
+        simpleDailySetDTO.setCalories(dailySet.getCalories());
+        simpleDailySetDTO.setCalories(dailySet.getCalories());
+        simpleDailySetDTO.setMealAmount(dailySet.getMealAmount());
+        simpleDailySetDTO.setCreatorUserId(dailySet.getCreatorUser().getId());
+        simpleDailySetDTO.setCreatorUserName(dailySet.getCreatorUser().getUsername());
+        simpleDailySetDTO.setMealForDailyDTO(dailySet.getMealTime().stream().filter(Objects::nonNull).map(p-> mealTimeRepository.getOne(p.getId())).map(this::convertMealToMealForDailyDTO
+        ).collect(Collectors.toList()));
+        log.debug("convertDailySetToSimpleDailySetDTO: Get path/daily-set: daily set meal size = {}", dailySet.getMealTime().size());
+        return simpleDailySetDTO;
+    }
+
+
 }

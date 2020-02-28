@@ -18,14 +18,13 @@ import java.util.stream.Collectors;
 @Data
 @Slf4j
 public class DailyMealSetDTO {
-
+    private Long id;
     private Long mealAmount;
     private Long caloriesPicked;
     private Long calories = 0L;
     private User creatorUser;
     private boolean mealPicked = false;
     private List<SimpleMealsDTO> meals = new ArrayList<>();
-
 
 
     public void setUpValuesCaloriesAndMealListQueue() {

@@ -22,58 +22,78 @@
         <th>Calories</th>
         <th COLSPAN="2">BREAKFAST</th>
         <th COLSPAN="2">SECOND BREAKFAST</th>
-        <th COLSPAN="2">BREAKFAST</th>
-        <th COLSPAN="2">BREAKFAST</th>
+        <th COLSPAN="2">Diner</th>
+        <th COLSPAN="2">TEA</th>
+        <th COLSPAN="2">SUPPER</th>
         <th>ACTION</th>
     </tr>
     <c:forEach items="${createdDailySet}" var="dailySet">
         <tr>
-            <td>${dailySet.calories}</td>
-            <td>${dailySet.mealTime.get(0).meal.mealFile}</td>
+            <td>${dailySet.calories} [kcal]</td>
             <td>
-                <div>${dailySet.mealTime.get(0).mealTypeName}</div>
-                <div>${dailySet.mealTime.get(0).meal.name}</div>
-                <div>${dailySet.mealTime.get(0).meal.preparationTime}</div>
-                <div>${dailySet.mealTime.get(0).meal.recipe}</div>
-                <div><a href="">View more</a></div>
+                    <%--                    ${dailySet.mealForDailyDTO.get(0).mealFile}--%>
             </td>
-            <td>${dailySet.mealTime.get(1).meal.mealFile}</td>
             <td>
-                <div>${dailySet.mealTime.get(1).mealTypeName}</div>
-                <div>${dailySet.mealTime.get(1).meal.name}</div>
-                <div>${dailySet.mealTime.get(1).meal.preparationTime}</div>
-                <div>${dailySet.mealTime.get(1).meal.recipe}</div>
-                <div><a href="/${dailySet.mealTime.get(1).id}">View more</a></div>
+                <div><p> Type: ${dailySet.mealForDailyDTO.get(0).mealTypeEnumeration} </p></div>
+                <div><p> Meal name:${dailySet.mealForDailyDTO.get(0).name}</p></div>
+                <div><p> Preparation time ${dailySet.mealForDailyDTO.get(0).preparationTime} min. </p></div>
+                <div><p> Meal calories: ${dailySet.mealForDailyDTO.get(0).calories} [kcal] </p></div>
+                    <%--                <div>${dailySet.mealForDailyDTO.get(3).recipe}</div>--%>
+                <div><a href="/${dailySet.mealForDailyDTO.get(0).id}">View more</a></div>
             </td>
-            <td>${dailySet.mealTime.get(2).meal.mealFile}</td>
             <td>
-                <div>${dailySet.mealTime.get(2).mealTypeName}</div>
-                <div>${dailySet.mealTime.get(2).meal.name}</div>
-                <div>${dailySet.mealTime.get(2).meal.preparationTime}</div>
-                <div>${dailySet.mealTime.get(2).meal.recipe}</div>
-                <div><a href="/${dailySet.mealTime.get(2).id}">View more</a></div>
+                    <%--                    ${dailySet.mealForDailyDTO.get(1).mealFile}--%>
             </td>
-            nom
+            <td>
+                <c:if test="${dailySet.mealAmount==5}">
+                    <div><p> Type: ${dailySet.mealForDailyDTO.get(3).mealTypeEnumeration} </p></div>
+                    <div><p> Meal name:${dailySet.mealForDailyDTO.get(3).name}</p></div>
+                    <div><p> Preparation time ${dailySet.mealForDailyDTO.get(3).preparationTime} min. </p></div>
+                    <div><p> Meal calories: ${dailySet.mealForDailyDTO.get(3).calories} [kcal] </p></div>
+                    <%--                <div>${dailySet.mealForDailyDTO.get(3).recipe}</div>--%>
+                    <div><a href="/${dailySet.mealForDailyDTO.get(3).id}">View more</a></div>
+                </c:if>
+            </td>
+            <td>
+                    <%--                    ${dailySet.mealForDailyDTO.get(2).mealFile}--%>
+            </td>
+            <td>
+                <div><p> Type: ${dailySet.mealForDailyDTO.get(1).mealTypeEnumeration} </p></div>
+                <div><p> Meal name:${dailySet.mealForDailyDTO.get(1).name}</p></div>
+                <div><p> Preparation time ${dailySet.mealForDailyDTO.get(1).preparationTime} min. </p></div>
+                <div><p> Meal calories: ${dailySet.mealForDailyDTO.get(1).calories} [kcal] </p></div>
+                    <%--                <div>${dailySet.mealForDailyDTO.get(3).recipe}</div>--%>
+                <div><a href="/${dailySet.mealForDailyDTO.get(1).id}">View more</a></div>
+            </td>
 
-            <td>${dailySet.mealTime.get(3).meal.mealFile}</td>
             <td>
-                <div>${dailySet.mealTime.get(3).mealTypeName}</div>
-                <div>${dailySet.mealTime.get(3).meal.name}</div>
-                <div>${dailySet.mealTime.get(3).meal.preparationTime}</div>
-                <div>${dailySet.mealTime.get(3).meal.recipe}</div>
-                <div><a href="/${dailySet.mealTime.get(3).id}">View more</a></div>
+
+                    <%--                    ${dailySet.mealForDailyDTO.get(4).mealFile}--%>
             </td>
-            <td>${dailySet.mealTime.get(4).meal.mealFile}</td>
             <td>
-                <div>${dailySet.mealTime.get(4).mealTypeName}</div>
-                <div>${dailySet.mealTime.get(4).meal.name}</div>
-                <div>${dailySet.mealTime.get(4).meal.preparationTime}</div>
-                <div>${dailySet.mealTime.get(4).meal.recipe}</div>
-                <div><a href="/${dailySet.mealTime.get(4).id}">View more</a></div>
+                <c:if test="${dailySet.mealAmount==5}">
+                    <div><p> Type: ${dailySet.mealForDailyDTO.get(4).mealTypeEnumeration} </p></div>
+                    <div><p> Meal name:${dailySet.mealForDailyDTO.get(4).name}</p></div>
+                    <div><p> Preparation time ${dailySet.mealForDailyDTO.get(4).preparationTime} min. </p></div>
+                    <div><p> Meal calories: ${dailySet.mealForDailyDTO.get(4).calories} [kcal] </p></div>
+                    <%--                <div>${dailySet.mealForDailyDTO.get(3).recipe}</div>--%>
+                    <div><a href="/${dailySet.mealForDailyDTO.get(4).id}">View more</a></div>
+                </c:if>
+            </td>
+            <td>
+                    <%--                    ${dailySet.mealForDailyDTO.get(4).mealFile}--%>
+            </td>
+            <td>
+                <div><p> Type: ${dailySet.mealForDailyDTO.get(2).mealTypeEnumeration} </p></div>
+                <div><p> Meal name:${dailySet.mealForDailyDTO.get(2).name}</p></div>
+                <div><p> Preparation time ${dailySet.mealForDailyDTO.get(2).preparationTime} min. </p></div>
+                <div><p> Meal calories: ${dailySet.mealForDailyDTO.get(2).calories} [kcal] </p></div>
+                    <%--                <div>${dailySet.mealForDailyDTO.get(3).recipe}</div>--%>
+                <div><a href="/${dailySet.mealForDailyDTO.get(2).id}">View more</a></div>
             </td>
             <td>
                 <div><a href="">View more</a></div>
-                <c:if test="${dailySet.creatorUser.username==loggedUser}">
+                <c:if test="${dailySet.creatorUserName==loggedUser}">
                     <div><a href="/${dailySet.id}}">Modify</a></div>
                 </c:if>
                 <div><a href="">View more</a></div>
@@ -85,6 +105,5 @@
 
 
 <jsp:include page="fragments/footer.jsp"/>
-
 </body>
 </html>

@@ -1,4 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: akprz
@@ -14,8 +15,8 @@
 <body>
 <h1>Crate new daily diet set </h1>
 <div id="container">
-    <form method="post" action="/createDailySet">
-
+    <form method="post" action="/daily-set/modify">
+<input type="hidden" value="${dailySetDTO.id}" name="id">
         <h3> Amount meals per day </h3>
         <div>
             <c:choose>
@@ -352,27 +353,18 @@
 
                             <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
                             <c:if test="${dailySetDTO.caloriesPicked<dailySetDTO.calories}">
-                                <p style="color: red">Too manygit branch calories!!!! You try create meal set with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories} [kcal] </p>
+                                <p style="color: red">Too many calories!!!! You try create meal set with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories} [kcal] </p>
                             </c:if>
 
-                            <c:choose>
-                                <c:when test="${redirected == true}">
-                                    <div>
-                                        <input type="hidden" name="dietDay" value="${dietDay}">
-                                        <button type="submit" name="createdForDiet">Create for diet</button>
-                                        <sec:csrfInput/>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
+
+
+
                                     <div>
                                         <button type="submit" name="send">SEND</button>
                                         <button type="submit" name="modifyMealList">MODIFY LIST</button>
                                         <button type="submit" name="clear">RESET ALL</button>
                                         <sec:csrfInput/>
                                     </div>
-                                </c:otherwise>
-                            </c:choose>
-
 
                         </c:otherwise>
 
@@ -392,7 +384,7 @@
         </div>
     </form>
 
-</di
+</div>
 
 </body>
 </html>

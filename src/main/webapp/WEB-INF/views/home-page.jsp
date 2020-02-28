@@ -21,7 +21,8 @@
     <ul>
         <li><a href="/ingredient">Ingredients</a></li>
         <li><a href="/createMeal">Meal</a></li>
-        <li><a href="/createDailySet">DailySet</a></li>
+        <li><a href="/daily-set">DailySet</a></li>
+        <li><a href="/daily-set/create">CreateDailySet</a></li>
         <li><a href="/createDiet">Diet</a></li>
         <li><a href="/userRegistration/modifyProfile">ModifyProfile</a></li>
     </ul>

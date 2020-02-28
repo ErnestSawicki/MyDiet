@@ -16,7 +16,7 @@
 
 <h1>Crate new daily diet set </h1>
 <div id="container">
-    <form method="post" action="/createDailySet">
+    <form method="post" action="/daily-set/create">
 
         <c:choose>
             <c:when test="${redirected == true}">

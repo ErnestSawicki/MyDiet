@@ -17,13 +17,40 @@ public class DailySetInitializer {
     public void createDailySetSamples(DailySetRepository dailySetRepository, MealRepository mealRepository, UserRepository userRepository, MealTimeRepository mealTimeRepository) {
         for (int i = 0; i < 10; i++) {
             DailySet dailySet = new DailySet();
-            dailySet.setMealAmount(3L);
-            for (int k = 0; k < new Random().nextInt(5); k++) {
-                MealTime mealTime = new MealTime();
-                mealTime.setMeal(mealRepository.findAll().get(new Random().nextInt(20)));
-                mealTime.setMealTypeName(MealTypeEnumeration.values()[new Random().nextInt(5)]);
-                dailySet.getMealTime().add(mealTime);
-                mealTimeRepository.save(mealTime);
+            if (new Random().nextBoolean()) {
+                dailySet.setMealAmount(3L);
+                for (int k = 0; k < 3; k++) {
+                    MealTime mealTime = new MealTime();
+                    mealTime.setMeal(mealRepository.findAll().get(new Random().nextInt(20)));
+                    if (k == 0)
+                        mealTime.setMealTypeName(MealTypeEnumeration.BREAKFAST);
+                    if (k == 1)
+                        mealTime.setMealTypeName(MealTypeEnumeration.DINNER);
+                    if (k == 2)
+                        mealTime.setMealTypeName(MealTypeEnumeration.SUPPER);
+                    mealTime.setDailySet(dailySet);
+                    dailySet.getMealTime().add(mealTime);
+                }
+            }else {
+                dailySet.setMealAmount(5L);
+
+                for (int k = 0; k < 5; k++) {
+                    MealTime mealTime = new MealTime();
+                    mealTime.setMeal(mealRepository.findAll().get(new Random().nextInt(20)));
+                    if (k == 0)
+                        mealTime.setMealTypeName(MealTypeEnumeration.BREAKFAST);
+                    if (k == 1)
+                        mealTime.setMealTypeName(MealTypeEnumeration.DINNER);
+                    if (k == 2)
+                        mealTime.setMealTypeName(MealTypeEnumeration.SUPPER);
+                    if (k == 3)
+                        mealTime.setMealTypeName(MealTypeEnumeration.SECOND_BREAKFAST);
+                    if (k == 4)
+                        mealTime.setMealTypeName(MealTypeEnumeration.TEA);
+
+                    mealTime.setDailySet(dailySet);
+                    dailySet.getMealTime().add(mealTime);
+                }
             }
             dailySet.setCreatorUser(userRepository.findAll().get(new Random().nextInt(8)));
             dailySet.setCalories(3000L);
