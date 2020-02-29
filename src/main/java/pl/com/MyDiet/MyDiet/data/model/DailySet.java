@@ -2,7 +2,6 @@ package pl.com.MyDiet.MyDiet.data.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import sun.rmi.runtime.Log;
 
 import javax.persistence.*;
 import java.time.LocalDate;
