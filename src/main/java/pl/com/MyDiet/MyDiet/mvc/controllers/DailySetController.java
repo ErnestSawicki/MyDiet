@@ -42,10 +42,7 @@ public class DailySetController {
     @GetMapping()
     public String displayAllCreatedDailySet(Model model) {
         model.addAttribute("loggedUser", SecurityUtils.getUsername());
-
-        List<SimpleDailySetDTO> allDailySetDTOToDisplay = dailySetService.getAllDailySetDTOToDisplay();
-
-        model.addAttribute("createdDailySet" , allDailySetDTOToDisplay);
+        model.addAttribute("createdDailySet", dailySetService.getAllDailySetDTOToDisplay());
         return "daily-set-display";
     }
 
@@ -62,25 +59,23 @@ public class DailySetController {
     @GetMapping("/modify/{id:[1-9][0-9]*}/{operation:delete|modify}")
     public String prepareModifyDailySetPage(@PathVariable("id") Long dailySetId, @PathVariable("operation") String operation, Model model) {
         //  if (dailySetService.checkUserIsDailySetOwner(dailySetId, userService.getUserDetails(SecurityUtils.getUsername()))) {
+        DailyMealSetDTO dailySetToModify = dailySetService.getDailySetAsDailyMealSetDTO(dailySetId);
         if (operation.equals("delete")) {
-            DailyMealSetDTO dailySetToDelete = dailySetService.getDailySetAsDailyMealSetDTO(dailySetId);
-            dailySetToDelete.setId(dailySetId);
-            model.addAttribute("dailySetDTO", dailySetToDelete);
-            return "confirm-delete-daily-Set";
+            model.addAttribute("dailySetDTO", dailySetService.getDailySetAsDailyMealSetDTO(dailySetId));
+            return "daily-set-delete-confirm";
         } else {
-            DailyMealSetDTO dailySetToModify = dailySetService.getDailySetAsDailyMealSetDTO(dailySetId);
-            dailySetToModify.setId(dailySetId);
             model.addAttribute("dailySetDTO", dailySetToModify);
             model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetToModify.getMealAmount()));
             return "daily-set-modify";
         }
+        //Todo
     }
 
 
     @PostMapping("/modify/delete")
-    public String deleteDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
+    public String deleteDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO) {
         //todo
-        return "daily-set-modify";
+        return "redirect:/daily-set";
     }
 
 
@@ -99,7 +94,7 @@ public class DailySetController {
 
         model.addAttribute("dietDay");
 
-        dailySetDTO = dailySetService.reloadPageWithSetVariable(dailySetDTO);
+        dailySetService.reloadPageWithSetVariable(dailySetDTO);
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         log.info("DailySetController redirect to page with amount {} , meal size {}", dailySetDTO.getMealAmount(), dailySetDTO.getMeals().size());
         return "daily-set-modify";
@@ -161,8 +156,8 @@ public class DailySetController {
             model.addAttribute("dietDay", dietDay);
         }
         log.info("DailySetController redirect to page with amount {}", dailySetDTO.getMealAmount());
-        dailySetDTO = dailySetService.reloadPageWithSetVariable(dailySetDTO);
-        dailySetDTO.getMeals().stream().forEach(p-> log.debug("createDailySetPages id {} name {}", p.getId(), p.getName()));
+        dailySetService.reloadPageWithSetVariable(dailySetDTO);
+
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         log.info("DailySetController redirect to page with amount {} , meal size {}", dailySetDTO.getMealAmount(), dailySetDTO.getMeals().size());
         return "dailySetCreate";
@@ -184,7 +179,7 @@ public class DailySetController {
 
         dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         log.debug("DailySetController-modifyClearList: user try modify his meal pick list with amount {}", dailySetDTO.getMealAmount());
-        dailySetDTO.getMeals().stream().forEach(p-> log.debug("id {} name {}", p.getId(), p.getName()));
+        dailySetDTO.getMeals().stream().forEach(p -> log.debug("id {} name {}", p.getId(), p.getName()));
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         return "dailySetCreate";
     }

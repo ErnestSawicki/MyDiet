@@ -13,8 +13,10 @@
     <title>Modification created daily meal's set</title>
 </head>
 <body>
-<h1>Modify existing diet set </h1>
+<jsp:include page="fragments/header.jsp"/>
+
 <div id="container">
+    <h1>Modify existing diet set </h1>
     <form method="post" action="/daily-set/modify">
 <input type="hidden" value="${dailySetDTO.id}" name="id">
         <h3> Amount meals per day </h3>

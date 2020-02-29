@@ -13,7 +13,7 @@
     <title>Daily meals set</title>
 </head>
 <body>
-
+<jsp:include page="fragments/header.jsp"/>
 <h1>Crate new daily diet set </h1>
 <div id="container">
     <form method="post" action="/daily-set/create">
@@ -361,9 +361,11 @@
                                    name="meals">
 
                             <h3> summary calories is ${dailySetDTO.calories} [kcal]</h3>
-                        <c:if test="${dailySetDTO.caloriesPicked<dailySetDTO.calories}">
-                            <p style="color: red">Too manygit branch calories!!!! You try create meal set with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories} [kcal] </p>
-                        </c:if>
+                            <c:if test="${dailySetDTO.caloriesPicked<dailySetDTO.calories}">
+                                <p style="color: red">Too manygit branch calories!!!! You try create meal set
+                                    with ${dailySetDTO.caloriesPicked} [kcal], but your set have ${dailySetDTO.calories}
+                                    [kcal] </p>
+                            </c:if>
 
                             <c:choose>
                                 <c:when test="${redirected == true}">
@@ -375,7 +377,9 @@
                                 </c:when>
                                 <c:otherwise>
                                     <div>
-                                        <button type="submit" name="send">SEND</button>
+                                        <c:if test="${dailySetDTO.calories<=dailySetDTO.caloriesPicked}">
+                                            <button type="submit" name="send">SEND</button>
+                                        </c:if>
                                         <button type="submit" name="modifyMealList">MODIFY LIST</button>
                                         <button type="submit" name="clear">RESET ALL</button>
                                         <sec:csrfInput/>

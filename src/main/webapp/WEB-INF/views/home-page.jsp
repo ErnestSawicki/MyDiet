@@ -27,9 +27,9 @@
         <li><a href="/userRegistration/modifyProfile">ModifyProfile</a></li>
     </ul>
 </div>
-<div class="footer">
-    <jsp:include page="fragments/footer.jsp"/>
-</div>
+<%--<div class="footer">--%>
+<%--    <jsp:include page="fragments/footer.jsp"/>--%>
+<%--</div>--%>
 </body>
 </html>
 
