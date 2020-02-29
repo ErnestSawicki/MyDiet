@@ -9,10 +9,7 @@ import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.MealsAvailableToSetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleDailySetDTO;
 import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
-import pl.com.MyDiet.MyDiet.data.model.DailySet;
-import pl.com.MyDiet.MyDiet.data.model.Meal;
-import pl.com.MyDiet.MyDiet.data.model.MealTime;
-import pl.com.MyDiet.MyDiet.data.model.User;
+import pl.com.MyDiet.MyDiet.data.model.*;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.repositories.*;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
@@ -136,6 +133,15 @@ public class DailySetServiceDefault implements DailySetService {
     public List<SimpleDailySetDTO> getAllDailySetDTOToDisplay() {
         return dailySetRepository.findAll().stream().filter(Objects::nonNull).map(this::convertDailySetToSimpleDailySetDTO
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SimpleDailySetDTO> getAllDailySetsDTOToDisplay(Diet diet) {
+        return dailySetRepository.findAllByDiets(diet)
+                .stream()
+                .filter(Objects::nonNull)
+                .map(this::convertDailySetToSimpleDailySetDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

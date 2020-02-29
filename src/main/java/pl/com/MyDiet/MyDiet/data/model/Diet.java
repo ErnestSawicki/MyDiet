@@ -2,6 +2,7 @@ package pl.com.MyDiet.MyDiet.data.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "diets")
 @Getter @Setter
+@ToString
 public class Diet extends EntityBase {
 
     @Column(name = "diet_name")

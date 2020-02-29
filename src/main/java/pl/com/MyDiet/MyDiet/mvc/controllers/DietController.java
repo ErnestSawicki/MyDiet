@@ -8,19 +8,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.com.MyDiet.MyDiet.DTO.DietDTO;
+import pl.com.MyDiet.MyDiet.DTO.DietDetailsDTO;
 import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
 import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Diet;
-import pl.com.MyDiet.MyDiet.data.model.User;
-import pl.com.MyDiet.MyDiet.data.repositories.DailySetRepository;
 import pl.com.MyDiet.MyDiet.data.repositories.DietRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.MealRepository;
-import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
 import pl.com.MyDiet.MyDiet.services.DietService;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -74,5 +72,25 @@ public class DietController {
         return "redirect:/createDiet";
     }
 
+    @GetMapping("/dietDetails")
+    public String dietDetailsPage(@RequestParam Long dietId, Model model) {
 
+        DietDetailsDTO dietDetails = dietService.getDietDetails(dietId);
+        model.addAttribute("dietDetails", dietDetails);
+
+        return "diet-Details";
+    }
+
+
+
+    @GetMapping("/assignDiet")
+    public String assignDietPage() {
+        return "diet-assign";
+    }
+
+    @PostMapping("/assignDiet")
+    public String assignDiet(){
+
+        return "redirect:/";
+    }
 }
