@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pl.com.MyDiet.MyDiet.DTO.DietDTO;
 import pl.com.MyDiet.MyDiet.DTO.DietDetailsDTO;
 import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
-import pl.com.MyDiet.MyDiet.data.model.DailySet;
-import pl.com.MyDiet.MyDiet.data.model.Diet;
-import pl.com.MyDiet.MyDiet.data.repositories.DietRepository;
 import pl.com.MyDiet.MyDiet.services.DietService;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @Slf4j
