@@ -1,24 +1,16 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
 
-import com.sun.deploy.net.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
-import pl.com.MyDiet.MyDiet.DTO.SimpleDailySetDTO;
-import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
 import pl.com.MyDiet.MyDiet.beans.SecurityUtils;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 import pl.com.MyDiet.MyDiet.services.UserService;
-
-import java.util.List;
 
 
 @Controller
