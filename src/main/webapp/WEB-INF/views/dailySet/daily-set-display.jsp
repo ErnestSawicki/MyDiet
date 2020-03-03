@@ -12,7 +12,7 @@
     <title>All daily meal's set</title>
 </head>
 <body>
-<jsp:include page="fragments/header.jsp"/>
+<jsp:include page="../fragments/header.jsp"/>
 
 <h1>
     All available created meal's daily set

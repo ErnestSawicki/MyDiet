@@ -12,7 +12,7 @@
     <title>Confirm delete this meal set</title>
 </head>
 <body>
-<jsp:include page="fragments/header.jsp"/>
+<jsp:include page="../fragments/header.jsp"/>
 <div id="container">
     <h1> Do You really want delete this daily set? </h1>
 

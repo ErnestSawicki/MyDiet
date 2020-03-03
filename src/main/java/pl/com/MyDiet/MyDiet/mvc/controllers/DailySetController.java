@@ -1,24 +1,20 @@
 package pl.com.MyDiet.MyDiet.mvc.controllers;
 
 
-import com.sun.deploy.net.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
-import pl.com.MyDiet.MyDiet.DTO.SimpleDailySetDTO;
-import pl.com.MyDiet.MyDiet.DTO.SimpleMealsDTO;
 import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
 import pl.com.MyDiet.MyDiet.beans.SecurityUtils;
 import pl.com.MyDiet.MyDiet.services.DailySetService;
 import pl.com.MyDiet.MyDiet.services.UserService;
 
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
 
 
 @Controller
@@ -43,32 +39,32 @@ public class DailySetController {
     public String displayAllCreatedDailySet(Model model) {
         model.addAttribute("loggedUser", SecurityUtils.getUsername());
         model.addAttribute("createdDailySet", dailySetService.getAllDailySetDTOToDisplay());
-        return "daily-set-display";
+        return "dailySet/daily-set-display";
     }
 
     @GetMapping("/my-daily-set")
     public String displayAllUserCreatedDailySet(Model model) {
         model.addAttribute("createdDailySet", dailySetService.getUserDailySetDTOToDisplay(userService.getUserDetails(SecurityUtils.getUsername())));
-        return "daily-set-display";
+        return "dailySet/daily-set-display";
     }
 
 
     //      Modify Daily Set Method        ///
 
-
     @GetMapping("/modify/{id:[1-9][0-9]*}/{operation:delete|modify}")
-    public String prepareModifyDailySetPage(@PathVariable("id") Long dailySetId, @PathVariable("operation") String operation, Model model) {
-        //  if (dailySetService.checkUserIsDailySetOwner(dailySetId, userService.getUserDetails(SecurityUtils.getUsername()))) {
+    public String prepareModifyDailySetPage(@PathVariable("id") Long dailySetId, @PathVariable("operation") String operation, Model model, HttpServletResponse response) throws IOException {
+        if (!dailySetService.checkUserIsDailySetOwner(dailySetId, SecurityUtils.getUsername())) {
+            response.sendError(403);
+    }
         DailyMealSetDTO dailySetToModify = dailySetService.getDailySetAsDailyMealSetDTO(dailySetId);
         if (operation.equals("delete")) {
             model.addAttribute("dailySetDTO", dailySetService.getDailySetAsDailyMealSetDTO(dailySetId));
-            return "daily-set-delete-confirm";
+            return "dailySet/daily-set-delete-confirm";
         } else {
             model.addAttribute("dailySetDTO", dailySetToModify);
             model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetToModify.getMealAmount()));
-            return "daily-set-modify";
+            return "dailySet/daily-set-modify";
         }
-        //Todo
     }
 
 
@@ -81,9 +77,9 @@ public class DailySetController {
 
     @PostMapping("/modify")
     public String modifyDailySetPages(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model) {
-        dailySetService.reloadPageWithSetVariable(dailySetDTO);
+        dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
-        return "daily-set-modify";
+        return "dailySet/daily-set-modify";
     }
 
 
@@ -94,10 +90,10 @@ public class DailySetController {
 
         model.addAttribute("dietDay");
 
-        dailySetService.reloadPageWithSetVariable(dailySetDTO);
+        dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         log.info("DailySetController redirect to page with amount {} , meal size {}", dailySetDTO.getMealAmount(), dailySetDTO.getMeals().size());
-        return "daily-set-modify";
+        return "dailySet/daily-set-modify";
     }
 
     @PostMapping(path = "/modify", params = {"modifyExistingMealList"})
@@ -105,18 +101,18 @@ public class DailySetController {
                                                 @RequestParam(defaultValue = "false") Boolean redirected,
                                                 @RequestParam(required = false) Integer dietDay) {
 
-        dailySetService.reloadPageWithSetVariable(dailySetDTO);
+        dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         dailySetDTO.setMealPicked(false);
         log.debug("DailySetController-modifyClearList: user try modify his meal pick list with amount {}", dailySetDTO.getMealAmount());
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
-        return "daily-set-modify";
+        return "dailySet/daily-set-modify";
     }
 
     @PostMapping(path = "/modify", params = {"resetAll"})
     public String clearModifyForm(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO) {
         dailySetDTO.setCaloriesPicked(null);
         log.debug("DailySetController-clearForm: user cleared form -redirect to createDailySet");
-        return "daily-set-modify";
+        return "dailySet/daily-set-modify";
     }
 
     @PostMapping(path = "/modify", params = {"approvalModification"})
@@ -126,7 +122,7 @@ public class DailySetController {
             return "home-page";
         } else {
             model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
-            return "daily-set-display";
+            return "dailySet/daily-set-display";
         }
     }
 
@@ -138,7 +134,7 @@ public class DailySetController {
     public String createDailySetPages(Model model) {
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(3L));
         model.addAttribute("dailySetDTO", new DailyMealSetDTO());
-        return "dailySetCreate";
+        return "dailySet/daily-set-create";
     }
 
 
@@ -148,7 +144,7 @@ public class DailySetController {
                                       @RequestParam(defaultValue = "false") Boolean redirected,
                                       @RequestParam(required = false) Integer dietDay) {
 
-        if (redirected.equals("false")) {
+        if (!redirected) {
             model.addAttribute("redirected", false);
         }
         model.addAttribute("redirected", redirected);
@@ -156,18 +152,18 @@ public class DailySetController {
             model.addAttribute("dietDay", dietDay);
         }
         log.info("DailySetController redirect to page with amount {}", dailySetDTO.getMealAmount());
-        dailySetService.reloadPageWithSetVariable(dailySetDTO);
+        dailySetDTO.setUpValuesCaloriesAndMealListQueue();
 
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
         log.info("DailySetController redirect to page with amount {} , meal size {}", dailySetDTO.getMealAmount(), dailySetDTO.getMeals().size());
-        return "dailySetCreate";
+        return "dailySet/daily-set-create";
     }
 
     @PostMapping(path = "/create", params = {"modifyMealList"})
     public String modifyMealList(@ModelAttribute("dailySetDTO") DailyMealSetDTO dailySetDTO, Model model,
                                  @RequestParam(defaultValue = "false") Boolean redirected,
                                  @RequestParam(required = false) Integer dietDay) {
-        if (redirected.equals("false")) {
+        if (!redirected) {
             model.addAttribute("redirected", false);
         }
         model.addAttribute("redirected", redirected);
@@ -179,9 +175,9 @@ public class DailySetController {
 
         dailySetDTO.setUpValuesCaloriesAndMealListQueue();
         log.debug("DailySetController-modifyClearList: user try modify his meal pick list with amount {}", dailySetDTO.getMealAmount());
-        dailySetDTO.getMeals().stream().forEach(p -> log.debug("id {} name {}", p.getId(), p.getName()));
+        dailySetDTO.getMeals().forEach(p -> log.debug("id {} name {}", p.getId(), p.getName()));
         model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
-        return "dailySetCreate";
+        return "dailySet/daily-set-create";
     }
 
     @PostMapping(path = "/create", params = {"clear"})
@@ -197,7 +193,7 @@ public class DailySetController {
             return "home-page";
         } else {
             model.addAttribute("availableMeats", dailySetService.getAvailableMeats(dailySetDTO.getMealAmount()));
-            return "dailySetCreate";
+            return "dailySet/daily-set-create";
         }
     }
 
@@ -212,7 +208,7 @@ public class DailySetController {
 
         model.addAttribute("redirected", true);
         model.addAttribute("dietDay", dietDay);
-        return "dailySetCreate";
+        return "dailySet/daily-set-create";
     }
 
     @PostMapping(path = "/create", params = {"createdForDiet"})
