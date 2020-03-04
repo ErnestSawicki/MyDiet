@@ -15,6 +15,7 @@ import pl.com.MyDiet.MyDiet.services.UserService;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 
 @Controller
@@ -54,8 +55,8 @@ public class DailySetController {
     @GetMapping("/modify/{id:[1-9][0-9]*}/{operation:delete|modify}")
     public String prepareModifyDailySetPage(@PathVariable("id") Long dailySetId, @PathVariable("operation") String operation, Model model, HttpServletResponse response) throws IOException {
         if (!dailySetService.checkUserIsDailySetOwner(dailySetId, SecurityUtils.getUsername())) {
-            response.sendError(403);
-    }
+            throw new AccessDeniedException("403 returned");
+        }
         DailyMealSetDTO dailySetToModify = dailySetService.getDailySetAsDailyMealSetDTO(dailySetId);
         if (operation.equals("delete")) {
             model.addAttribute("dailySetDTO", dailySetService.getDailySetAsDailyMealSetDTO(dailySetId));

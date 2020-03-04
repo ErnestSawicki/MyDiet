@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.com.MyDiet.MyDiet.DTO.UserRegistrationDTO;
+import pl.com.MyDiet.MyDiet.beans.SecurityUtils;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.repositories.UserRepository;
@@ -31,9 +32,15 @@ public class UserRegistrationController  {
         this.userService = userService;
     }
 
+//   @GetMapping
+//   public String getUserRegistrationPage(){
+//       return "userRegistration-page";
+//   }
+
     @GetMapping
-    public String getUserRegistrationPage(){
-        return "userRegistration-page";
+    public String getUserRegistrationPage(Model model){
+        model.addAttribute("userRegistrationDTO", new UserRegistrationDTO());
+        return "user-register";
     }
 
     @PostMapping
@@ -44,7 +51,7 @@ public class UserRegistrationController  {
 
     @GetMapping("/modifyProfile")
     public String getModifyProfilePage(Model model, Principal principal){
-        model.addAttribute("userData", userService.getUserDetails(principal.getName()));
+        model.addAttribute("userData", userService.getUserDetails(SecurityUtils.getUsername()));
         return "/modifyUserProfile";
     }
 

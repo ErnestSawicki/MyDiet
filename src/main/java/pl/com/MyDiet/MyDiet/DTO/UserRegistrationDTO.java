@@ -2,24 +2,30 @@ package pl.com.MyDiet.MyDiet.DTO;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import pl.com.MyDiet.MyDiet.config.passwordConfig.ValidPassword;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@Slf4j
 public class UserRegistrationDTO {
 
-
+@Size(min = 3, max = 20)
     private String username;
 
+    @Size(min = 3, max = 20)
     private String firstName;
 
+    @Size(min = 3, max = 20)
     private String lastName;
 
     @ValidPassword
@@ -29,13 +35,13 @@ public class UserRegistrationDTO {
 
     private Integer height;
 
-    private Integer weight;
+    private Double weight;
 
-    private String birthDate;
+    private LocalDate birthDate;
 
     private String sex;
 
-    @Email
+    @Email(regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
     private String email;
 
     public User copyProperties(){
@@ -43,7 +49,8 @@ public class UserRegistrationDTO {
         registeredUser.setUsername(username);
         registeredUser.setFirstName(firstName);
         registeredUser.setLastName(lastName);
-        registeredUser.setBirthDate(LocalDate.parse(birthDate));
+        log.debug("UserRegistrationDTO: birth date {}", birthDate);
+        registeredUser.setBirthDate(birthDate);
         registeredUser.setSex(Sex.valueOf(sex));
         registeredUser.setPassword(password);
 

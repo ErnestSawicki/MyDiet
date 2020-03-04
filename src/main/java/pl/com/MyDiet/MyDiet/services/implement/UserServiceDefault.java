@@ -46,7 +46,7 @@ public class UserServiceDefault implements UserService {
         user.setFirstName(userRegistrationDTO.getFirstName());
         user.setLastName(userRegistrationDTO.getLastName());
         user.setEmail(userRegistrationDTO.getEmail());
-        user.setBirthDate(LocalDate.parse(userRegistrationDTO.getBirthDate()));
+        user.setBirthDate(userRegistrationDTO.getBirthDate());
         user.setSex(Sex.valueOf(userRegistrationDTO.getSex()));
         userRepository.save(user);
         return false;
