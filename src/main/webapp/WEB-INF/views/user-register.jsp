@@ -19,7 +19,7 @@
 <f:form modelAttribute="userRegistrationDTO" method="post" action="/userRegistration">
 <div class="username">
     <div class="col-25">
-        <f:label path="username">Username</f:label>
+        <f:label path="username*">Username*</f:label>
     </div>
     <div class="col-75">
         <f:input path="username" required="true"/>
@@ -32,7 +32,7 @@
 
 <div class="email">
     <div class="col-25">
-        <f:label path="email">email</f:label>
+        <f:label path="email">email*</f:label>
     </div>
     <div class="col-75">
         <f:input path="email" required="true" placeholder="simple@service.surfix"/>
@@ -47,7 +47,7 @@
         <f:label path="firstName">first name</f:label>
     </div>
     <div class="col-75">
-        <f:input path="firstName" required="true"/>
+        <f:input path="firstName"/>
     </div>
     <div class="error">
         <f:errors path="firstName"/>
@@ -59,7 +59,7 @@
         <f:label path="lastName">last name</f:label>
     </div>
     <div class="col-75">
-        <f:input path="lastName" required="true"/>
+        <f:input path="lastName"/>
     </div>
     <div class="error">
         <f:errors path="lastName"/>
@@ -71,7 +71,7 @@
         <f:label path="height">height</f:label>
     </div>
     <div class="col-75">
-        <f:input type="number" min="0" step="1"  path="height" required="true" placeholder="xxx[cm]"/>
+        <f:input type="number" min="0" step="1"  path="height" placeholder="xxx[cm]"/>
     </div>
     <div class="error">
         <f:errors path="height"/>
@@ -83,7 +83,7 @@
         <f:label path="weight">weight</f:label>
     </div>
     <div class="col-75">
-        <f:input type="number" min="0" step="0.1" path="weight" required="true" placeholder="xx.xx[kg]"/>
+        <f:input type="number" min="0" step="0.1" path="weight" placeholder="xx.xx[kg]"/>
     </div>
     <div class="error">
         <f:errors path="weight"/>
@@ -96,7 +96,7 @@
         <f:label path="birthDate">birthDate</f:label>
     </div>
     <div class="col-75">
-        <f:input path="birthDate" required="true" placeholder="required: DD.MM.RRRR"/>
+        <f:input path="birthDate" placeholder="required: DD.MM.RRRR"/>
     </div>
     <div class="error">
         <f:errors path="birthDate"/>
@@ -105,7 +105,7 @@
 
 <div class="sex">
     <div class="col-25">
-        <f:label path="sex">sex</f:label>
+        <f:label path="sex">sex*</f:label>
     </div>
     <div class="col-75">
         <f:select path="sex" id="selected_sex">
@@ -119,7 +119,7 @@
 
     <div class="password-field">
         <div class="col-25">
-            <f:label path="password">password</f:label>
+            <f:label path="password">password*</f:label>
         </div>
         <div class="col-75">
             <f:password path="password" required="true"/>
@@ -131,7 +131,7 @@
 
     <div class="password-field">
         <div class="col-25">
-            <f:label path="confirmPassword">confirm password</f:label>
+            <f:label path="confirmPassword">confirm password*</f:label>
         </div>
         <div class="col-75">
             <f:password path="confirmPassword" required="true"/>

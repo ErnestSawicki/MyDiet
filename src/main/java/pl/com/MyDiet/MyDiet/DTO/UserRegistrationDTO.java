@@ -1,17 +1,17 @@
 package pl.com.MyDiet.MyDiet.DTO;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.NonNullApi;
 import pl.com.MyDiet.MyDiet.config.passwordConfig.ValidPassword;
 import pl.com.MyDiet.MyDiet.data.model.User;
 import pl.com.MyDiet.MyDiet.data.model.enumeration.Sex;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.annotation.Nullable;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Getter
@@ -19,32 +19,35 @@ import java.time.LocalDate;
 @Slf4j
 public class UserRegistrationDTO {
 
-@Size(min = 3, max = 20)
+    @Size(min = 3, max = 20)
     private String username;
 
-    @Size(min = 3, max = 20)
     private String firstName;
 
-    @Size(min = 3, max = 20)
     private String lastName;
 
+    @NotNull
     @ValidPassword
     private String password;
 
+    @NotNull
     private String confirmPassword;
 
     private Integer height;
 
     private Double weight;
 
+    @Nullable
     private LocalDate birthDate;
 
+    @NotNull
     private String sex;
 
+    @NotNull
     @Email(regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
     private String email;
 
-    public User copyProperties(){
+    public User copyProperties() {
         User registeredUser = new User();
         registeredUser.setUsername(username);
         registeredUser.setFirstName(firstName);
@@ -53,7 +56,6 @@ public class UserRegistrationDTO {
         registeredUser.setBirthDate(birthDate);
         registeredUser.setSex(Sex.valueOf(sex));
         registeredUser.setPassword(password);
-
         return registeredUser;
     }
 

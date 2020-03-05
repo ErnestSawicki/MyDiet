@@ -5,6 +5,10 @@ import pl.com.MyDiet.MyDiet.data.model.User;
 
 public interface UserService {
 
+
+
+    boolean usernameIsTaken(String username);
+
     boolean registerUser(UserRegistrationDTO userRegistrationDTO);
 
     User getUserDetails(String username);

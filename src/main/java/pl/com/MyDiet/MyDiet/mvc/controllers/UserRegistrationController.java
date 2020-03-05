@@ -15,12 +15,13 @@ import pl.com.MyDiet.MyDiet.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDate;
 
 
 @Controller
 @Slf4j
 @RequestMapping("/userRegistration")
-public class UserRegistrationController  {
+public class UserRegistrationController {
 
     private final UserService userService;
 
@@ -31,27 +32,51 @@ public class UserRegistrationController  {
 
 
     @GetMapping
-    public String getUserRegistrationPage(Model model){
+    public String getUserRegistrationPage(Model model) {
         model.addAttribute("userRegistrationDTO", new UserRegistrationDTO());
         return "user-register";
     }
 
     @PostMapping
-    public String registerUser(@Valid UserRegistrationDTO userDTO , BindingResult bindingResult){
+    public String registerUser(@Valid UserRegistrationDTO userDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "user-register";
-        userService.registerUser(userDTO);
+        if (userService.usernameIsTaken(userDTO.getUsername())) {
+            bindingResult.rejectValue("username",null,"This user name is already taken");
+            userService.registerUser(userDTO);
+            return "user-register";
+        }
+        if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword",null, "Password and  confirm password must be the same");
+           return  "user-register";
+        }
         return "redirect:/";
     }
 
     @GetMapping("/modifyProfile")
-    public String getModifyProfilePage(Model model, Principal principal){
+    public String getModifyProfilePage(Model model, Principal principal) {
         model.addAttribute("userData", userService.getUserDetails(SecurityUtils.getUsername()));
         return "/modifyUserProfile";
     }
 
     @PostMapping("/modifyProfile")
-    public String modifyProfile(UserRegistrationDTO userDTO){
+    public String modifyProfile(@Valid UserRegistrationDTO userDTO, BindingResult bindingResult) {
+        if (userService.usernameIsTaken(userDTO.getUsername())) {
+
+            bindingResult.rejectValue("username",null,"This user name is already taken");
+            userService.registerUser(userDTO);
+            return "user-register";
+        }
+        if (userDTO.getPassword()!=null &&!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword",null, "Password and  confirm password must be the same");
+            return  "user-register";
+        }
+        if (userDTO.getBirthDate()!=null && userDTO.getBirthDate().isBefore(LocalDate.now())) {
+            bindingResult.rejectValue("birthDate",null, "Wrong birthday date. You should was born in past");
+            return  "user-register";
+        }
+
+
         userService.updateProfile(userDTO);
         return "redirect:/userRegistration/modifyProfile";
     }
