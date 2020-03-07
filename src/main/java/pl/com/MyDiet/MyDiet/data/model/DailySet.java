@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "daily_sets")
@@ -37,6 +38,9 @@ public class DailySet extends EntityBase {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "dailySet",cascade = CascadeType.ALL)
     private List<MealTime> mealTime = new ArrayList<>();
+
+    @OneToMany(mappedBy = "dailySet", fetch = FetchType.LAZY)
+    private Set<UserCalendar> userCalendars;
 
 
 

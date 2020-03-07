@@ -25,6 +25,7 @@ public class DataInitializer implements CommandLineRunner {
     private final DailySetRepository dailySetRepository;
     private final MealTimeRepository mealTimeRepository;
     private final DietRepository dietRepository;
+    private final UserCalendarRepository userCalendarRepository;
 
 
     @Autowired
@@ -36,7 +37,8 @@ public class DataInitializer implements CommandLineRunner {
                            PasswordEncoder passwordEncoder,
                            MealTypeRepository mealTypeRepository,
                            DailySetRepository dailySetRepository,
-                           MealTimeRepository mealTimeRepository, DietRepository dietRepository) {
+                           MealTimeRepository mealTimeRepository, DietRepository dietRepository,
+                           UserCalendarRepository userCalendarRepository) {
         this.ingredientCategoryRepository = ingredientCategoryRepository;
         this.ingredientRepository = ingredientRepository;
         this.mealRepository = mealRepository;
@@ -47,6 +49,7 @@ public class DataInitializer implements CommandLineRunner {
         this.dailySetRepository = dailySetRepository;
         this.mealTimeRepository = mealTimeRepository;
         this.dietRepository = dietRepository;
+        this.userCalendarRepository = userCalendarRepository;
     }
 
     @Override
@@ -72,6 +75,9 @@ public class DataInitializer implements CommandLineRunner {
 
         DietInitializer dietInitializer = new DietInitializer();
         dietInitializer.createSampleDiets(dietRepository, dailySetRepository, userRepository);
+
+        UserCalendarInitializer userCalendarInitializer = new UserCalendarInitializer();
+        userCalendarInitializer.createCalendarSampleForUsers(userCalendarRepository, userRepository, dailySetRepository);
 
         log.info("DataInitializer: ... sample data finished");
     }

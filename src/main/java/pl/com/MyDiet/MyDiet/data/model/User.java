@@ -51,7 +51,6 @@ public class User extends EntityBase {
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<ShopList> shopLists;
 
-
     @OneToMany(mappedBy = "creatorUser", fetch = FetchType.LAZY)
     List<DailySet> createdDailySet;
 
@@ -60,5 +59,8 @@ public class User extends EntityBase {
 
     @ManyToOne(fetch = FetchType.LAZY)
     Diet ownedDiet;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    Set<UserCalendar> userCalendars;
 
 }
