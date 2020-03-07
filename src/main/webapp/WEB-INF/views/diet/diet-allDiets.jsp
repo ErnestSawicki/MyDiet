@@ -13,17 +13,41 @@
 <head>
     <title>AllDiets</title>
     <style>
-        .tile {
+        .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            transition: 0.3s;
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
         }
 
-        .tile:hover {
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        .title {
+            color: grey;
+            font-size: 18px;
         }
-        .container {
-            padding: 2px 16px;
+
+        a.button {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 95%;
+            font-size: 18px;
         }
+
+        a {
+            text-decoration: none;
+            font-size: 22px;
+            color: black;
+        }
+
+        a.button:hover, a:hover {
+            opacity: 0.7;
+        }
+
 
     </style>
 </head>
@@ -31,31 +55,22 @@
 <div>
     <jsp:include page="/WEB-INF/views/fragments/header.jsp"/>
 </div>
-<p1>Here all diets</p1>
 <div class="diets">
     <c:forEach items="${diets}" var="diet">
-        <div class="tile">
-            <div class="container">
-                <div class="name">
-                    <p1>Diet name:</p1>
-                    <p1>${diet.dietName}</p1>
-                </div>
-                <div>
-                    <p1>Description</p1>
-                    <p1>${diet.description}</p1>
-                </div>
-                <div>
-                    <p1>Duration</p1>
-                    <p1>${diet.duration}</p1>
-                </div>
-                <div>
-                    <p1>Created by</p1>
-                    <p1>${diet.creatorUser.username}</p1>
-                </div>
-                <div>
-                    <a href="/diet/dietDetails?dietId=${diet.id}">Details</a>
-                </div>
+        <div class="card">
+            <div class="title">
+                <p>Diet name: ${diet.dietName}</p>
             </div>
+            <div>
+                <p>Description: ${diet.description}</p>
+            </div>
+            <div>
+                <p>Duration: ${diet.duration}days</p>
+            </div>
+            <div>
+                <p>Created by: ${diet.creatorUser.username}</p>
+            </div>
+            <a href="/diet/dietDetails?dietId=${diet.id}" class="button">Details</a>
         </div>
     </c:forEach>
 </div>
