@@ -16,7 +16,7 @@
 </head>
 <body>
 <div>
-    <jsp:include page="fragments/header.jsp"/>
+    <jsp:include page="../fragments/header.jsp"/>
 </div>
 <h1>PREPARE MEAL</h1>
 <div class="container">
@@ -123,7 +123,7 @@
         </div>
         <div class="content">
             <c:if test="${hasMealPicture}">
-                <img src="/createMeal/meal-file?mealFileId=${mealCreateDTO.mealFile.id}"/>
+                <img src="/createMeal/meal-file?mealFileId=${mealCreateDTO.mealFile.id}" height="200"/>
             </c:if>
         </div>
 
@@ -135,7 +135,7 @@
 
 </div>
 <div>
-    <jsp:include page="fragments/footer.jsp"/>
+    <jsp:include page="../fragments/footer.jsp"/>
 </div>
 </body>
 </html>

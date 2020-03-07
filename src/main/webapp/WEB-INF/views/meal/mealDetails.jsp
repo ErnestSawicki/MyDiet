@@ -13,10 +13,13 @@
     <title>MealDetails</title>
 </head>
 <body>
-<label>MealPicture: </label>
+<div>
+    <jsp:include page="/WEB-INF/views/fragments/header.jsp"/>
+</div>
+
 <div class="content">
     <c:if test="${hasMealPicture}">
-        <img src="/createMeal/meal-file?mealFileId=${mealDetails.mealFile.id}"/>
+        <img src="/createMeal/meal-file?mealFileId=${mealDetails.mealFile.id}" height="200"/>
     </c:if>
 </div>
 <div><label for="mealName">Name:</label></div>
@@ -63,6 +66,5 @@
 <div>
     <input value="${mealDetails.creatorUser.username}" name="creatorUsername" readonly>
 </div>
-
 
 </html>

@@ -7,7 +7,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +51,7 @@ public class MealController {
         model.addAttribute("mealCreateDTO", mealCreateDTO);
         model.addAttribute("mealTypes", mealTypeRepository.findAll());
         model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
-        return "createMeal";
+        return "meal/createMeal";
     }
 
     @PostMapping(params = {"addIngredient"})
@@ -62,7 +61,7 @@ public class MealController {
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
-        return "createMeal";
+        return "meal/createMeal";
     }
 
     @PostMapping(params = {"ingredientToRemove"})
@@ -72,7 +71,7 @@ public class MealController {
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
-        return "createMeal";
+        return "meal/createMeal";
     }
 
     @PostMapping(params = {"addMealType"})
@@ -82,7 +81,7 @@ public class MealController {
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
-        return "createMeal";
+        return "meal/createMeal";
     }
 
     @PostMapping(params = {"mealTypeToRemove"})
@@ -92,7 +91,7 @@ public class MealController {
         model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
         model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
         model.addAttribute("hasMealPicture", hasMealPicture(mealCreateDTO));
-        return "createMeal";
+        return "meal/createMeal";
     }
 
     @PostMapping(params = {"send"})
@@ -105,7 +104,7 @@ public class MealController {
         } else {
             model.addAttribute("availableIngredients", mealService.getIngredientsDTO(mealCreateDTO));
             model.addAttribute("mealTypes", mealService.getMealType(mealCreateDTO));
-            return "createMeal";
+            return "meal/createMeal";
         }
     }
 
@@ -127,7 +126,7 @@ public class MealController {
         log.debug("MealController-uploadFile: mealCreateDTO-inModel: {}", model.getAttribute("mealCreateDTO").toString());
         log.debug("MealController-uploadFile: ...upload finished");
 
-        return "createMeal";
+        return "meal/createMeal";
     }
 
     @GetMapping("/meal-file")
@@ -152,7 +151,7 @@ public class MealController {
             model.addAttribute("hasMealPicture", false);
         }
         model.addAttribute("mealToModify", mealService.getMealById(mealId));
-        return "/modifyMeal";
+        return "meal/modifyMeal";
     }
 
     @PostMapping("/modifyMeal")
@@ -178,7 +177,13 @@ public class MealController {
         model.addAttribute("mealTypes", mealTypesNames);
         log.debug("MealController-viewMeal: mealTypes are: {}", mealTypesNames);
         model.addAttribute("mealDetails", meal);
-        return "/mealDetails";
+        return "meal/mealDetails";
+    }
+
+    @GetMapping(path = "/meals")
+    public String getAllMeals(Model model){
+        model.addAttribute("meals", mealService.getAllMeals());
+        return "meal/meals";
     }
 
     private ResponseEntity<Resource> buildNoMealFileResponse() { return ResponseEntity.noContent().build();}
