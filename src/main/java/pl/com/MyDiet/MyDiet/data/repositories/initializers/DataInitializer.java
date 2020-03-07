@@ -71,7 +71,7 @@ public class DataInitializer implements CommandLineRunner {
         dailySetInitializer.createDailySetSamples(dailySetRepository, mealRepository, userRepository, mealTimeRepository);
 
         DietInitializer dietInitializer = new DietInitializer();
-        dietInitializer.createSampleDiets(dietRepository, dailySetRepository);
+        dietInitializer.createSampleDiets(dietRepository, dailySetRepository, userRepository);
 
         log.info("DataInitializer: ... sample data finished");
     }
