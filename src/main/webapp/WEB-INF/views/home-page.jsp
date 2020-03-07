@@ -24,7 +24,7 @@
         <li><a href="/daily-set">DailySet</a></li>
         <li><a href="/daily-set/create">CreateDailySet</a></li>
         <li><a href="/diet/createDiet">Create diet</a></li>
-        <li><a href="/diet/dietDetails">Diet details</a></li>
+        <li><a href="/diet/diets">Diets</a></li>
         <li><a href="/userRegistration/modifyProfile">ModifyProfile</a></li>
     </ul>
 </div>

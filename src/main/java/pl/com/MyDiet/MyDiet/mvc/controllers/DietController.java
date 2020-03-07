@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pl.com.MyDiet.MyDiet.DTO.DietDTO;
 import pl.com.MyDiet.MyDiet.DTO.DietDetailsDTO;
 import pl.com.MyDiet.MyDiet.beans.DietConfigurator;
-import pl.com.MyDiet.MyDiet.data.model.DailySet;
 import pl.com.MyDiet.MyDiet.data.model.Diet;
-import pl.com.MyDiet.MyDiet.data.repositories.DietRepository;
 import pl.com.MyDiet.MyDiet.services.DietService;
 
 import java.security.Principal;
@@ -40,7 +38,7 @@ public class DietController {
     public String getDietPage(Model model) {
         model.addAttribute("dietConfigurator", dietConfigurator);
         model.addAttribute("dailyMealSetsDTO", dietConfigurator.getDailySetDTOMap());
-        return "/diet-create";
+        return "diet/diet-create";
     }
 
     @PostMapping(path = "/createDiet", params = {"filter"})
@@ -48,7 +46,7 @@ public class DietController {
         dietDTO.copyPropertiesDietDTO(dietConfigurator);
         model.addAttribute("dietConfigurator", dietConfigurator);
         model.addAttribute("dailyMealSetsDTO", dietConfigurator.getDailySetDTOMap());
-        return "/diet-create";
+        return "diet/diet-create";
     }
 
     @PostMapping(params = {"createDailySet"})
@@ -72,16 +70,23 @@ public class DietController {
         return "redirect:/createDiet";
     }
 
+    @GetMapping("/diets")
+    public String dietDetailsPage(Model model) {
+        List<Diet> diets = dietService.getAllDiets();
+        model.addAttribute("diets", diets);
+        return "diet/diet-allDiets";
+    }
+
     @GetMapping("/dietDetails")
     public String dietDetailsPage(@RequestParam Long dietId, Model model) {
         DietDetailsDTO dietDetails = dietService.getDietDetails(dietId);
         model.addAttribute("dietDetails", dietDetails);
-        return "diet-Details";
+        return "diet/diet-Details";
     }
 
     @GetMapping("/assignDiet")
     public String assignDietPage() {
-        return "diet-assign";
+        return "diet/diet-assign";
     }
 
     @PostMapping("/assignDiet")

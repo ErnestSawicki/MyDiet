@@ -57,4 +57,12 @@ public class DietServiceDefault implements DietService {
         log.debug("DietService-getDietDetails: dietDetailsDTO={}", dietDetailsDTO);
         return dietDetailsDTO;
     }
+
+    @Override
+    public List<Diet> getAllDiets() {
+        log.debug("DietService-getAllDiets: started...");
+        List<Diet> diets = dietRepository.findAll();
+        log.debug("DietService-getAllDiets: ... finished");
+        return diets;
+    }
 }
