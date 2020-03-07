@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/createDiet")
+@RequestMapping("/diet")
 @Transactional
 public class DietController {
 
@@ -36,14 +36,14 @@ public class DietController {
         this.dietService = dietService;
     }
 
-    @GetMapping
+    @GetMapping("/createDiet")
     public String getDietPage(Model model) {
         model.addAttribute("dietConfigurator", dietConfigurator);
         model.addAttribute("dailyMealSetsDTO", dietConfigurator.getDailySetDTOMap());
         return "/diet-create";
     }
 
-    @PostMapping(params = {"filter"})
+    @PostMapping(path = "/createDiet", params = {"filter"})
     public String getDietPageWithFilter(Model model, DietDTO dietDTO) {
         dietDTO.copyPropertiesDietDTO(dietConfigurator);
         model.addAttribute("dietConfigurator", dietConfigurator);
@@ -61,7 +61,7 @@ public class DietController {
         return "redirect:/createDailySet";
     }
 
-    @PostMapping(params = {"create"})
+    @PostMapping(path = "/createDiet" ,params = {"create"})
     public String createDiet(Principal principal) {
         log.debug("DietController-create: Start to create diet ...");
         if (dietService.save(dietConfigurator, principal.getName())) {
@@ -74,14 +74,10 @@ public class DietController {
 
     @GetMapping("/dietDetails")
     public String dietDetailsPage(@RequestParam Long dietId, Model model) {
-
         DietDetailsDTO dietDetails = dietService.getDietDetails(dietId);
         model.addAttribute("dietDetails", dietDetails);
-
         return "diet-Details";
     }
-
-
 
     @GetMapping("/assignDiet")
     public String assignDietPage() {

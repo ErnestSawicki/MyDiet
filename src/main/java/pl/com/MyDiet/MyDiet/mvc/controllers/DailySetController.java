@@ -218,6 +218,6 @@ public class DailySetController {
         log.debug("DailySetController-createdForDiet: dietDay:{}", dietDay);
         log.debug("DailySetController-createdForDiet: dietConfigurationDailySetMap:{}", dietConfigurator.getDailySetDTOMap());
         dietConfigurator.getDailySetDTOMap().put(dietDay, dailyMealSetDTO);
-        return "redirect:/createDiet";
+        return "redirect:/diet/createDiet";
     }
 }
