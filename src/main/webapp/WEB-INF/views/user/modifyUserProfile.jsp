@@ -14,7 +14,7 @@
     <title>ModifyUserProfile</title>
 </head>
 <body>
-<jsp:include page="fragments/header.jsp"/>
+<jsp:include page="../fragments/header.jsp"/>
 <form method="post" action="/userRegistration/modifyProfile">
     <div class="row">
         <div class="col-25">
@@ -90,6 +90,6 @@
     <button class="button" type="submit">Update profile</button>
     <sec:csrfInput/>
 </form>
-<jsp:include page="fragments/footer.jsp"/>
+<jsp:include page="../fragments/footer.jsp"/>
 </body>
 </html>

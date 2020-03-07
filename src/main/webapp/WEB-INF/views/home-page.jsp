@@ -20,7 +20,8 @@
     <h1>Dostępne fumkcjonalności:</h1>
     <ul>
         <li><a href="/ingredient">Ingredients</a></li>
-        <li><a href="/createMeal">Meal</a></li>
+        <li><a href="/createMeal">Create meal</a></li>
+        <li><a href="/createMeal/meals">All meals</a></li>
         <li><a href="/daily-set">DailySet</a></li>
         <li><a href="/daily-set/create">CreateDailySet</a></li>
         <li><a href="/diet/createDiet">Create diet</a></li>

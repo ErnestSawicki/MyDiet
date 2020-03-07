@@ -3,7 +3,7 @@
   Created by IntelliJ IDEA.
   User: dell
   Date: 2020-03-07
-  Time: 13:14
+  Time: 14:16
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page isELIgnored="false" %>
@@ -11,7 +11,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AllDiets</title>
+    <title>Meals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -52,28 +53,36 @@
     </style>
 </head>
 <body>
-<div>
+<div class="header">
     <jsp:include page="/WEB-INF/views/fragments/header.jsp"/>
 </div>
-<div class="diets">
-    <c:forEach items="${diets}" var="diet">
+<div class="wrapper">
+    <c:forEach items="${meals}" var="meal">
         <div class="card">
+            <div>
+                <c:if test="${meal.mealFile != null}">
+                    <img src="/createMeal/meal-file?mealFileId=${meal.mealFile.id}" style="width: 100%"/>
+                </c:if>
+            </div>
             <div class="title">
-                <p>Diet name: ${diet.dietName}</p>
+                <p1>Name: ${meal.name}</p1>
             </div>
             <div>
-                <p>Description: ${diet.description}</p>
+                <p1>Recipe: ${meal.recipe}</p1>
             </div>
             <div>
-                <p>Duration: ${diet.duration}days</p>
+                <p1>Calories: ${meal.calories}</p1>
             </div>
             <div>
-                <p>Created by: ${diet.creatorUser.username}</p>
+                <p1>Preparation time: ${meal.preparationTime}min</p1>
             </div>
-            <a href="/diet/dietDetails?dietId=${diet.id}" class="button">Details</a>
+            <div>
+                <p1>Created by: ${meal.creatorUser.username}</p1>
+            </div>
+
+            <a href="/createMeal/viewMeal?mealId=${meal.id}" class="button">Details</a>
         </div>
     </c:forEach>
 </div>
-
 </body>
 </html>

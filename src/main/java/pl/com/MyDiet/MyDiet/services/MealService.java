@@ -29,4 +29,6 @@ public interface MealService {
     Meal getMealById(Long mealId);
 
     boolean saveMeal(MealCreateDTO mealCreateDTO, String principal);
+
+    List<Meal> getAllMeals();
 }

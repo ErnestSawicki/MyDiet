@@ -166,6 +166,14 @@ public class MealServiceDefault implements MealService {
         return true;
     }
 
+    @Override
+    public List<Meal> getAllMeals() {
+        log.debug("MealServiceDefault-getAllMeals: Started...");
+        List<Meal> meals = mealRepository.findAll();
+        log.debug("MealServiceDefault-getAllMeals: ... finished all meals from repository");
+        return meals;
+    }
+
 
     private Long countCalories(MealCreateDTO mealCreateDTO) {
         List<Long> calories = mealCreateDTO.getPartsOfMealIngredientIdNameAmount().stream()

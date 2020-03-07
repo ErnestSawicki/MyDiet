@@ -32,21 +32,21 @@ public class IngredientController {
         IngredientDTO ingredientDTO = new IngredientDTO();
         model.addAttribute("ingredientDTO", ingredientDTO);
         model.addAttribute("availableCategory", ingredientCategoryService.getAllIngredientCategoryDTO());
-        return "addIngredient";
+        return "ingredient/addIngredient";
     }
 
     @PostMapping(params = {"add"})
     public String rebuildFormWhenAdd(@ModelAttribute("ingredientDTO") IngredientDTO ingredientDTO, Model model) {
         ingredientDTO = ingredientService.rebuildFormWhenAddCategory(ingredientDTO);
         model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
-        return "addIngredient";
+        return "ingredient/addIngredient";
     }
 
     @PostMapping(params = {"categoryToRemove"})
     public String rebuildFormWhenDelete(@ModelAttribute("ingredientDTO") IngredientDTO ingredientDTO, Model model) {
         ingredientDTO = ingredientService.rebuildFormWhenDeletedCategory(ingredientDTO);
         model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
-        return "addIngredient";
+        return "ingredient/addIngredient";
     }
 
     @PostMapping(params = {"send"})
@@ -58,7 +58,7 @@ public class IngredientController {
         }
         else {
             model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
-            return "addIngredient";}
+            return "ingredient/addIngredient";}
     }
 
     @PostMapping(params = {"addNewCategory"})
@@ -66,7 +66,7 @@ public class IngredientController {
         model.addAttribute("availableCategory", ingredientService.getIngredientCategories(ingredientDTO));
         model.addAttribute("categoryToAdd", true);
 
-         return "addIngredient";
+         return "ingredient/addIngredient";
     }
 
     @PostMapping(params = {"addCategory"})
@@ -77,7 +77,7 @@ public class IngredientController {
             model.addAttribute("categoryToAdd", true);
             model.addAttribute("categoryName", categoryName);
         }
-        return "addIngredient";
+        return "ingredient/addIngredient";
 
 
     }

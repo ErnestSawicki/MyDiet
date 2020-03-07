@@ -12,34 +12,52 @@
 <html>
 <head>
     <title>DietDetails</title>
+    <style>
+        .dietGeneral{
+            align-content: center;
+        }
+    </style>
 </head>
 <body>
 <div>
     <div>
-        <label>Diet name: </label>
+        <jsp:include page="/WEB-INF/views/fragments/header.jsp"/>
+    </div>
+    <div class="dietGeneral">
+        <div class="title">
+            <p>Diet name: ${dietDetails.dietName}</p>
+        </div>
+        <div>
+            <p>Description: ${dietDetails.description}</p>
+        </div>
+        <div>
+            <p>Duration: ${dietDetails.duration}days</p>
+        </div>
+        <div>
+            <p>Created by: ${dietDetails.creatorUser.username}</p>
+        </div>
     </div>
     <div>
-        <input type="text" value="${dietDetails.dietName}">
+        <div>
+            <label>DailySets</label>
+        </div>
+        <div>
+            <c:forEach items="${dietDetails.dailySets}" var="dailySet" varStatus="iter">
+                <div class="diet">
+                    <p>Day ${iter.count}</p>
+                    <c:forEach items="${dailySet.mealForDailyDTO}" var="meal">
+                        <div class="dietDay">
+                            <p>MealType: ${meal.mealTypeEnumeration.name()}</p>
+                            <p>Name: ${meal.name}</p>
+                            <p>kcal: ${meal.calories}</p>
+                            <a href="/createMeal/viewMeal?mealId=${meal.id}" class="button">Meal Details</a>
+                        </div>
+                    </c:forEach>
+                </div>
+
+            </c:forEach>
+        </div>
     </div>
-</div>
-<div>
-    <div>
-        <label>Duration: </label>
-    </div>
-    <div>
-        <input type="text" value="${dietDetails.duration}">
-    </div>
-</div>
-<div>
-    <div>
-        <label>DailySets</label>
-    </div>
-    <div>
-        <c:forEach items="${dietDetails.dailySets}" var="dailySet">
-            ${dailySet.mealForDailyDTO}
-        </c:forEach>
-    </div>
-</div>
 
 
 </body>

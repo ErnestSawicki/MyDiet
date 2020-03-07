@@ -34,21 +34,21 @@ public class UserRegistrationController {
     @GetMapping
     public String getUserRegistrationPage(Model model) {
         model.addAttribute("userRegistrationDTO", new UserRegistrationDTO());
-        return "user-register";
+        return "user/user-register";
     }
 
     @PostMapping
     public String registerUser(@Valid UserRegistrationDTO userDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "user-register";
+            return "user/user-register";
         if (userService.usernameIsTaken(userDTO.getUsername())) {
             bindingResult.rejectValue("username",null,"This user name is already taken");
             userService.registerUser(userDTO);
-            return "user-register";
+            return "user/user-register";
         }
         if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword",null, "Password and  confirm password must be the same");
-           return  "user-register";
+           return "user/user-register";
         }
         return "redirect:/";
     }
@@ -56,7 +56,7 @@ public class UserRegistrationController {
     @GetMapping("/modifyProfile")
     public String getModifyProfilePage(Model model, Principal principal) {
         model.addAttribute("userData", userService.getUserDetails(SecurityUtils.getUsername()));
-        return "/modifyUserProfile";
+        return "user/modifyUserProfile";
     }
 
     @PostMapping("/modifyProfile")
@@ -65,15 +65,15 @@ public class UserRegistrationController {
 
             bindingResult.rejectValue("username",null,"This user name is already taken");
             userService.registerUser(userDTO);
-            return "user-register";
+            return "user/user-register";
         }
         if (userDTO.getPassword()!=null &&!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword",null, "Password and  confirm password must be the same");
-            return  "user-register";
+            return "user/user-register";
         }
         if (userDTO.getBirthDate()!=null && userDTO.getBirthDate().isBefore(LocalDate.now())) {
             bindingResult.rejectValue("birthDate",null, "Wrong birthday date. You should was born in past");
-            return  "user-register";
+            return "user/user-register";
         }
 
 
