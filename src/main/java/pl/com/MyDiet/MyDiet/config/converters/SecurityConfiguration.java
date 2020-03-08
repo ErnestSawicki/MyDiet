@@ -1,4 +1,4 @@
-package pl.com.MyDiet.MyDiet.config;
+package pl.com.MyDiet.MyDiet.config.converters;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/css/**")
+                .antMatchers("/images/**")
                 .antMatchers("/webjars/**")
                 .antMatchers("/h2-console", "/h2-console/**");
     }

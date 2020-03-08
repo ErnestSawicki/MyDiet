@@ -24,6 +24,10 @@ public class UserServiceDefault implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+@Override
+    public boolean usernameIsTaken(String username){
+        return userRepository.existsByUsername(username.trim().toLowerCase());
+    }
 
     @Override
     public boolean registerUser(UserRegistrationDTO userRegistrationDTO) {
@@ -46,7 +50,8 @@ public class UserServiceDefault implements UserService {
         user.setFirstName(userRegistrationDTO.getFirstName());
         user.setLastName(userRegistrationDTO.getLastName());
         user.setEmail(userRegistrationDTO.getEmail());
-        user.setBirthDate(LocalDate.parse(userRegistrationDTO.getBirthDate()));
+        if (userRegistrationDTO.getBirthDate()!=null)
+        user.setBirthDate(userRegistrationDTO.getBirthDate());
         user.setSex(Sex.valueOf(userRegistrationDTO.getSex()));
         userRepository.save(user);
         return false;

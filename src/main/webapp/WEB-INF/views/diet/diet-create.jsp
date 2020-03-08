@@ -15,7 +15,7 @@
     <title>Create diet</title>
 </head>
 <body>
-<form method="post" action="/createDiet">
+<form method="post" action="/diet/createDiet">
 <div>
     <label for="dietName">Diet name</label>
     <input type="text" id="dietName" name="dietName" value="${dietConfigurator.dietName}"/>

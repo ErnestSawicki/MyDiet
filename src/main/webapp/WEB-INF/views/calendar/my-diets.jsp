@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: dell
-  Date: 2020-02-29
-  Time: 09:19
+  Date: 2020-03-08
+  Time: 11:05
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page isELIgnored="false" %>
@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>DietCalendar</title>
 </head>
 <body>
 

@@ -21,7 +21,7 @@ public interface DailySetService {
     List<SimpleDailySetDTO> getAllDailySetsDTOToDisplay(Diet diet);
     List<SimpleDailySetDTO> getAllDailySetDTOToDisplay();
     List<SimpleDailySetDTO> getUserDailySetDTOToDisplay(User user);
-    boolean checkUserIsDailySetOwner(Long dailySetId, User user);
+    boolean checkUserIsDailySetOwner(Long dailySetId, String user);
 
     DailySet getOneDailyMealById(Long dailySetId);
 

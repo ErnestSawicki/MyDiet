@@ -2,7 +2,6 @@ package pl.com.MyDiet.MyDiet.services.implement;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.MyDiet.MyDiet.DTO.DailyMealSetDTO;
@@ -84,22 +83,6 @@ public class DailySetServiceDefault implements DailySetService {
         return convertDailySetToDailyMealSetDTO(getOneDailyMealById(dailySetId));
     }
 
-    private DailyMealSetDTO convertDailySetToDailyMealSetDTO(DailySet dailySet) {
-        DailyMealSetDTO dailyMealSetDTO = new DailyMealSetDTO();
-        dailyMealSetDTO.setCaloriesPicked(dailySet.getCalories());
-        dailyMealSetDTO.setCreatorUser(dailySet.getCreatorUser());
-        dailyMealSetDTO.setMealAmount(dailySet.getMealAmount());
-        dailyMealSetDTO.setMeals(dailySet.getMealTime().stream().map(p -> {
-            SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
-            simpleMealsDTO.setCalories(p.getMeal().getCalories());
-            simpleMealsDTO.setName(p.getMeal().getName());
-            simpleMealsDTO.setId(p.getMeal().getId());
-            simpleMealsDTO.setMealType(p.getMealTypeName());
-            return simpleMealsDTO;
-        }).collect(Collectors.toList()));
-        return dailyMealSetDTO;
-    }
-
 
     @Override
     public DailyMealSetDTO reloadPageWithSetVariable(DailyMealSetDTO dailyMealSetDTO) {
@@ -152,8 +135,11 @@ public class DailySetServiceDefault implements DailySetService {
 
 
     @Override
-    public boolean checkUserIsDailySetOwner(Long dailySetId, User user) {
-        return !dailySetRepository.existsById(dailySetId) && dailySetRepository.getOne(dailySetId).getCreatorUser() == user;
+    public boolean checkUserIsDailySetOwner(Long dailySetId, String username) {
+
+        String creatorName = dailySetRepository.getOne(dailySetId).getCreatorUser().getUsername();
+        log.debug("DailySetService. checkUserIsDailySetOwner: username ={} creatorName={}", username, creatorName );
+        return username.equals(creatorName);
     }
 
     @Override
@@ -175,22 +161,6 @@ public class DailySetServiceDefault implements DailySetService {
         return true;
     }
 
-    private SimpleDailySetDTO.MealForDailyDTO convertMealToMealForDailyDTO(MealTime mealTime) {
-        SimpleDailySetDTO.MealForDailyDTO mealForDailyDTO = new SimpleDailySetDTO.MealForDailyDTO();
-        Meal meal = mealRepository.getOne(mealTime.getMeal().getId());
-        mealForDailyDTO.setId(meal.getId());
-        mealForDailyDTO.setMealFileId(meal.getMealFileId());
-        mealForDailyDTO.setMealFile(meal.getMealFile());
-        mealForDailyDTO.setCalories(meal.getCalories());
-        mealForDailyDTO.setCreatorUser(meal.getCreatorUser().getUsername());
-        mealForDailyDTO.setName(meal.getName());
-        mealForDailyDTO.setPreparationTime(meal.getPreparationTime());
-        mealForDailyDTO.setRecipe(meal.getRecipe());
-        mealForDailyDTO.setMealTypeEnumeration(mealTime.getMealTypeName());
-        log.debug("convertMealToMealForDailyDTO: dailySets name {}", mealForDailyDTO.getName());
-        return mealForDailyDTO;
-    }
-
     private SimpleDailySetDTO convertDailySetToSimpleDailySetDTO(DailySet dailySet) {
         SimpleDailySetDTO simpleDailySetDTO = new SimpleDailySetDTO();
         simpleDailySetDTO.setId(dailySet.getId());
@@ -206,4 +176,35 @@ public class DailySetServiceDefault implements DailySetService {
     }
 
 
+    private DailyMealSetDTO convertDailySetToDailyMealSetDTO(DailySet dailySet) {
+        DailyMealSetDTO dailyMealSetDTO = new DailyMealSetDTO();
+        dailyMealSetDTO.setCaloriesPicked(dailySet.getCalories());
+        dailyMealSetDTO.setCreatorUser(dailySet.getCreatorUser());
+        dailyMealSetDTO.setMealAmount(dailySet.getMealAmount());
+        dailyMealSetDTO.setMeals(dailySet.getMealTime().stream().map(p -> {
+            SimpleMealsDTO simpleMealsDTO = new SimpleMealsDTO();
+            simpleMealsDTO.setCalories(p.getMeal().getCalories());
+            simpleMealsDTO.setName(p.getMeal().getName());
+            simpleMealsDTO.setId(p.getMeal().getId());
+            simpleMealsDTO.setMealType(p.getMealTypeName());
+            return simpleMealsDTO;
+        }).collect(Collectors.toList()));
+        return dailyMealSetDTO;
+    }
+
+    private SimpleDailySetDTO.MealForDailyDTO convertMealToMealForDailyDTO(MealTime mealTime) {
+        SimpleDailySetDTO.MealForDailyDTO mealForDailyDTO = new SimpleDailySetDTO.MealForDailyDTO();
+        Meal meal = mealRepository.getOne(mealTime.getMeal().getId());
+        mealForDailyDTO.setId(meal.getId());
+        mealForDailyDTO.setMealFileId(meal.getMealFileId());
+        mealForDailyDTO.setMealFile(meal.getMealFile());
+        mealForDailyDTO.setCalories(meal.getCalories());
+        mealForDailyDTO.setCreatorUser(meal.getCreatorUser().getUsername());
+        mealForDailyDTO.setName(meal.getName());
+        mealForDailyDTO.setPreparationTime(meal.getPreparationTime());
+        mealForDailyDTO.setRecipe(meal.getRecipe());
+        mealForDailyDTO.setMealTypeEnumeration(mealTime.getMealTypeName());
+        log.debug("convertMealToMealForDailyDTO: dailySets name {}", mealForDailyDTO.getName());
+        return mealForDailyDTO;
+    }
 }
