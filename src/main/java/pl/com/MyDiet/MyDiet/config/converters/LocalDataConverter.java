@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 public class LocalDataConverter implements Converter<String, LocalDate> {
 
     @Override
-    public LocalDate convert( @Nullable String s) {
+    public LocalDate convert(@Nullable String s) {
         if (s ==  null ||s.isEmpty()) {
             return null;
         }

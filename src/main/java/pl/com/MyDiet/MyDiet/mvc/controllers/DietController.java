@@ -16,7 +16,13 @@ import pl.com.MyDiet.MyDiet.data.model.Diet;
 import pl.com.MyDiet.MyDiet.services.DietService;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+
+import static pl.com.MyDiet.MyDiet.beans.SecurityUtils.getUsername;
 
 @Controller
 @Slf4j
@@ -85,13 +91,18 @@ public class DietController {
     }
 
     @GetMapping("/assignDiet")
-    public String assignDietPage() {
+    public String assignDietPage(Model model) {
+        model.addAttribute("diets", dietService.getAllDiets());
         return "diet/diet-assign";
     }
 
     @PostMapping("/assignDiet")
-    public String assignDiet(){
-
+    public String assignDiet(@RequestParam String startDate, @RequestParam Long dietId) throws ParseException {
+        log.debug("DietController-assignDiet: startDate: {}, dietId: {}", startDate, dietId);
+        LocalDate date = LocalDate.parse(startDate);
+        log.debug("DietController-assignDiet: dietAssignment started ...");
+        dietService.assignUserDietFromDate(getUsername() ,date, dietId);
+        log.debug("DietController-assignDiet: ... dietAssignment finished");
         return "redirect:/";
     }
 }
