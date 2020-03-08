@@ -7,4 +7,6 @@ import java.time.LocalDate;
 public interface UserCalendarService {
 
     DailySet getDailySetForSpecificDay(LocalDate date);
+
+
 }

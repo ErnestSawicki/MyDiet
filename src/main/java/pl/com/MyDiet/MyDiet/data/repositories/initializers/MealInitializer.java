@@ -36,6 +36,7 @@ public class MealInitializer {
                 partOfMeal.setAmount(1L + (long) (Math.random() * (300L - 1L)));
                 partOfMeal.setIngredient(ingredientRepository.findAll().get(new Random().nextInt(15)));
                 meal.getPartsOfMeal().add(partOfMeal);
+                partOfMeal.setMeal(meal);
                 partOfMealRepository.save(partOfMeal);
             }
 
