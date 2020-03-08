@@ -70,13 +70,13 @@ public class DietServiceDefault implements DietService {
     @Override
     public void assignUserDietFromDate(String username, LocalDate startDate, Long dietId) {
         Diet diet = dietRepository.getOne(dietId);
-        diet.getDailySet().forEach( p -> {
+        for(int i =0; i < diet.getDailySet().size(); i++){
             UserCalendar userCalendar = new UserCalendar();
             userCalendar.setUser(userRepository.findUserByUsername(username));
-            userCalendar.setDailySet(p);
+            userCalendar.setDailySet(diet.getDailySet().get(i));
             userCalendar.setDate(startDate);
-            startDate.plusDays(1L);
+            startDate = startDate.plusDays(1L);
             userCalendarRepository.save(userCalendar);
-        });
+        }
     }
 }
