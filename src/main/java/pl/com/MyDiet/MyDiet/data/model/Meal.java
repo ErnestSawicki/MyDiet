@@ -23,7 +23,7 @@ public class Meal extends EntityBase {
     private String name;
 
 
-    @Column(name = "reciple")
+    @Column(name = "reciple", columnDefinition = "TEXT")
     private String recipe;
 
     @Column(name = "preparation_time")

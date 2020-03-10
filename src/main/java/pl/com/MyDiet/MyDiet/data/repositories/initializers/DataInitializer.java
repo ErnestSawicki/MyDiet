@@ -26,6 +26,7 @@ public class DataInitializer implements CommandLineRunner {
     private final MealTimeRepository mealTimeRepository;
     private final DietRepository dietRepository;
     private final UserCalendarRepository userCalendarRepository;
+    private final FileEntityRepository fileEntityRepository;
 
 
     @Autowired
@@ -38,7 +39,8 @@ public class DataInitializer implements CommandLineRunner {
                            MealTypeRepository mealTypeRepository,
                            DailySetRepository dailySetRepository,
                            MealTimeRepository mealTimeRepository, DietRepository dietRepository,
-                           UserCalendarRepository userCalendarRepository) {
+                           UserCalendarRepository userCalendarRepository,
+                           FileEntityRepository fileEntityRepository) {
         this.ingredientCategoryRepository = ingredientCategoryRepository;
         this.ingredientRepository = ingredientRepository;
         this.mealRepository = mealRepository;
@@ -50,6 +52,7 @@ public class DataInitializer implements CommandLineRunner {
         this.mealTimeRepository = mealTimeRepository;
         this.dietRepository = dietRepository;
         this.userCalendarRepository = userCalendarRepository;
+        this.fileEntityRepository = fileEntityRepository;
     }
 
     @Override
@@ -68,7 +71,7 @@ public class DataInitializer implements CommandLineRunner {
         mealTypeInitializer.createSampleUsers(mealTypeRepository);
 
         MealInitializer mealInitializer = new MealInitializer();
-        mealInitializer.createSampleMeal(mealRepository, userRepository, mealTypeRepository, partOfMealRepository, ingredientRepository);
+        mealInitializer.createSampleMeal(mealRepository, userRepository, mealTypeRepository, partOfMealRepository, ingredientRepository, fileEntityRepository);
 
         DailySetInitializer dailySetInitializer = new DailySetInitializer();
         dailySetInitializer.createDailySetSamples(dailySetRepository, mealRepository, userRepository, mealTimeRepository);
