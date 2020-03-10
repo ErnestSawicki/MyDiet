@@ -15,4 +15,5 @@ public interface IngredientCategoryRepository extends JpaRepository<IngredientCa
     boolean existsByName(String name);
 
     IngredientCategory findByName(String name);
+
 }

@@ -11,11 +11,15 @@ import java.util.Set;
 
 public interface IngredientCategoryService {
     Set<IngredientCategoryDTO> getAllIngredientCategoryDTO();
-    Optional<IngredientCategory> findById (Long id);
+    Optional<IngredientCategory> findIngredientCategoryById(Long id);
+
+    IngredientCategoryDTO findIngredientCategoryDTOByName(String name);
 
     Set<IngredientCategoryDTO> getIngredientCategories(IngredientDTO ingredientDTO);
 
     boolean save (IngredientDTO ingredientDTO, String nameCategory);
     boolean delete (Long id, Long moderatorId);
     boolean modify (Long id, Long moderatorId);
+
+    boolean ingredientCategoryNameIsAvailable(String name);
 }

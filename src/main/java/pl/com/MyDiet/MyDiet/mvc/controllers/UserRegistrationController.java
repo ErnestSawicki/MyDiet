@@ -42,7 +42,7 @@ public class UserRegistrationController {
         if (bindingResult.hasErrors())
             return "user/user-register";
         if (userService.usernameIsTaken(userDTO.getUsername())) {
-            bindingResult.rejectValue("username",null,"This user name is already taken");
+            bindingResult.rejectValue("username",null,"This user is being already taken");
             userService.registerUser(userDTO);
             return "user/user-register";
         }
@@ -54,7 +54,7 @@ public class UserRegistrationController {
     }
 
     @GetMapping("/modifyProfile")
-    public String getModifyProfilePage(Model model, Principal principal) {
+    public String getModifyProfilePage(Model model) {
         model.addAttribute("userData", userService.getUserDetails(SecurityUtils.getUsername()));
         return "user/modifyUserProfile";
     }

@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Set;
 
 public interface IngredientService {
+    IngredientDTO rebuildFormWhenCreateNewCategory(IngredientDTO ingredientDTO, IngredientCategoryDTO ingredientCategoryDTO);
+
+    boolean ingredientNameIsAvailable(String name);
+
     IngredientDTO rebuildFormWhenAddCategory(IngredientDTO ingredientDTO);
 
     IngredientDTO rebuildFormWhenDeletedCategory(IngredientDTO ingredientDTO);

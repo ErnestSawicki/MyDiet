@@ -123,7 +123,7 @@
         </div>
         <div class="content">
             <c:if test="${hasMealPicture}">
-                <img src="/createMeal/meal-file?mealFileId=${mealCreateDTO.mealFile.id}" height="200"/>
+                <img src="/createMeal/meal-file?mealFileId=${mealCreateDTO.mealFile.id}" height="30"/>
             </c:if>
         </div>
 

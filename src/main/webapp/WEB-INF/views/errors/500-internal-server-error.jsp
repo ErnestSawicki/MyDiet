@@ -13,5 +13,6 @@
 <body>
 <h1>Server FUCK UP! Programmer is idiot</h1>
 <h2> 500 internal server error </h2>
+<img src="/images/failImages/crazy_carott.jpg" height="300"/>
 </body>
 </html>

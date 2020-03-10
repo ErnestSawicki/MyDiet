@@ -35,8 +35,13 @@ public class IngredientCategoryServiceDefault implements IngredientCategoryServi
     }
 
     @Override
-    public Optional<IngredientCategory> findById(Long id) {
+    public Optional<IngredientCategory> findIngredientCategoryById(Long id) {
         return ingredientCategoryRepository.findById(id);
+    }
+
+    @Override
+    public IngredientCategoryDTO findIngredientCategoryDTOByName(String name) {
+        return mapper.map(ingredientCategoryRepository.findByName(name), IngredientCategoryDTO.class);
     }
     @Override
     public Set<IngredientCategoryDTO> getIngredientCategories(IngredientDTO ingredientDTO) {
@@ -74,5 +79,10 @@ public class IngredientCategoryServiceDefault implements IngredientCategoryServi
     @Override
     public boolean modify(Long id, Long moderatorId) {
         return false;
+    }
+
+    @Override
+    public boolean ingredientCategoryNameIsAvailable(String name) {
+        return !ingredientCategoryRepository.existsByName(name);
     }
 }

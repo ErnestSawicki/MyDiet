@@ -1,7 +1,6 @@
 package pl.com.MyDiet.MyDiet.services.implement;
 
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,20 @@ public class IngredientsServiceDefault implements IngredientService {
         this.ingredientRepository = ingredientRepository;
 
     }
+    @Override
+    public IngredientDTO rebuildFormWhenCreateNewCategory(IngredientDTO ingredientDTO, IngredientCategoryDTO ingredientCategoryDTO) {
+        IngredientCategoryDTO categoryDTO = ingredientCategoryService.findIngredientCategoryDTOByName(ingredientCategoryDTO.getName());
+        ingredientDTO.setCategoryToAdd(new IngredientDTO.IngredientCategoriesIdAndName(categoryDTO.getId(), categoryDTO.getName()));
+        ingredientDTO.saveCategory();
+        return ingredientDTO;
+    }
 
+    @Override
+    public boolean ingredientNameIsAvailable(String name) {
+        return !ingredientRepository.existsByName(name);
+    }
+
+    @Override
     public IngredientDTO rebuildFormWhenAddCategory(IngredientDTO ingredientDTO) {
         ingredientDTO.saveCategory();
         return ingredientDTO;
@@ -88,7 +100,7 @@ public class IngredientsServiceDefault implements IngredientService {
         ingredient.setName(ingredientDTO.getIngredientName());
         ingredient.setCaloriesPer100gram(ingredientDTO.getCaloriesPer100g());
         List<IngredientCategory> ingredientCategories = ingredientDTO.getIngredientCategoriesIdAndName().stream()
-                .map(p -> ingredientCategoryService.findById(p.getId())
+                .map(p -> ingredientCategoryService.findIngredientCategoryById(p.getId())
                         .orElse(null))
                 .collect(Collectors.toList());
         ingredient.setIngredientCategories(ingredientCategories);

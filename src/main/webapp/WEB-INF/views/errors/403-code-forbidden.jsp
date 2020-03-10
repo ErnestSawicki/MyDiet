@@ -12,7 +12,9 @@
 </head>
 <body>
 <h1>Access denied</h1>
-<h2> 404 Execute access forbidden </h2>
+<h2> 403 Execute access forbidden </h2>
+<h2> YOU HAVE NO POWER HERE!!!!</h2>
+<img src="/images/failImages/marchewkowy_rycerz.jpg" height="300"/>
 
 </body>
 </html>

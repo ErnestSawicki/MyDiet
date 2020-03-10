@@ -1,7 +1,9 @@
-package pl.com.MyDiet.MyDiet.config.converters;
+package pl.com.MyDiet.MyDiet.config;
 
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
@@ -16,16 +18,16 @@ public class MvcConfig implements WebMvcConfigurer {
         SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
 
         Properties mapping = new Properties();
-        mapping.setProperty(AccessDeniedException.class.getName(), "errorsMapping/403-code-forbidden");
-        mapping.setProperty(AccessDeniedException.class.getName(), "errorsMapping/404-code-not-found");
-        mapping.setProperty(AccessDeniedException.class.getName(), "errorsMapping/500-internal-server-error");
+        mapping.setProperty(AccessDeniedException.class.getName(), "errors/403-code-forbidden");
+        mapping.setProperty(HttpClientErrorException.NotFound.class.getName(), "errors/404-code-not-found");
+        mapping.setProperty(InternalError.class.getName(), "errors/500-internal-server-error");
 
 
         resolver.setExceptionMappings(mapping);
-        resolver.addStatusCode("errorsMapping/403-code-forbidden", 403);
-        resolver.addStatusCode("errorsMapping/404-code-not-found", 404);
-        resolver.addStatusCode("errorsMapping/500-internal-server-error", 500);
-        resolver.setDefaultErrorView("errorsMapping/default-error");
+        resolver.addStatusCode("errors/403-code-forbidden", 403);
+        resolver.addStatusCode("errors/404-code-not-found", 404);
+        resolver.addStatusCode("errors/500-internal-server-error", 500);
+        resolver.setDefaultErrorView("errors/default-error");
         resolver.setExceptionAttribute("exc");
         resolver.setWarnLogCategory("MVC:Logger");
         return resolver;

@@ -13,5 +13,6 @@
 <body>
 <h1>Bad GATEWAY</h1>
 <h2> 404 page not found </h2>
+<img src="/images/mealImages/sad_carotes.jpg.jpg" height="300"/>
 </body>
 </html>
