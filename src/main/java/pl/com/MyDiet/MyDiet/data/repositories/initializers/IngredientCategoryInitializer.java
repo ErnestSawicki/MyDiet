@@ -11,12 +11,15 @@ public class IngredientCategoryInitializer {
         log.info("IngredientCategoryInitializer: IngredientCategory sample data started ...");
         createIngredientCategory("dairy", ingredientCategoryRepository);
         createIngredientCategory("meat", ingredientCategoryRepository);
+        createIngredientCategory("fish", ingredientCategoryRepository);
         createIngredientCategory("vegetables", ingredientCategoryRepository);
         createIngredientCategory("beverages", ingredientCategoryRepository);
         createIngredientCategory("fruits", ingredientCategoryRepository);
         createIngredientCategory("spices", ingredientCategoryRepository);
         createIngredientCategory("sauces", ingredientCategoryRepository);
         createIngredientCategory("sweets", ingredientCategoryRepository);
+        createIngredientCategory("fats", ingredientCategoryRepository);
+        createIngredientCategory("breads&cereals", ingredientCategoryRepository);
         log.info("IngredientCategoryInitializer: ... IngredientCategory data finished");
 
     }
