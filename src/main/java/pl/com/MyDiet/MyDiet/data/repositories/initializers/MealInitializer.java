@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.com.MyDiet.MyDiet.data.model.Meal;
 import pl.com.MyDiet.MyDiet.data.model.MealType;
 import pl.com.MyDiet.MyDiet.data.model.PartOfMeal;
+import pl.com.MyDiet.MyDiet.data.model.User;
+import pl.com.MyDiet.MyDiet.data.model.enumeration.MealTypeEnumeration;
 import pl.com.MyDiet.MyDiet.data.model.file.FileEntity;
 import pl.com.MyDiet.MyDiet.data.repositories.*;
 import sun.misc.IOUtils;
@@ -17,7 +19,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class MealInitializer {
 
@@ -29,6 +33,8 @@ public class MealInitializer {
                                  FileEntityRepository fileEntityRepository) throws IOException {
         Faker faker = new Faker();
 
+
+        //manual
         Meal soup = new Meal();
         soup.setRecipe("Heat a large saucepan and dry-fry 2 tsp cumin seeds and a pinch of chilli flakes for 1 min, or until they start to jump around the pan and release their aromas.\n" +
                 "\n" +
@@ -64,6 +70,22 @@ public class MealInitializer {
         mealRepository.save(soup);
 
 
+        // here starts quick way
+        Set<PartOfMeal> partOfMeals = new HashSet<>();
+        partOfMeals.add(createPartOfMeal("milk whole", 250L, ingredientRepository));
+        partOfMeals.add(createPartOfMeal("honey", 20L, ingredientRepository));
+        partOfMeals.add(createPartOfMeal("porridge oats", 20L, ingredientRepository));
+        createMeal("oatmeal",
+                "Combine oats, milk, water, salt, and cinnamon in a medium saucepan. Bring to a boil, then reduce heat to low.\n" +
+                "Simmer uncovered for 3 to 5 minutes until thickened, stirring occasionally. Remove from heat and let cool slightly.\n" +
+                "Divide equally between two bowls. Drizzle each serving with 1/2 teaspoon honey.",
+                10L,
+                userRepository.findUserByUsername("user"),
+                mealTypeRepository.findByMealTypeName(MealTypeEnumeration.BREAKFAST),
+                mealRepository, "src/main/webapp/images/testImages/meals/oatmeal.PNG",
+                fileEntityRepository, partOfMeals);
+
+        //randoms
         for (int i = 0; i < 50; i++) {
             Meal meal = new Meal();
             meal.setRecipe(faker.harryPotter().quote());
@@ -91,8 +113,47 @@ public class MealInitializer {
         }
     }
 
+    private void createMeal(String mealName, String recipe, Long preparationTime, User creator, MealType mealType, MealRepository mealRepository, String filePath , FileEntityRepository fileEntityRepository, Set<PartOfMeal> partOfMeals) throws IOException {
+        Meal meal = new Meal();
+        meal.setName(mealName);
+        meal.setRecipe(recipe);
+        meal.setPreparationTime(preparationTime);
+        meal.setCalories(238L);
+        meal.setCreatorUser(creator);
+        meal.getMealTypes().add(mealType);
+        mealType.getMeals().add(meal);
+
+        partOfMeals.forEach(p -> {
+            meal.getPartsOfMeal().add(p);
+            p.setMeal(meal);
+        });
+        /*for (int j = 0; j < new Random().nextInt(6); j++) {
+            PartOfMeal partOfMeal = new PartOfMeal();
+            partOfMeal.setAmount(1L + (long) (Math.random() * (300L - 1L)));
+            partOfMeal.setIngredient(ingredientRepository.findAll().get(new Random().nextInt(15)));
+            meal.getPartsOfMeal().add(partOfMeal);
+            partOfMeal.setMeal(meal);
+            partOfMealRepository.save(partOfMeal);
+        }*/
+        MultipartFile file = mealImage(filePath);
+        FileEntity mealFileEntity = new FileEntity();
+        mealFileEntity.setContentType(file.getContentType());
+        mealFileEntity.setFileName(file.getOriginalFilename());
+        mealFileEntity.setData(file.getBytes());
+        fileEntityRepository.save(mealFileEntity);
+        meal.setMealFile(mealFileEntity);
+        mealRepository.save(meal);
+    }
+
     private MultipartFile mealImage(String imgPath) throws IOException {
         Path path = Paths.get(imgPath);
         return new MockMultipartFile("file", "file", "text/plain", Files.readAllBytes(path));
+    }
+
+    private PartOfMeal createPartOfMeal(String ingredientName, Long amount, IngredientRepository ingredientRepository){
+        PartOfMeal partOfMeal = new PartOfMeal();
+        partOfMeal.setIngredient(ingredientRepository.getByName(ingredientName));
+        partOfMeal.setAmount(amount);
+        return partOfMeal;
     }
 }
