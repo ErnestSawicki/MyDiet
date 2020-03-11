@@ -72,9 +72,9 @@ public class MealInitializer {
 
         // here starts quick way
         Set<PartOfMeal> partOfMeals = new HashSet<>();
-        partOfMeals.add(createPartOfMeal("milk whole", 250L, ingredientRepository));
-        partOfMeals.add(createPartOfMeal("honey", 20L, ingredientRepository));
-        partOfMeals.add(createPartOfMeal("porridge oats", 20L, ingredientRepository));
+        partOfMeals.add(createPartOfMeal("milk whole", 250L, ingredientRepository, partOfMealRepository));
+        partOfMeals.add(createPartOfMeal("honey", 20L, ingredientRepository, partOfMealRepository));
+        partOfMeals.add(createPartOfMeal("porridge oats", 20L, ingredientRepository, partOfMealRepository));
         createMeal("oatmeal",
                 "Combine oats, milk, water, salt, and cinnamon in a medium saucepan. Bring to a boil, then reduce heat to low.\n" +
                 "Simmer uncovered for 3 to 5 minutes until thickened, stirring occasionally. Remove from heat and let cool slightly.\n" +
@@ -150,10 +150,11 @@ public class MealInitializer {
         return new MockMultipartFile("file", "file", "text/plain", Files.readAllBytes(path));
     }
 
-    private PartOfMeal createPartOfMeal(String ingredientName, Long amount, IngredientRepository ingredientRepository){
+    private PartOfMeal createPartOfMeal(String ingredientName, Long amount, IngredientRepository ingredientRepository, PartOfMealRepository partOfMealRepository){
         PartOfMeal partOfMeal = new PartOfMeal();
         partOfMeal.setIngredient(ingredientRepository.getByName(ingredientName));
         partOfMeal.setAmount(amount);
+        partOfMealRepository.save(partOfMeal);
         return partOfMeal;
     }
 }
